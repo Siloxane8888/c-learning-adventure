@@ -1,9 +1,9 @@
 # 📘 C 语言闯关学习平台
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Levels](https://img.shields.io/badge/levels-48-orange)](https://github.com/Siloxane/c-learning-adventure)
+[![Levels](https://img.shields.io/badge/levels-48-orange)](https://github.com/Siloxane8888/c-learning-adventure)
 [![Node](https://img.shields.io/badge/node-18%2B-brightgreen)](https://nodejs.org/)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/Siloxane/c-learning-adventure)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/Siloxane8888/c-learning-adventure)
 
 > 基于《C Primer Plus》的交互式 C 语言学习网站 — 闯关式教学 × 在线编码 × 成就系统
 
@@ -67,7 +67,7 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/Siloxane/c-learning-adventure.git
+git clone https://github.com/Siloxane8888/c-learning-adventure.git
 cd c-learning-adventure
 
 # 2. 安装依赖（仅一个包：express）
