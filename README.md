@@ -1,7 +1,7 @@
 # 📘 C 语言闯关学习平台
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Levels](https://img.shields.io/badge/levels-56-orange)](https://github.com/Siloxane8888/c-learning-adventure)
+[![Levels](https://img.shields.io/badge/levels-59-orange)](https://github.com/Siloxane8888/c-learning-adventure)
 [![Node](https://img.shields.io/badge/node-18%2B-brightgreen)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/Siloxane8888/c-learning-adventure)
 
@@ -13,9 +13,9 @@
 
 ## ✨ 功能特性
 
-### 🎮 48 关闯关式学习
-- **12 个章节 × 36 个常规关卡** — 从 Hello World 到指针、文件操作、综合实战
-- **12 个章末挑战（🏆）** — 每章末尾的综合挑战，从零编码，无初始代码
+### 🎮 59 关闯关式学习
+- **14 个章节 × 45 个常规关卡** — 从 Hello World 到指针、位操作、综合实战
+- **14 个章末挑战（🏆）** — 每章末尾的综合挑战，从零编码，无初始代码
 - **关卡锁定机制** — 前一关通关后解锁下一关；章末挑战需完成该章全部关卡
 - 基于《C Primer Plus》知识体系，渐进式设计
 
@@ -113,16 +113,18 @@ sudo dnf install gcc    # Fedora
 | 第4章 · 控制流 | 4 | 🏆 | 45-90 | `if`/`else`、`switch`/`case`、`for`、`while`、嵌套 |
 | 第5章 · 字符输入输出 | 3 | 🏆 | 45-85 | `getchar`/`putchar`、`ctype.h`、缓冲区清理、输入验证 |
 | 第6章 · 数组 | 2 | 🏆 | 50-85 | 一维数组、遍历、排序（冒泡、插入）、查找 |
-| 第7章 · 函数 | 3 | 🏆 | 50-90 | 定义调用、递归、作用域、`static`、gcd 算法 |
+| 第7章 · 函数 | 4 | 🏆 | 45-90 | 定义调用、递归、`math.h`、作用域、`static`、gcd 算法 |
 | 第8章 · 指针 | 4 | 🏆 | 60-100 | `&`/`*`、指针与数组、指针与函数、动态内存 `malloc` |
 | 第9章 · 字符串 | 2 | 🏆 | 55-85 | `strlen`、`strcmp`、`ctype.h` 字符分类 |
-| 第10章 · 结构体与联合 | 3 | 🏆 | 55-90 | `struct`、`typedef`、`union`、结构体数组、`enum` |
+| 第10章 · 结构体与联合 | 3 | 🏆 | 50-90 | `struct`、`typedef`、`union`、结构体数组、`enum` |
 | 第11章 · 位操作 | 2 | 🏆 | 50-80 | `&` `\|` `^` `~`、`<<` `>>`、位掩码、权限标志 |
 | 第12章 · 文件操作 | 1 | 🏆 | 60-90 | `fopen`、`fprintf`、`fscanf`、`fclose`、追加模式 |
-| 第13章 · 预处理 | 1 | 🏆 | 55-75 | `#define` 宏、`#ifdef` 条件编译、宏括号陷阱 |
+| 第13章 · 预处理与标准库 | 3 | 🏆 | 45-75 | `#define`、`#undef`、预定义宏、条件编译、`qsort`、`rand` |
 | 第14章 · 综合实战 | 10 | 🏆 | 75-120 | 猜数字、计算器、成绩统计、素数、回文、排序、RLE、进制转换、俄罗斯方块计分板 |
 
-**总计：56 关 · 14 章末挑战 · 基于《C Primer Plus》完整知识体系**
+**总计：59 关 · 14 章末挑战 · 对齐《C Primer Plus》16/17 章**
+
+> 📖 开始界面提供 **C Primer Plus 原书链接**和 **📋 附录速查**（运算符优先级表、ASCII 码表、C 关键字、格式说明符、转义序列）
 
 ---
 
@@ -135,7 +137,7 @@ c-learning-adventure/
 ├── public/
 │   └── index.html           # 前端界面（单文件 SPA）
 ├── levels/
-│   └── levels.json          # 48 关完整教学数据
+│   └── levels.json          # 59 关完整教学数据
 ├── progress.example.json    # 用户进度模板
 ├── package.json
 ├── install-gcc.bat          # Windows GCC 自动安装脚本
