@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title C 语言闯关学习平台
+title C语言学习挑战
 echo.
-echo   📘 C 语言闯关学习平台
+echo   📘 C语言学习挑战
 echo   ════════════════════
 echo.
 echo   正在启动服务器...

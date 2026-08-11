@@ -1,7 +1,7 @@
 {
   "name": "c-learning-adventure",
-  "version": "1.0.0",
-  "description": "C语言闯关式学习平台 - 基于 C Primer Plus 系统教学",
+  "version": "2.4.0",
+  "description": "C语言学习挑战 - 基于 C Primer Plus 的交互式闯关学习平台",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -1,4 +1,4 @@
-# 📘 C 语言闯关学习平台
+# 📘 C语言学习挑战
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Levels](https://img.shields.io/badge/levels-59-orange)](https://github.com/Siloxane8888/c-learning-adventure)

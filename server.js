@@ -510,7 +510,7 @@ app.post('/api/submit', async (req, res) => {
 app.listen(PORT, '127.0.0.1', () => {
   COMPILER = findCompiler();
   console.log('');
-  console.log('  🎓 C语言闯关学习平台');
+  console.log('  🎓 C语言学习挑战');
   console.log(`  📡 http://127.0.0.1:${PORT}`);
   const compilerInfo = COMPILER ? `${COMPILER.type.toUpperCase()} (${COMPILER.path})` : '❌ 未找到';
   console.log(`  🔧 编译器: ${compilerInfo}`);
