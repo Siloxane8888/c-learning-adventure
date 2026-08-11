@@ -4,7 +4,7 @@
 [![Levels](https://img.shields.io/badge/levels-59-orange)](https://github.com/Siloxane8888/c-learning-adventure)
 [![Node](https://img.shields.io/badge/node-18%2B-brightgreen)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/Siloxane8888/c-learning-adventure)
-[![Release](https://img.shields.io/badge/release-v2.3.0-blue)](https://github.com/Siloxane8888/c-learning-adventure/releases)
+[![Release](https://img.shields.io/badge/release-v2.4.0-blue)](https://github.com/Siloxane8888/c-learning-adventure/releases)
 
 > 基于《C Primer Plus》第 6 版的交互式 C 语言学习平台 — 59 关闯关式教学 × 在线编码 × 成就系统
 
@@ -17,7 +17,7 @@
 从 [Releases](https://github.com/Siloxane8888/c-learning-adventure/releases) 下载 `portable-*.tar.gz`，解压后双击启动：
 
 ```bash
-tar -xzf portable-v2.3.0.tar.gz
+tar -xzf portable-v2.4.0.tar.gz
 cd c-learning-adventure
 
 # Windows — 双击 start.bat
@@ -74,6 +74,7 @@ npm start
 - **5 步新手引导** — 首次使用自动触发
 - **三层提示系统** — 逐步揭示，防止卡关
 - **📋 附录速查** — 运算符优先级表 · ASCII 码表 · C 关键字 · 格式说明符 · 转义序列
+- **🗺️ 学习路线** — 入门→基础→进阶→高级→实战五阶段可视化路径
 
 ---
 
