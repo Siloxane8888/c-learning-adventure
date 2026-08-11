@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>C 语言闯关学习 · C Primer Plus</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
 <style>
 /* ============================================================
    C 语言闯关学习平台 — 设计系统
@@ -588,7 +590,18 @@ const S = {
 // ============================================================
 // 初始化
 // ============================================================
+// Markdown 解析辅助（防止 CDN 加载失败时崩溃）
+function parseMD(text) {
+  if (typeof marked !== 'undefined') return marked.parse(text);
+  // 回退：简单处理换行
+  return text.replace(/\n/g, '<br>');
+}
+
 async function init() {
+  // 配置 marked.js（如果已加载）
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({ gfm: true, breaks: false });
+  }
   await loadLevels();
   renderLevelList();
   if (S.levels.length > 0) selectLevel(S.levels[0].id);
@@ -646,9 +659,9 @@ async function selectLevel(id) {
       <div style="color:var(--text-tertiary);font-size:0.78rem;margin-bottom:14px;">
         ${resp.chapter} · ${resp.xp} XP ${resp.completed ? '· ✅ 已通关' : ''}
       </div>
-      ${resp.theory}
+      ${parseMD(resp.theory)}
       <div class="task-card">
-        ${resp.task}
+        ${parseMD(resp.task)}
         ${resp.expectedOutput ? `<div class="expected-output">📋 期望输出：\n${resp.expectedOutput}</div>` : ''}
       </div>
       ${resp.extraChallenge ? `
