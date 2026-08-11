@@ -1,386 +1,931 @@
 [
   {
-    "id": 1, "chapter": "第1章 · 初识C语言", "title": "你的第一个程序", "xp": 30,
+    "id": 1,
+    "chapter": "第1章 · 初识C语言",
+    "title": "你的第一个程序",
+    "xp": 30,
     "theory": "## 🖐️ 欢迎来到C语言\n\nC语言1972年诞生于贝尔实验室，至今仍是操作系统、嵌入式、数据库等底层系统的首选语言。\n\n---\n\n### 📝 第一个程序：Hello World\n\n```c\n#include <stdio.h>\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n```\n\n---\n\n### 🔍 逐行解析\n\n| 代码 | 含义 | 记忆要点 |\n|------|------|---------|\n| `#include <stdio.h>` | 引入标准输入输出库 | `#` 开头 = 预处理指令 |\n| `int main()` | 程序入口函数 | 每个程序必须有且仅有一个 |\n| `{` ... `}` | 函数体边界 | 左花括号开始，右花括号结束 |\n| `printf(\"...\");` | 屏幕输出 | print + f = 格式化打印 |\n| `\\n` | 换行符 | 反斜杠 + n = newline |\n| `return 0;` | 程序正常结束 | 0 = 成功，非0 = 出错 |\n| `;` | 语句结束符 | C语言每句话必须以分号结尾 |",
     "task": "修改 printf 中的文字，让程序输出 `Hello, C World!`",
     "starterCode": "#include <stdio.h>\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}\n",
-    "expectedOutput": "Hello, C World!", "matchType": "contains",
-    "hints": ["💡 只改双引号里的文字", "🔓 答案: printf(\"Hello, C World!\\n\");"]
+    "expectedOutput": "Hello, C World!",
+    "matchType": "contains",
+    "hints": [
+      "💡 只改双引号里的文字",
+      "🔓 答案: printf(\"Hello, C World!\\n\");"
+    ]
   },
   {
-    "id": 2, "chapter": "第1章 · 初识C语言", "title": "程序的基本结构", "xp": 35,
+    "id": 2,
+    "chapter": "第1章 · 初识C语言",
+    "title": "程序的基本结构",
+    "xp": 35,
     "theory": "## 🏗️ C程序的骨架\n\n每个C程序都遵循固定的结构模板。理解这个骨架，后面学什么都是往里面填内容。\n\n---\n\n### 📐 标准结构\n\n| 部分 | 位置 | 作用 | 是否必需 |\n|------|------|------|---------|\n| 预处理指令 | 文件最顶部 | 引入库、定义常量 | 按需 |\n| main 函数 | 必有 | 程序入口 | ✅ 必需 |\n| 语句 | main 内部 | 实际执行的代码 | ✅ 必需 |\n| 注释 | 任意位置 | 给人看的说明 | 建议添加 |\n\n---\n\n### ✍️ 注释的写法\n\n| 类型 | 语法 | 适用场景 |\n|------|------|---------|\n| 单行注释 | `// 这是一条注释` | 简短说明 |\n| 多行注释 | `/* 多行\\n注释 */` | 详细文档 |\n\n---\n\n### 🎯 main 函数的三种写法\n\n| 写法 | 含义 |\n|------|------|\n| `int main() { }` | 标准写法，返回 int |\n| `int main(void) { }` | 明确表示无参数 |\n| `void main() { }` | 不推荐，非标准 |\n\n---\n\n### 📏 代码缩进——让代码「看得见」结构\n\n缩进（Indentation）是在代码行前面加空格，让代码的嵌套层次一目了然。C语言**不强制**缩进，但**强烈建议**使用——缩进良好的代码，调试效率提升数倍。\n\n---\n\n### 👍 好缩进 vs 👎 坏缩进\n\n| | 有缩进 ✅ | 无缩进 ❌ |\n|------|---------|----------|\n| 代码 | `int main() {`<br>`····printf(\"Hi\");`<br>`····return 0;`<br>`}` | `int main() {`<br>`printf(\"Hi\");`<br>`return 0;`<br>`}` |\n| 可读性 | 一眼看出函数体内容 | 代码「趴在左边」，结构模糊 |\n\n---\n\n### 📐 缩进规则\n\n| 规则 | 说明 | 示例 |\n|------|------|------|\n| 每层 `{` 后缩进一级 | 进入函数/循环/if 后向右缩进 | `if(x>0){` → 下一行缩进 |\n| `}` 回到上一层 | 右花括号与对应代码块左边界对齐 | 缩进级别还原 |\n| 缩进量统一 | 推荐 **4 个空格**（或 1 个 Tab） | 全文件保持一致 |\n| 不要混用 Tab 和空格 | 会导致不同编辑器显示混乱 | 选一种并坚持 |\n\n---\n\n### 🔍 缩进可视化\n\n```c\nint main() {              // 缩进级别 0\n····printf(\"Hello\\n\");  // 缩进级别 1（1 个 Tab = 4 空格）\n····if (1 > 0) {         // 缩进级别 1\n········printf(\"Yes\");  // 缩进级别 2\n····}                    // 缩进级别 1\n····return 0;            // 缩进级别 1\n}                         // 缩进级别 0\n```\n\n> 💡 记住：`{` 后的下一行向右缩进，`}` 本身与其匹配的代码块左边界对齐。",
     "task": "给下面代码添加注释：在 printf 上方加一行 `// 输出欢迎信息`，然后让程序输出 `Welcome to C!`",
     "starterCode": "#include <stdio.h>\nint main() {\n    printf(\"Hello\\n\");\n    return 0;\n}\n",
-    "expectedOutput": "Welcome to C!", "matchType": "contains",
-    "hints": ["💡 注释写法: // 你的文字", "💡 把 printf 里的 Hello 改成 Welcome to C!", "🔓 答案: // 输出欢迎信息\\nprintf(\"Welcome to C!\\n\");"]
+    "expectedOutput": "Welcome to C!",
+    "matchType": "contains",
+    "hints": [
+      "💡 注释写法: // 你的文字",
+      "💡 把 printf 里的 Hello 改成 Welcome to C!",
+      "🔓 答案: // 输出欢迎信息\\nprintf(\"Welcome to C!\\n\");"
+    ]
   },
   {
-    "id": 3, "chapter": "第2章 · 数据与变量", "title": "基本数据类型", "xp": 40,
+    "id": 3,
+    "chapter": "第2章 · 数据与变量",
+    "title": "基本数据类型",
+    "xp": 40,
     "theory": "## 📦 数据类型——告诉计算机「这是什么」\n\nC语言是强类型语言：每个变量必须先声明类型才能使用。\n\n---\n\n### 📊 四大基本类型\n\n| 类型 | 关键字 | 占用空间 | 取值范围 | 示例 |\n|------|--------|---------|---------|------|\n| 整数 | `int` | 4字节 | -21亿 ~ 21亿 | `int age = 18;` |\n| 单精度浮点 | `float` | 4字节 | ±3.4×10³⁸（约7位精度） | `float pi = 3.14f;` |\n| 双精度浮点 | `double` | 8字节 | ±1.7×10³⁰⁸（约15位精度） | `double e = 2.71828;` |\n| 字符 | `char` | 1字节 | -128 ~ 127 或 0 ~ 255 | `char c = 'A';` |\n\n---\n\n### 🔤 字符 vs 字符串\n\n| 概念 | 写法 | 本质 |\n|------|------|------|\n| 字符 | `'A'` 单引号 | 一个字节 |\n| 字符串 | `\"ABC\"` 双引号 | 字符数组 + `\\0` |",
     "task": "声明三个变量：`int year = 2024;`、`float temp = 36.5;`、`char grade = 'A';`，用 printf 输出它们的值",
     "starterCode": "#include <stdio.h>\nint main() {\n    int year = 2024;\n    float temp = 36.5;\n    char grade = 'A';\n    printf(\"Year: %d\\n\", year);\n    printf(\"Temp: %.1f\\n\", ???);\n    printf(\"Grade: %c\\n\", ???);\n    return 0;\n}\n",
-    "expectedOutput": "Year: 2024\nTemp: 36.5\nGrade: A", "matchType": "exact",
-    "hints": ["💡 %f 对应 float，%c 对应 char", "🔓 答案: printf(\"Temp: %.1f\\n\", temp); printf(\"Grade: %c\\n\", grade);"]
+    "expectedOutput": "Year: 2024\nTemp: 36.5\nGrade: A",
+    "matchType": "exact",
+    "hints": [
+      "💡 %f 对应 float，%c 对应 char",
+      "🔓 答案: printf(\"Temp: %.1f\\n\", temp); printf(\"Grade: %c\\n\", grade);"
+    ]
   },
   {
-    "id": 4, "chapter": "第2章 · 数据与变量", "title": "变量声明与赋值", "xp": 40,
+    "id": 4,
+    "chapter": "第2章 · 数据与变量",
+    "title": "变量声明与赋值",
+    "xp": 40,
     "theory": "## ✍️ 变量的三种操作\n\n| 操作 | 代码 | 说明 |\n|------|------|------|\n| 声明 | `int score;` | 告诉编译器：我要一个叫score的整型变量 |\n| 赋值 | `score = 95;` | 把95放进score |\n| 初始化 | `int age = 18;` | 声明的同时赋值（推荐） |\n\n---\n\n### 🏷️ 命名规则\n\n| 规则 | ✅ 正确 | ❌ 错误 |\n|------|---------|---------|\n| 字母数字下划线 | `player1`, `max_hp` | `player-1`, `max hp` |\n| 不能数字开头 | `count2` | `2count` |\n| 不能是关键字 | `value` | `int`, `if`, `return` |\n| 区分大小写 | `Age ≠ age` | — |\n\n---\n\n### 🔄 变量值的交换\n\n交换两个变量的值需要一个临时变量：\n```c\nint a = 10, b = 20;\nint temp = a;  // 暂存a\na = b;         // a 变成 b 的值\nb = temp;      // b 变成暂存的 a 的值\n```\n| 步骤 | a | b | temp |\n|------|---|---|------|\n| 初始 | 10 | 20 | — |\n| temp=a | 10 | 20 | 10 |\n| a=b | 20 | 20 | 10 |\n| b=temp | 20 | 10 | 10 |",
     "task": "交换 `a=10, b=20` 的值，让程序输出 `a=20, b=10`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int a = 10, b = 20;\n    // 👇 在这里完成交换\n\n\n    printf(\"a=%d, b=%d\\n\", a, b);\n    return 0;\n}\n",
-    "expectedOutput": "a=20, b=10", "matchType": "exact",
-    "hints": ["💡 需要一个临时变量 int temp;", "💡 temp = a; a = b; b = temp;", "🔓 答案: int temp=a; a=b; b=temp;"]
+    "expectedOutput": "a=20, b=10",
+    "matchType": "exact",
+    "hints": [
+      "💡 需要一个临时变量 int temp;",
+      "💡 temp = a; a = b; b = temp;",
+      "🔓 答案: int temp=a; a=b; b=temp;"
+    ]
   },
   {
-    "id": 5, "chapter": "第2章 · 数据与变量", "title": "格式化输入输出", "xp": 45,
+    "id": 5,
+    "chapter": "第2章 · 数据与变量",
+    "title": "格式化输入输出",
+    "xp": 45,
     "theory": "## ⌨️ printf 和 scanf — 程序的嘴和耳朵\n\n`printf` 把数据输出到屏幕，`scanf` 从键盘读取数据。\n\n---\n\n### 🖨️ printf 格式说明符\n\n| 符号 | 对应类型 | 示例 | 输出 |\n|------|---------|------|------|\n| `%d` | int | `printf(\"%d\", 42);` | `42` |\n| `%f` | float/double | `printf(\"%.2f\", 3.14);` | `3.14` |\n| `%c` | char | `printf(\"%c\", 'A');` | `A` |\n| `%s` | 字符串 | `printf(\"%s\", \"Hi\");` | `Hi` |\n| `%%` | 百分号本身 | `printf(\"100%%\");` | `100%` |\n\n---\n\n### ⌨️ scanf 格式说明符\n\n| 符号 | 读取类型 | 示例 | ⚠️ 注意 |\n|------|---------|------|---------|\n| `%d` | int | `scanf(\"%d\", &n);` | 必须加 `&` |\n| `%f` | float | `scanf(\"%f\", &f);` | 必须加 `&` |\n| `%lf` | double | `scanf(\"%lf\", &d);` | 是 `lf` 不是 `f` |\n| `%s` | 字符串 | `scanf(\"%s\", str);` | ⚠️ 字符串不加 `&` |\n\n---\n\n### 📋 输入输出的标准三步\n\n| 步骤 | 代码 | 说明 |\n|------|------|------|\n| ① 提示 | `printf(\"请输入年龄: \");` | 告诉用户要输入什么 |\n| ② 读取 | `scanf(\"%d\", &age);` | 等待用户输入 |\n| ③ 处理 | `printf(\"你%d岁\\n\", age);` | 使用输入的数据 |",
     "task": "读取用户输入的两个整数，计算并输出它们的和与积",
     "starterCode": "#include <stdio.h>\nint main() {\n    int a, b;\n    printf(\"Enter two numbers: \");\n    scanf(\"%d %d\", &a, &b);\n    printf(\"Sum = %d\\n\", ???);\n    printf(\"Product = %d\\n\", ???);\n    return 0;\n}\n",
-    "expectedOutput": "Enter two numbers: Sum = 8\nProduct = 15", "matchType": "contains", "testInput": "5 3\n",
-    "hints": ["💡 和 = a+b，积 = a*b", "🔓 答案: printf(\"Sum = %d\\n\",a+b); printf(\"Product = %d\\n\",a*b);"]
+    "expectedOutput": "Enter two numbers: Sum = 8\nProduct = 15",
+    "matchType": "contains",
+    "testInput": "5 3\n",
+    "hints": [
+      "💡 和 = a+b，积 = a*b",
+      "🔓 答案: printf(\"Sum = %d\\n\",a+b); printf(\"Product = %d\\n\",a*b);"
+    ]
   },
   {
-    "id": 6, "chapter": "第3章 · 运算符与表达式", "title": "算术与赋值运算符", "xp": 40,
+    "id": 6,
+    "chapter": "第3章 · 运算符与表达式",
+    "title": "算术与赋值运算符",
+    "xp": 40,
     "theory": "## 🔢 算术运算符\n\n| 运算符 | 含义 | 示例 | 结果 |\n|------|------|------|------|\n| `+` | 加 | `5 + 3` | `8` |\n| `-` | 减 | `5 - 3` | `2` |\n| `*` | 乘 | `5 * 3` | `15` |\n| `/` | 除 | `5 / 2` | `2`（整数除法截断！）|\n| `%` | 取余 | `5 % 2` | `1` |\n\n⚠️ **整数除法陷阱**：`5/2` 结果是 `2` 不是 `2.5`！要得到小数结果，至少一个操作数是浮点数：`5.0/2` = `2.5`。\n\n---\n\n### ✍️ 复合赋值运算符\n\n| 写法 | 等价于 |\n|------|------|\n| `x += 5;` | `x = x + 5;` |\n| `x -= 3;` | `x = x - 3;` |\n| `x *= 2;` | `x = x * 2;` |\n| `x /= 4;` | `x = x / 4;` |\n| `x %= 3;` | `x = x % 3;` |\n\n---\n\n### 📈 自增自减\n\n| 写法 | 等价于 | 注意 |\n|------|------|------|\n| `i++` | `i = i + 1` | 先用后加 |\n| `++i` | `i = i + 1` | 先加后用 |\n| `i--` | `i = i - 1` | 先用后减 |",
     "task": "给定 `int x = 10;`，使用复合赋值：x+=5, x*=2, x-=8，输出最终结果 `x = 22`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int x = 10;\n    // 👇 使用复合赋值运算符\n    x += 5;\n    \n    \n    printf(\"x = %d\\n\", x);\n    return 0;\n}\n",
-    "expectedOutput": "x = 22", "matchType": "contains",
-    "hints": ["💡 x+=5 之后 x=15，x*=2 之后 x=30，x-=8 之后 x=22", "🔓 答案: x+=5; x*=2; x-=8;"]
+    "expectedOutput": "x = 22",
+    "matchType": "contains",
+    "hints": [
+      "💡 x+=5 之后 x=15，x*=2 之后 x=30，x-=8 之后 x=22",
+      "🔓 答案: x+=5; x*=2; x-=8;"
+    ]
   },
   {
-    "id": 7, "chapter": "第3章 · 运算符与表达式", "title": "比较与逻辑运算符", "xp": 45,
+    "id": 7,
+    "chapter": "第3章 · 运算符与表达式",
+    "title": "比较与逻辑运算符",
+    "xp": 45,
     "theory": "## 🔣 比较运算符\n\n| 符号 | 含义 | 示例 | 结果 |\n|------|------|------|------|\n| `==` | 等于 | `5 == 5` | 真（1）|\n| `!=` | 不等于 | `5 != 3` | 真（1）|\n| `>` | 大于 | `10 > 3` | 真（1）|\n| `<` | 小于 | `3 < 10` | 真（1）|\n| `>=` | 大于等于 | `5 >= 5` | 真（1）|\n| `<=` | 小于等于 | `4 <= 5` | 真（1）|\n\n⚠️ **`==` 和 `=` 的区别**：`a == 5` 是「a等于5吗？」，`a = 5` 是「把5赋给a」。写错编译器不会报错！\n\n---\n\n### 🧩 逻辑运算符\n\n| 符号 | 含义 | 真值表 |\n|------|------|------|\n| `&&` | 与 (AND) | 两边都真 → 真 |\n| `\\|\\|` | 或 (OR) | 至少一边真 → 真 |\n| `!` | 非 (NOT) | 真变假，假变真 |\n\n---\n\n### 🔀 三目运算符\n\n| 语法 | 含义 |\n|------|------|\n| `条件 ? 值1 : 值2` | 条件为真取值1，否则取值2 |\n\n```c\nint max = (a > b) ? a : b;  // 取较大值\n```",
     "task": "读入一个整数，判断它是否是偶数（能被2整除）。偶数输出 `Even`，奇数输出 `Odd`。",
     "starterCode": "#include <stdio.h>\nint main() {\n    int n;\n    scanf(\"%d\", &n);\n    // 👇 用三目运算符判断奇偶\n    \n    return 0;\n}\n",
-    "expectedOutput": "Even", "matchType": "contains", "testInput": "42\n",
-    "hints": ["💡 n % 2 == 0 表示偶数", "💡 三目: (n%2==0) ? printf(\"Even\") : printf(\"Odd\");", "🔓 答案: printf(\"%s\",(n%2==0)?\"Even\":\"Odd\");"]
+    "expectedOutput": "Even",
+    "matchType": "contains",
+    "testInput": "42\n",
+    "hints": [
+      "💡 n % 2 == 0 表示偶数",
+      "💡 三目: (n%2==0) ? printf(\"Even\") : printf(\"Odd\");",
+      "🔓 答案: printf(\"%s\",(n%2==0)?\"Even\":\"Odd\");"
+    ]
   },
   {
-    "id": 8, "chapter": "第4章 · 控制流", "title": "if/else 条件判断", "xp": 50,
+    "id": 8,
+    "chapter": "第4章 · 控制流",
+    "title": "if/else 条件判断",
+    "xp": 50,
     "theory": "## 🚦 if/else — 让程序学会决策\n\n---\n\n### 📐 三种判断结构\n\n| 结构 | 模板 | 何时用 |\n|------|------|------|\n| 单分支 | `if (条件) { 做事; }` | 满足条件才执行 |\n| 双分支 | `if (条件) { 做A; } else { 做B; }` | 二选一 |\n| 多分支 | `if…else if…else if…else` | 多选一 |\n\n---\n\n### 🎯 成绩等级示例\n\n```c\nif (score >= 90)      printf(\"A\\n\");\nelse if (score >= 80) printf(\"B\\n\");\nelse if (score >= 70) printf(\"C\\n\");\nelse if (score >= 60) printf(\"D\\n\");\nelse                   printf(\"F\\n\");\n```\n\n| 关键规则 | 说明 |\n|------|------|\n| 条件从高到低排列 | 先判断最高分，顺序不能乱 |\n| 单语句可省略花括号 | `if (x>0) printf(\"正\");` 合法 |\n| 最后一个 `else` 是兜底 | 以上都不满足时执行 |",
     "task": "读入分数(0-100)，输出等级：90+→A, 80+→B, 70+→C, 60+→D, 其余→F",
     "starterCode": "#include <stdio.h>\nint main() {\n    int score;\n    printf(\"Enter score: \");\n    scanf(\"%d\", &score);\n    // 👇 判断等级\n    \n    return 0;\n}\n",
-    "expectedOutput": "Enter score: Grade: B", "matchType": "contains", "testInput": "85\n",
-    "hints": ["💡 从高分到低分判断: if(score>=90) ... else if(score>=80) ...", "🔓 答案: if(s>=90)printf(\"Grade: A\");else if(s>=80)printf(\"Grade: B\");else if(s>=70)printf(\"Grade: C\");else if(s>=60)printf(\"Grade: D\");else printf(\"Grade: F\");"]
+    "expectedOutput": "Enter score: Grade: B",
+    "matchType": "contains",
+    "testInput": "85\n",
+    "hints": [
+      "💡 从高分到低分判断: if(score>=90) ... else if(score>=80) ...",
+      "🔓 答案: if(s>=90)printf(\"Grade: A\");else if(s>=80)printf(\"Grade: B\");else if(s>=70)printf(\"Grade: C\");else if(s>=60)printf(\"Grade: D\");else printf(\"Grade: F\");"
+    ]
   },
   {
-    "id": 9, "chapter": "第4章 · 控制流", "title": "switch/case 多分支", "xp": 45,
+    "id": 9,
+    "chapter": "第4章 · 控制流",
+    "title": "switch/case 多分支",
+    "xp": 45,
     "theory": "## 🔀 switch/case — 等值判断的更清晰写法\n\n当需要判断一个变量「等于」多个不同值时，`switch` 比一长串 `if-else` 更清晰。\n\n---\n\n### 📐 switch 语法\n\n```c\nswitch (表达式) {\n    case 值1:  /* 代码 */ break;\n    case 值2:  /* 代码 */ break;\n    default:   /* 兜底 */ break;\n}\n```\n\n| 关键字 | 作用 |\n|------|------|\n| `switch(expr)` | 计算表达式，跳转到匹配的 case |\n| `case 值:` | 匹配标签 |\n| `break;` | 跳出 switch，**忘记写会穿透到下一个 case！** |\n| `default:` | 所有 case 都不匹配时的兜底 |\n\n---\n\n### ⚠️ break 穿透陷阱\n\n| 有 break | 无 break（穿透）|\n|---------|---------------|\n| 执行匹配的 case 后跳出 | 继续执行下一个 case 的代码 |\n\n---\n\n### 🆚 switch vs if-else\n\n| 场景 | 推荐 |\n|------|------|\n| 判断整数是否等于几个固定值 | `switch` |\n| 判断范围（>、<）| `if-else` |\n| 复杂条件（&&、\\|\\|）| `if-else` |",
     "task": "用 switch 实现：输入数字1-7，输出对应星期几。输入 `3` → `Wednesday`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int day;\n    scanf(\"%d\", &day);\n    // 👇 用 switch 判断\n    switch(day) {\n        case 1: printf(\"Monday\\n\"); break;\n        case 2: printf(\"Tuesday\\n\"); break;\n        // 👇 继续补充 case 3-7\n        \n        default: printf(\"Invalid\\n\");\n    }\n    return 0;\n}\n",
-    "expectedOutput": "Wednesday", "matchType": "contains", "testInput": "3\n",
-    "hints": ["💡 case 3: printf(\"Wednesday\\n\"); break;", "💡 每个 case 后面都要写 break;", "🔓 答案: 依次补充 case 3 到 case 7，每个后面 break"]
+    "expectedOutput": "Wednesday",
+    "matchType": "contains",
+    "testInput": "3\n",
+    "hints": [
+      "💡 case 3: printf(\"Wednesday\\n\"); break;",
+      "💡 每个 case 后面都要写 break;",
+      "🔓 答案: 依次补充 case 3 到 case 7，每个后面 break"
+    ]
   },
   {
-    "id": 10, "chapter": "第4章 · 控制流", "title": "for 循环", "xp": 50,
+    "id": 10,
+    "chapter": "第4章 · 控制流",
+    "title": "for 循环",
+    "xp": 50,
     "theory": "## 🔄 for 循环 — 精确控制重复次数\n\n---\n\n### 📐 for 循环解剖\n\n```c\nfor (①初始化; ②条件; ③更新) {\n    ④循环体\n}\n```\n\n| 部分 | 何时执行 | 示例 |\n|------|---------|------|\n| ① 初始化 | 循环开始前执行**一次** | `int i = 0` |\n| ② 条件 | 每次循环**前**检查 | `i < 10` |\n| ③ 更新 | 每次循环**后**执行 | `i++` |\n| ④ 循环体 | 条件为真时执行 | `printf(\"%d\", i);` |\n\n---\n\n### 📊 执行顺序追踪\n\n```c\nfor (int i = 1; i <= 3; i++) {\n    printf(\"%d \", i);\n}\n```\n\n| 轮次 | ①初始化 | ②条件 | ④循环体 | ③更新 |\n|------|---------|------|---------|------|\n| 1 | i=1 | 1≤3✓ | 输出1 | i=2 |\n| 2 | — | 2≤3✓ | 输出2 | i=3 |\n| 3 | — | 3≤3✓ | 输出3 | i=4 |\n| 4 | — | 4≤3✗ | 退出 | — |\n\n---\n\n### 🎯 常见模式\n\n| 模式 | 代码 | 用途 |\n|------|------|------|\n| 正序 0~9 | `for(i=0;i<10;i++)` | 遍历数组 |\n| 正序 1~10 | `for(i=1;i<=10;i++)` | 计数 |\n| 倒序 | `for(i=9;i>=0;i--)` | 反向遍历 |\n| 步长2 | `for(i=0;i<10;i+=2)` | 跳元素 |",
     "task": "用 for 循环输出 5 的乘法表（5×1 到 5×10）",
     "starterCode": "#include <stdio.h>\nint main() {\n    int n = 5;\n    // 👇 for 循环 1 到 10\n    \n    return 0;\n}\n",
-    "expectedOutput": "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50", "matchType": "exact",
-    "hints": ["💡 for(int i=1; i<=10; i++)", "💡 printf(\"%d x %d = %d\\n\", n, i, n*i);", "🔓 答案: for(int i=1;i<=10;i++)printf(\"%d x %d = %d\\n\",n,i,n*i);"]
+    "expectedOutput": "5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n5 x 6 = 30\n5 x 7 = 35\n5 x 8 = 40\n5 x 9 = 45\n5 x 10 = 50",
+    "matchType": "exact",
+    "hints": [
+      "💡 for(int i=1; i<=10; i++)",
+      "💡 printf(\"%d x %d = %d\\n\", n, i, n*i);",
+      "🔓 答案: for(int i=1;i<=10;i++)printf(\"%d x %d = %d\\n\",n,i,n*i);"
+    ]
   },
   {
-    "id": 11, "chapter": "第4章 · 控制流", "title": "while 与嵌套循环", "xp": 55,
+    "id": 11,
+    "chapter": "第4章 · 控制流",
+    "title": "while 与嵌套循环",
+    "xp": 55,
     "theory": "## 🔁 while — 不知道循环次数时用它\n\n| 循环类型 | 最少执行 | 适用场景 |\n|------|---------|------|\n| `while(条件){…}` | 0次 | 先判断再执行 |\n| `do{…}while(条件);` | 1次 | 先执行再判断 |\n| `for(;;){…}` | 看条件 | 已知循环次数 |\n\n---\n\n### 🎯 while 示例：数字反转\n\n```c\nint n = 1234, rev = 0;\nwhile (n > 0) {\n    rev = rev * 10 + n % 10;\n    n = n / 10;\n}\n// rev = 4321\n```\n\n---\n\n### 🪆 嵌套循环\n\n```c\nfor (int i = 1; i <= 9; i++) {      // 外层：行\n    for (int j = 1; j <= i; j++) {  // 内层：列\n        printf(\"%dx%d=%-2d \", j, i, i*j);\n    }\n    printf(\"\\n\");\n}\n```\n\n| 概念 | 说明 |\n|------|------|\n| 外层循环 | 控制行数 |\n| 内层循环 | 控制每行内容 |\n| 执行次数 | 外层 × 内层 |",
     "task": "用嵌套循环打印 9×9 乘法表的前3行。提示：外层 i 从1到3，内层 j 从1到 i。",
     "starterCode": "#include <stdio.h>\nint main() {\n    for(int i=1; i<=3; i++) {\n        for(int j=1; j<=i; j++) {\n            printf(\"%dx%d=%d \", j, i, i*j);\n        }\n        printf(\"\\n\");\n    }\n    return 0;\n}\n",
-    "expectedOutput": "1x1=1\n2x1=2 2x2=4\n3x1=3 3x2=6 3x3=9", "matchType": "exact",
-    "hints": ["💡 这道题代码已经给好了，直接运行查看效果", "💡 试着把外层循环的 3 改成 9 看看完整乘法表"]
+    "expectedOutput": "1x1=1\n2x1=2 2x2=4\n3x1=3 3x2=6 3x3=9",
+    "matchType": "exact",
+    "hints": [
+      "💡 这道题代码已经给好了，直接运行查看效果",
+      "💡 试着把外层循环的 3 改成 9 看看完整乘法表"
+    ]
   },
   {
-    "id": 12, "chapter": "第5章 · 数组", "title": "一维数组基础", "xp": 50,
+    "chapter": "第5章 · 字符输入输出",
+    "title": "getchar 与 putchar",
+    "xp": 45,
+    "theory": "## ⌨️ getchar/putchar — 逐字符读写\n\n`scanf`/`printf` 处理格式化数据，`getchar`/`putchar` 处理单个字符——更底层、更灵活。\n\n---\n\n### 📐 两个函数\n\n| 函数 | 作用 | 返回值 | 头文件 |\n|------|------|------|------|\n| `int getchar(void)` | 从键盘读取一个字符 | 字符的 ASCII 码（int） | `<stdio.h>` |\n| `int putchar(int c)` | 向屏幕输出一个字符 | 输出的字符 | `<stdio.h>` |\n\n---\n\n### 🎯 为什么返回值是 int ？\n\n因为需要区分「读到字符」和「文件结束 EOF（-1）」。\n\n```c\nint c;\nc = getchar();  // 读一个字符\nputchar(c);     // 输出这个字符\n```\n\n---\n\n### 🔄 echo 回显循环\n\n```c\nint c;\nwhile ((c = getchar()) != '\\n') {\n    putchar(c);\n}\n```\n\n| 表达式 | 含义 |\n|------|------|\n| `c = getchar()` | 读取一个字符赋给 c |\n| `!= '\\n'` | 检查是否换行符 |\n| `putchar(c)` | 原样输出 |",
+    "task": "用 getchar/putchar 循环读取字符直到换行，将小写字母转为大写输出（其他字符不变）。输入 `hello` → `HELLO`",
+    "starterCode": "#include <stdio.h>\nint main() {\n    int c;\n    while((c = getchar()) != '\\n') {\n        // 👇 如果 c 是小写字母(a-z)，转成大写\n        \n        putchar(c);\n    }\n    return 0;\n}\n",
+    "expectedOutput": "HELLO",
+    "matchType": "exact",
+    "testInput": "hello\n",
+    "hints": [
+      "💡 if(c >= 'a' && c <= 'z') c = c - 32;",
+      "💡 'a'-'A' = 32，小写减32得大写",
+      "🔓 答案: if(c>='a'&&c<='z') c-=32;"
+    ],
+    "id": 12
+  },
+  {
+    "chapter": "第5章 · 字符输入输出",
+    "title": "ctype.h 字符分类",
+    "xp": 45,
+    "theory": "## 🏷️ ctype.h — 字符检测工具箱\n\n手动判断字符类型（`c>='a' && c<='z'`）容易出错。`<ctype.h>` 提供标准化的字符分类函数。\n\n---\n\n### 📊 常用函数\n\n| 函数 | 检测内容 | 返回真（非0） |\n|------|---------|-------------|\n| `isalpha(c)` | 字母 A-Z, a-z | c 是字母 |\n| `isdigit(c)` | 数字 0-9 | c 是数字 |\n| `isalnum(c)` | 字母或数字 | c 是字母或数字 |\n| `isspace(c)` | 空白字符 | c 是空格/制表/换行 |\n| `islower(c)` | 小写字母 | c 是小写 |\n| `isupper(c)` | 大写字母 | c 是大写 |\n| `tolower(c)` | 转小写 | 对应小写字母 |\n| `toupper(c)` | 转大写 | 对应大写字母 |\n\n---\n\n### 🔑 示例：统计各类字符\n\n```c\n#include <ctype.h>\nint letters = 0, digits = 0, spaces = 0;\nint c;\nwhile ((c = getchar()) != '\\n') {\n    if (isalpha(c)) letters++;\n    else if (isdigit(c)) digits++;\n    else if (isspace(c)) spaces++;\n}\n```\n\n> 💡 这些函数比手写判断更可靠——它们考虑了不同语言的字符编码。",
+    "task": "用 getchar 读入一串字符直到换行，统计字母、数字、空格数量并输出。输入 `abc 123 xyz` → `Letters:6 Digits:3 Spaces:2`",
+    "starterCode": "#include <stdio.h>\n#include <ctype.h>\nint main() {\n    int c, letters=0, digits=0, spaces=0;\n    while((c = getchar()) != '\\n') {\n        // 👇 用 isalpha/isdigit/isspace 统计\n        \n    }\n    printf(\"Letters:%d Digits:%d Spaces:%d\\n\", letters, digits, spaces);\n    return 0;\n}\n",
+    "expectedOutput": "Letters:6 Digits:3 Spaces:2",
+    "matchType": "exact",
+    "testInput": "abc 123 xyz\n",
+    "hints": [
+      "💡 if(isalpha(c)) letters++;",
+      "💡 else if(isdigit(c)) digits++; else if(isspace(c)) spaces++;",
+      "🔓 答案: if(isalpha(c))letters++;else if(isdigit(c))digits++;else if(isspace(c))spaces++;"
+    ],
+    "id": 13
+  },
+  {
+    "chapter": "第5章 · 字符输入输出",
+    "title": "输入验证与缓冲区清理",
+    "xp": 50,
+    "theory": "## 🧹 缓冲区——输入流中的隐形队列\n\n键盘输入先存入<strong>缓冲区</strong>，程序从缓冲区读取。`scanf` 读完后可能残留换行符——下次 `getchar` 会直接读到它！\n\n---\n\n### ⚠️ 缓冲区问题示例\n\n```c\nint n; char c;\nscanf(\"%d\", &n);  // 用户输入: 42\\n\ngetchar();  // 读到的是 \\n 而不是期望的字符！\n```\n\n---\n\n### 🔧 解决方案：清空缓冲区\n\n```c\nwhile (getchar() != '\\n');  // 丢弃直到换行\n```\n\n| 步骤 | 代码 | 说明 |\n|------|------|------|\n| ① scanf 读数字 | `scanf(\"%d\", &n);` | `\\n` 残留在缓冲区 |\n| ② 清空缓冲区 | `while(getchar()!='\\n');` | 丢弃残留字符 |\n| ③ 安全读取 | `c = getchar();` | 读到真正想要的字符 |\n\n> 💡 这个模式在交互式程序中极其常用！",
+    "task": "先读整数 n，清空缓冲区，再读一行字符，输出 n 和字符数（不含换行）。输入 `42` + `hello world` → `n=42 len=11`",
+    "starterCode": "#include <stdio.h>\nint main() {\n    int n, c, len=0;\n    scanf(\"%d\", &n);\n    // 👇 清空缓冲区\n    \n    // 👇 读一行字符统计长度\n    while((c = getchar()) != '\\n') len++;\n    printf(\"n=%d len=%d\\n\", n, len);\n    return 0;\n}\n",
+    "expectedOutput": "n=42 len=11",
+    "matchType": "exact",
+    "testInput": "42\nhello world\n",
+    "hints": [
+      "💡 scanf 后加 while(getchar()!='\\n'); 清空残留",
+      "💡 然后 while((c=getchar())!='\\n') len++; 统计字符",
+      "🔓 答案: while(getchar()!='\\n');"
+    ],
+    "id": 14
+  },
+  {
+    "chapter": "第5章 · 字符输入输出",
+    "title": "🏆 章末挑战：文本分析器",
+    "xp": 85,
+    "chapterEnd": true,
+    "theory": "## 🏆 第5章综合挑战\n\n综合运用 getchar/putchar、ctype.h、缓冲区处理。\n\n---\n\n### 🎯 程序功能\n\n| 分析项 | 方法 |\n|------|------|\n| 字符总数 | 循环计数 |\n| 单词数 | 检测字母→非字母的边界 |\n| 行数 | 检测 \\\\n 数量 |\n| 大写转换 | toupper |\n\n---\n\n### 🔑 单词计数算法\n\n在字母→非字母的边界处 +1：\n```c\nif (isalpha(c) && !inWord) {\n    words++;\n    inWord = 1;\n} else if (!isalpha(c)) {\n    inWord = 0;\n}\n```\n\n| 变量 | 作用 |\n|------|------|\n| `inWord` | 标记当前是否在单词内部 |\n| `words` | 累加单词数 |",
+    "task": "读入一段文本（以单独一行的 END 结束），输出字符数、单词数、行数，并将所有字母转大写输出。输入 `Hello World\\nI am learning C\\nEND` → `Chars:29 Words:6 Lines:2` 后跟大写文本",
+    "starterCode": "// 👇 从零开始实现文本分析器\n// 需要 getchar 循环、ctype.h、单词边界检测\n// 遇到 \"END\" 行时结束\n\n",
+    "expectedOutput": "Chars: 29\nWords: 6\nLines: 2",
+    "matchType": "contains",
+    "testInput": "Hello World\nI am learning C\nEND\n",
+    "hints": [
+      "💡 用 while((c=getchar())!=EOF) 读，检测到 END 后 break",
+      "💡 单词边界：由非字母进入字母时 words++",
+      "💡 行数：每次读到 \\n 时 lines++"
+    ],
+    "id": 15
+  },
+  {
+    "id": 16,
+    "chapter": "第6章 · 数组",
+    "title": "一维数组基础",
+    "xp": 50,
     "theory": "## 📊 数组 — 一个名字管理一组数据\n\n---\n\n### 📐 数组操作速查\n\n| 操作 | 代码 | 说明 |\n|------|------|------|\n| 声明 | `int a[5];` | 5个整数，值未初始化 |\n| 声明+初始化 | `int a[] = {1,2,3};` | 大小自动=3 |\n| 访问 | `a[0]` `a[1]` `a[2]` | 下标从0开始 |\n| 修改 | `a[1] = 99;` | 改第2个元素 |\n\n⚠️ **下标从0开始**：`int a[5]` 的有效下标是 `0,1,2,3,4`，`a[5]` 越界！\n\n---\n\n### 🔄 数组 + for = 标配组合\n\n| 操作 | 代码 |\n|------|------|\n| 遍历 | `for(i=0;i<5;i++) printf(\"%d\",a[i]);` |\n| 求和 | `for(i=0;i<5;i++) sum+=a[i];` |\n| 找最大 | `for(i=1;i<5;i++) if(a[i]>max) max=a[i];` |\n| 查找 | `for(i=0;i<5;i++) if(a[i]==target) break;` |",
     "task": "给定数组 `{23,45,12,67,34}`，遍历输出所有元素并找出最大值",
     "starterCode": "#include <stdio.h>\nint main() {\n    int arr[] = {23, 45, 12, 67, 34};\n    int size = 5;\n    printf(\"Array: \");\n    // 👇 遍历输出\n    \n    printf(\"\\n\");\n    // 👇 找最大值\n    int max = arr[0];\n    \n    printf(\"Max: %d\\n\", max);\n    return 0;\n}\n",
-    "expectedOutput": "Array: 23 45 12 67 34\nMax: 67", "matchType": "exact",
-    "hints": ["💡 for(i=0;i<size;i++) printf(\"%d \",arr[i]);", "💡 for(i=1;i<size;i++) if(arr[i]>max) max=arr[i];", "🔓 答案: 两个 for 循环分别完成遍历和找最大值"]
+    "expectedOutput": "Array: 23 45 12 67 34\nMax: 67",
+    "matchType": "exact",
+    "hints": [
+      "💡 for(i=0;i<size;i++) printf(\"%d \",arr[i]);",
+      "💡 for(i=1;i<size;i++) if(arr[i]>max) max=arr[i];",
+      "🔓 答案: 两个 for 循环分别完成遍历和找最大值"
+    ]
   },
   {
-    "id": 13, "chapter": "第5章 · 数组", "title": "数组排序与查找", "xp": 60,
+    "id": 17,
+    "chapter": "第6章 · 数组",
+    "title": "数组排序与查找",
+    "xp": 60,
     "theory": "## 🔢 冒泡排序\n\n```c\nfor (int i = 0; i < n-1; i++) {\n    for (int j = 0; j < n-1-i; j++) {\n        if (a[j] > a[j+1]) {\n            int t = a[j]; a[j] = a[j+1]; a[j+1] = t;\n        }\n    }\n}\n```\n\n| 轮次 | 做了什么 |\n|------|---------|\n| i=0 | 最大元素沉到最后 |\n| i=1 | 次大元素沉到倒数第二 |\n| ... | 依次类推 |\n\n---\n\n### 🔍 二分查找（数组必须已排序）\n\n| 步骤 | 操作 |\n|------|------|\n| 1 | 取中间元素 |\n| 2 | 等于目标 → 找到 |\n| 3 | 大于目标 → 搜左半 |\n| 4 | 小于目标 → 搜右半 |",
     "task": "将数组 `{64,34,25,12,22}` 用冒泡排序升序排列后输出",
     "starterCode": "#include <stdio.h>\nint main() {\n    int a[] = {64, 34, 25, 12, 22};\n    int n = 5;\n    // 👇 冒泡排序\n    \n    // 👇 输出排序结果\n    for(int i=0; i<n; i++) printf(\"%d \", a[i]);\n    return 0;\n}\n",
-    "expectedOutput": "12 22 25 34 64", "matchType": "contains",
-    "hints": ["💡 两层循环: for(i=0;i<n-1;i++) for(j=0;j<n-1-i;j++)", "💡 if(a[j]>a[j+1]) 交换它们", "🔓 答案: 冒泡排序双层循环+交换"]
+    "expectedOutput": "12 22 25 34 64",
+    "matchType": "contains",
+    "hints": [
+      "💡 两层循环: for(i=0;i<n-1;i++) for(j=0;j<n-1-i;j++)",
+      "💡 if(a[j]>a[j+1]) 交换它们",
+      "🔓 答案: 冒泡排序双层循环+交换"
+    ]
   },
   {
-    "id": 14, "chapter": "第6章 · 函数", "title": "函数定义与调用", "xp": 55,
+    "id": 18,
+    "chapter": "第7章 · 函数",
+    "title": "函数定义与调用",
+    "xp": 55,
     "theory": "## 🧩 函数 — 可复用的代码积木\n\n---\n\n### 📐 函数的四个部分\n\n| 部分 | 位置 | 示例 |\n|------|------|------|\n| 返回类型 | **`int`** `add(int a,int b)` | 函数返回值的类型 |\n| 函数名 | `int` **`add`** `(int a,int b)` | 调用时用的名字 |\n| 参数列表 | `int add`**`(int a,int b)`** | 需要传入什么 |\n| 函数体 | `{` **`return a+b;`** `}` | 实际执行的代码 |\n\n---\n\n### ✍️ 完整示例\n\n```c\nint max(int a, int b) {      // 函数定义\n    return (a > b) ? a : b;\n}\nint main() {\n    int m = max(15, 8);      // 函数调用\n    printf(\"Max: %d\\n\", m);  // 输出 Max: 15\n    return 0;\n}\n```\n\n| 规则 | 说明 |\n|------|------|\n| 先定义后调用 | 函数定义必须出现在调用之前 |\n| 或先声明后定义 | 把函数签名写在前面，实现在后面 |\n| `return` 终止函数 | return 之后的代码不执行 |\n| `void` = 无返回值 | `void greet(){printf(\"Hi\");}` |",
     "task": "写一个 `int cube(int n)` 函数返回 n³，然后调用它计算 5 的立方",
     "starterCode": "#include <stdio.h>\n// 👇 在这里定义 cube 函数\n\nint main() {\n    int n = 5;\n    printf(\"Cube: %d\\n\", cube(n));\n    return 0;\n}\n",
-    "expectedOutput": "Cube: 125", "matchType": "exact",
-    "hints": ["💡 int cube(int n) { return n * n * n; }", "🔓 答案: int cube(int n){return n*n*n;}"]
+    "expectedOutput": "Cube: 125",
+    "matchType": "exact",
+    "hints": [
+      "💡 int cube(int n) { return n * n * n; }",
+      "🔓 答案: int cube(int n){return n*n*n;}"
+    ]
   },
   {
-    "id": 15, "chapter": "第6章 · 函数", "title": "递归函数", "xp": 60,
+    "id": 19,
+    "chapter": "第7章 · 函数",
+    "title": "递归函数",
+    "xp": 60,
     "theory": "## 🪞 递归 — 函数调用自己\n\n---\n\n### 🎯 递归两要素\n\n| 要素 | 说明 | 示例（阶乘）|\n|------|------|---------|\n| 基准条件 | 什么时候停止 | `if (n==1) return 1;` |\n| 递归条件 | 如何缩小问题 | `return n * fact(n-1);` |\n\n---\n\n### 📐 经典递归：阶乘\n\n```c\nint fact(int n) {\n    if (n <= 1) return 1;         // 基准：1! = 1\n    return n * fact(n - 1);       // 递归：n! = n × (n-1)!\n}\n```\n\n| 调用 | 返回值 |\n|------|------|\n| `fact(1)` | 1 |\n| `fact(2)` | 2 × fact(1) = 2 |\n| `fact(3)` | 3 × fact(2) = 6 |\n| `fact(5)` | 5 × fact(4) = 120 |\n\n---\n\n### ⚠️ 递归 vs 迭代\n\n| | 递归 | 迭代（循环）|\n|------|------|------|\n| 优点 | 代码简洁优雅 | 效率高，不爆栈 |\n| 缺点 | 太深会栈溢出 | 复杂问题代码长 |\n| 适用 | 树、分治、回溯 | 简单重复 |",
     "task": "用递归实现斐波那契数列：`fib(1)=1, fib(2)=1, fib(n)=fib(n-1)+fib(n-2)`。计算 fib(8)。",
     "starterCode": "#include <stdio.h>\n// 👇 递归实现 fib\n\nint main() {\n    printf(\"fib(8) = %d\\n\", fib(8));\n    return 0;\n}\n",
-    "expectedOutput": "fib(8) = 21", "matchType": "exact",
-    "hints": ["💡 if(n<=2) return 1;", "💡 return fib(n-1) + fib(n-2);", "🔓 答案: int fib(int n){if(n<=2)return 1;return fib(n-1)+fib(n-2);}"]
+    "expectedOutput": "fib(8) = 21",
+    "matchType": "exact",
+    "hints": [
+      "💡 if(n<=2) return 1;",
+      "💡 return fib(n-1) + fib(n-2);",
+      "🔓 答案: int fib(int n){if(n<=2)return 1;return fib(n-1)+fib(n-2);}"
+    ]
   },
   {
-    "id": 16, "chapter": "第6章 · 函数", "title": "作用域与存储类", "xp": 50,
+    "id": 20,
+    "chapter": "第7章 · 函数",
+    "title": "作用域与存储类",
+    "xp": 50,
     "theory": "## 🔭 变量在哪里可见？\n\n---\n\n### 📍 三种作用域\n\n| 作用域 | 声明位置 | 可见范围 | 生命周期 |\n|------|---------|---------|---------|\n| 局部变量 | 函数/代码块内部 | 仅该块内 | 离开块即销毁 |\n| 全局变量 | 所有函数外部 | 整个文件 | 程序运行期间 |\n| 静态局部 | 函数内 + `static` | 仅该函数内 | 程序运行期间 |\n\n---\n\n### 🔑 存储类关键字\n\n| 关键字 | 作用 |\n|------|------|\n| `auto` | 默认，自动分配释放 |\n| `static` | 值在函数调用间保持 |\n| `extern` | 声明外部文件中的全局变量 |\n| `register` | 建议放寄存器（编译器可能忽略）|\n\n---\n\n### 📊 static 局部变量示例\n\n```c\nvoid counter() {\n    static int count = 0;  // 只初始化一次！\n    count++;\n    printf(\"%d\\n\", count);\n}\n// 第一次调用 → 1，第二次 → 2，第三次 → 3\n```",
     "task": "写一个函数 `count`，每次调用输出递增的数字（用 static）。调用3次，输出 `1 2 3`",
     "starterCode": "#include <stdio.h>\nvoid counter() {\n    // 👇 用 static 变量\n    \n    printf(\"%d \", ???);\n}\nint main() {\n    counter(); counter(); counter();\n    return 0;\n}\n",
-    "expectedOutput": "1 2 3", "matchType": "contains",
-    "hints": ["💡 static int c = 0; c++;", "💡 每次调用 c 保持上次的值", "🔓 答案: static int c=0; c++; printf(\"%d \",c);"]
+    "expectedOutput": "1 2 3",
+    "matchType": "contains",
+    "hints": [
+      "💡 static int c = 0; c++;",
+      "💡 每次调用 c 保持上次的值",
+      "🔓 答案: static int c=0; c++; printf(\"%d \",c);"
+    ]
   },
   {
-    "id": 17, "chapter": "第7章 · 指针", "title": "指针基础", "xp": 60,
+    "id": 21,
+    "chapter": "第8章 · 指针",
+    "title": "指针基础",
+    "xp": 60,
     "theory": "## 👉 指针 = 存储地址的变量\n\n---\n\n### 🔑 三个核心操作\n\n| 符号 | 名称 | 作用 |\n|------|------|------|\n| `int *p` | 声明指针 | 声明一个指向 int 的指针变量 |\n| `&x` | 取地址 | 获取变量 x 的内存地址 |\n| `*p` | 解引用 | 取出指针 p 指向的那个值 |\n\n---\n\n### 🎯 直观理解\n\n```c\nint x = 42;\nint *p = &x;   // p 存的是 x 的地址\n\nprintf(\"%d\", x);   // 42 — 直接拿\nprintf(\"%d\", *p);  // 42 — 按地址去拿\nprintf(\"%p\", p);   // 某个地址，如 0x7ffd...\nprintf(\"%p\", &x);  // 和 p 相同\n```\n\n| 表达式 | 值 | 类型 |\n|------|-----|------|\n| `x` | 42 | int |\n| `&x` | x的地址 | int* |\n| `p` | x的地址 | int* |\n| `*p` | 42 | int |",
     "task": "声明 `int x=100`，创建指针 `p` 指向 x，通过指针修改 x 的值为 200，输出验证。",
     "starterCode": "#include <stdio.h>\nint main() {\n    int x = 100;\n    int *p = &x;\n    // 👇 通过指针修改 x\n    \n    printf(\"x = %d\\n\", x);\n    return 0;\n}\n",
-    "expectedOutput": "x = 200", "matchType": "exact",
-    "hints": ["💡 *p = 200; 通过解引用修改 x", "🔓 答案: *p = 200;"]
+    "expectedOutput": "x = 200",
+    "matchType": "exact",
+    "hints": [
+      "💡 *p = 200; 通过解引用修改 x",
+      "🔓 答案: *p = 200;"
+    ]
   },
   {
-    "id": 18, "chapter": "第7章 · 指针", "title": "指针与数组", "xp": 60,
+    "id": 22,
+    "chapter": "第8章 · 指针",
+    "title": "指针与数组",
+    "xp": 60,
     "theory": "## 🔗 指针和数组的亲密关系\n\n数组名本身就是指向首元素的指针。\n\n---\n\n### 📐 等价关系\n\n| 数组写法 | 指针写法 | 含义 |\n|------|------|------|\n| `arr[0]` | `*p` | 第一个元素 |\n| `arr[i]` | `*(p + i)` | 第 i+1 个元素 |\n| `arr` | `p` | 首元素地址 |\n| `&arr[i]` | `p + i` | 第 i+1 个元素的地址 |\n\n---\n\n### 🔄 指针遍历数组\n\n```c\nint arr[] = {10, 20, 30, 40, 50};\nint *p = arr;              // p 指向 arr[0]\nfor (int i = 0; i < 5; i++) {\n    printf(\"%d \", *(p+i)); // 等效于 arr[i]\n}\n```\n\n| 指针运算 | 实际移动 |\n|------|------|\n| `p + 1` | 向后移动 1 个元素（4字节 for int）|\n| `p++` | p 指向下一个元素 |\n| `p2 - p1` | 两指针之间的元素个数 |",
     "task": "用指针（不用下标）遍历数组 `{10,20,30,40,50}` 并求和输出 `Sum: 150`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40, 50};\n    int *p = arr;\n    int sum = 0;\n    // 👇 用指针遍历求和\n    for(int i = 0; i < 5; i++) {\n        \n    }\n    printf(\"Sum: %d\\n\", sum);\n    return 0;\n}\n",
-    "expectedOutput": "Sum: 150", "matchType": "exact",
-    "hints": ["💡 sum += *(p + i);", "💡 或者 sum += *p; p++;", "🔓 答案: sum += *(p+i); 或 sum += p[i];"]
+    "expectedOutput": "Sum: 150",
+    "matchType": "exact",
+    "hints": [
+      "💡 sum += *(p + i);",
+      "💡 或者 sum += *p; p++;",
+      "🔓 答案: sum += *(p+i); 或 sum += p[i];"
+    ]
   },
   {
-    "id": 19, "chapter": "第7章 · 指针", "title": "指针与函数", "xp": 65,
+    "id": 23,
+    "chapter": "第8章 · 指针",
+    "title": "指针与函数",
+    "xp": 65,
     "theory": "## 🔄 指针参数 — 让函数修改外部变量\n\nC语言默认传值：函数收到的是副本。传指针才能修改原值。\n\n---\n\n### 🎯 swap 函数\n\n```c\nvoid swap(int *a, int *b) {\n    int temp = *a;\n    *a = *b;\n    *b = temp;\n}\n// 调用: swap(&x, &y);  ← 传地址！\n```\n\n| 执行步骤 | 代码 | a指向的值 | b指向的值 |\n|------|------|---------|---------|\n| 初始 | — | x=5 | y=10 |\n| temp=*a | `int t=*a;` | 5 | 10（t=5）|\n| *a=*b | `*a=*b;` | 10 | 10 |\n| *b=temp | `*b=t;` | 10 | 5 |\n\n---\n\n### ⚠️ 常见错误\n\n| 错误 | 后果 |\n|------|------|\n| 忘记 `&` | 传了值而不是地址 |\n| 函数内忘记 `*` | 改了指针本身而不是指向的值 |\n| 空指针解引用 | 程序崩溃 |",
     "task": "写 swap 函数，交换两个变量的值。输出交换前后的 a 和 b。",
     "starterCode": "#include <stdio.h>\n// 👇 写 swap 函数\n\nint main() {\n    int a = 5, b = 10;\n    printf(\"Before: a=%d, b=%d\\n\", a, b);\n    swap(&a, &b);\n    printf(\"After: a=%d, b=%d\\n\", a, b);\n    return 0;\n}\n",
-    "expectedOutput": "Before: a=5, b=10\nAfter: a=10, b=5", "matchType": "exact",
-    "hints": ["💡 void swap(int *a, int *b) { int t=*a; *a=*b; *b=t; }", "🔓 答案: void swap(int *a,int *b){int t=*a;*a=*b;*b=t;}"]
+    "expectedOutput": "Before: a=5, b=10\nAfter: a=10, b=5",
+    "matchType": "exact",
+    "hints": [
+      "💡 void swap(int *a, int *b) { int t=*a; *a=*b; *b=t; }",
+      "🔓 答案: void swap(int *a,int *b){int t=*a;*a=*b;*b=t;}"
+    ]
   },
   {
-    "id": 20, "chapter": "第7章 · 指针", "title": "动态内存分配", "xp": 65,
+    "id": 24,
+    "chapter": "第8章 · 指针",
+    "title": "动态内存分配",
+    "xp": 65,
     "theory": "## 🗂️ malloc/free — 按需分配内存\n\n数组大小必须编译时确定。`malloc` 让你在运行时按需分配。\n\n---\n\n### 📐 四个核心函数\n\n| 函数 | 作用 | 示例 |\n|------|------|------|\n| `malloc(n)` | 分配 n 字节 | `int *p = malloc(5*sizeof(int));` |\n| `calloc(n,s)` | 分配 n 个大小为 s 的元素（初始化为0） | `int *p = calloc(5,sizeof(int));` |\n| `realloc(p,n)` | 调整已分配内存大小 | `p = realloc(p, 10*sizeof(int));` |\n| `free(p)` | 释放内存 | `free(p);` |\n\n⚠️ **malloc 后必须 free**，否则内存泄漏！\n\n---\n\n### ✍️ 使用模板\n\n```c\n#include <stdlib.h>\nint *arr = malloc(5 * sizeof(int));\nif (arr == NULL) { printf(\"分配失败\"); return 1; }\nfor(int i=0; i<5; i++) arr[i] = i*10;\nfree(arr);  // 用完释放\n```\n\n| 步骤 | 说明 |\n|------|------|\n| ① malloc | 申请内存 |\n| ② 检查NULL | 分配可能失败 |\n| ③ 使用 | 和数组一样用 |\n| ④ free | 必须释放 |",
     "task": "用 malloc 动态分配一个能存5个 int 的数组，赋值为 `{11,22,33,44,55}`，求和输出 `Sum: 165`",
     "starterCode": "#include <stdio.h>\n#include <stdlib.h>\nint main() {\n    int *arr = malloc(5 * sizeof(int));\n    // 👇 赋值\n    \n    // 👇 求和\n    int sum = 0;\n    \n    printf(\"Sum: %d\\n\", sum);\n    free(arr);\n    return 0;\n}\n",
-    "expectedOutput": "Sum: 165", "matchType": "exact",
-    "hints": ["💡 arr[0]=11; arr[1]=22; ... 或 for循环赋值", "💡 for(i=0;i<5;i++) sum+=arr[i];", "🔓 答案: int vals[]={11,22,33,44,55}; for(int i=0;i<5;i++)arr[i]=vals[i]; for(int i=0;i<5;i++)sum+=arr[i];"]
+    "expectedOutput": "Sum: 165",
+    "matchType": "exact",
+    "hints": [
+      "💡 arr[0]=11; arr[1]=22; ... 或 for循环赋值",
+      "💡 for(i=0;i<5;i++) sum+=arr[i];",
+      "🔓 答案: int vals[]={11,22,33,44,55}; for(int i=0;i<5;i++)arr[i]=vals[i]; for(int i=0;i<5;i++)sum+=arr[i];"
+    ]
   },
   {
-    "id": 21, "chapter": "第8章 · 字符串", "title": "字符串基础", "xp": 55,
+    "id": 25,
+    "chapter": "第9章 · 字符串",
+    "title": "字符串基础",
+    "xp": 55,
     "theory": "## 📝 C中的字符串 = char 数组 + \\0\n\n---\n\n### 🔤 字符串的本质\n\n| 声明 | 内存内容 | 长度(strlen) |\n|------|---------|-------------|\n| `char s[] = \"Hi\";` | `H i \\0` | 2 |\n| `char s[10] = \"Hello\";` | `H e l l o \\0 _ _ _ _` | 5 |\n\n`\\0`（空字符/NUL）标记字符串结束。忘记 `\\0` 是所有字符串 bug 的根源。\n\n---\n\n### 📥 字符串输入\n\n| 函数 | 特点 |\n|------|------|\n| `scanf(\"%s\",s)` | 遇空格停止，不安全 |\n| `gets(s)` | ⚠️ 已废弃，危险！|\n| `fgets(s, size, stdin)` | 安全，保留换行符 |\n\n---\n\n### 🛠️ string.h 核心函数\n\n| 函数 | 作用 | 返回值 |\n|------|------|------|\n| `strlen(s)` | 计算长度（不含\\0） | 字符数 |\n| `strcpy(d,s)` | 复制 s 到 d | d 的地址 |\n| `strcmp(a,b)` | 字典序比较 | 0=相等 |\n| `strcat(d,s)` | 拼接 s 到 d 末尾 | d 的地址 |",
     "task": "读取一个名字，输出 `Hello, [名字]!`。例如输入 `Alice` → `Hello, Alice!`",
     "starterCode": "#include <stdio.h>\nint main() {\n    char name[50];\n    printf(\"Enter name: \");\n    scanf(\"%s\", name);\n    printf(\"Hello, %s!\\n\", ???);\n    return 0;\n}\n",
-    "expectedOutput": "Enter name: Hello, Alice!", "matchType": "contains", "testInput": "Alice\n",
-    "hints": ["💡 用 %s 输出字符串: printf(\"Hello, %s!\\n\", name);", "🔓 答案: printf(\"Hello, %s!\\n\", name);"]
+    "expectedOutput": "Enter name: Hello, Alice!",
+    "matchType": "contains",
+    "testInput": "Alice\n",
+    "hints": [
+      "💡 用 %s 输出字符串: printf(\"Hello, %s!\\n\", name);",
+      "🔓 答案: printf(\"Hello, %s!\\n\", name);"
+    ]
   },
   {
-    "id": 22, "chapter": "第8章 · 字符串", "title": "字符串处理实战", "xp": 60,
+    "id": 26,
+    "chapter": "第9章 · 字符串",
+    "title": "字符串处理实战",
+    "xp": 60,
     "theory": "## 🔡 字符判断函数 (ctype.h)\n\n| 函数 | 判断什么 |\n|------|------|\n| `isupper(c)` | 是否大写 A-Z |\n| `islower(c)` | 是否小写 a-z |\n| `isdigit(c)` | 是否数字 0-9 |\n| `isalpha(c)` | 是否字母 |\n| `isspace(c)` | 是否空白 |\n| `toupper(c)` | 转大写 |\n| `tolower(c)` | 转小写 |\n\n---\n\n### 🎯 常见字符串操作\n\n| 需求 | 实现思路 |\n|------|------|\n| 统计大写字母 | 遍历 + isupper() |\n| 大小写转换 | 遍历 + toupper/tolower |\n| 回文检测 | 首尾字符比较 |\n| 反转字符串 | 首尾交换 |\n| 统计单词数 | 检测空格 + 字母边界 |",
     "task": "读取一个字符串，统计其中的大写字母个数。输入 `Hello World` → `Uppercase: 2`",
     "starterCode": "#include <stdio.h>\n#include <string.h>\n#include <ctype.h>\nint main() {\n    char str[100];\n    fgets(str, 100, stdin);\n    int len = strlen(str);\n    if(str[len-1]=='\\n') len--;\n    int upper = 0;\n    // 👇 遍历统计大写\n    \n    printf(\"Uppercase: %d\\n\", upper);\n    return 0;\n}\n",
-    "expectedOutput": "Uppercase: 2", "matchType": "contains", "testInput": "Hello World\n",
-    "hints": ["💡 for(int i=0;i<len;i++) if(isupper(str[i])) upper++;", "🔓 答案: for(int i=0;i<len;i++)if(isupper(str[i]))upper++;"]
+    "expectedOutput": "Uppercase: 2",
+    "matchType": "contains",
+    "testInput": "Hello World\n",
+    "hints": [
+      "💡 for(int i=0;i<len;i++) if(isupper(str[i])) upper++;",
+      "🔓 答案: for(int i=0;i<len;i++)if(isupper(str[i]))upper++;"
+    ]
   },
   {
-    "id": 23, "chapter": "第9章 · 结构体", "title": "结构体定义与使用", "xp": 55,
+    "id": 27,
+    "chapter": "第10章 · 结构体与联合",
+    "title": "结构体定义与使用",
+    "xp": 55,
     "theory": "## 🏗️ struct — 自定义复合类型\n\n---\n\n### 📐 结构体三步\n\n| 步骤 | 代码 | 说明 |\n|------|------|------|\n| ① 定义 | `struct Student { char name[50]; int age; float score; };` | 创建新类型 |\n| ② 声明 | `struct Student s1;` | 用新类型创建变量 |\n| ③ 访问 | `s1.age = 20;` | 用 `.` 读写字段 |\n\n---\n\n### ✍️ 初始化\n\n```c\nstruct Student s = {\"Alice\", 20, 92.5};  // 按顺序初始化\nstruct Student s = {.name=\"Bob\", .age=21}; // 指定字段初始化\n```\n\n---\n\n### 🔧 typedef — 简化类型名\n\n```c\ntypedef struct { float w, h; } Rect;\nRect r = {5.0, 3.0};  // 不需要写 struct 关键字\n```",
     "task": "定义 Rectangle 结构体（width, height），计算面积和周长。w=5.0, h=3.0 → `Area: 15.00, Peri: 16.00`",
     "starterCode": "#include <stdio.h>\n// 👇 定义结构体\n\nint main() {\n    // 👇 初始化\n    \n    float area = ???;\n    float peri = ???;\n    printf(\"Area: %.2f, Peri: %.2f\\n\", area, peri);\n    return 0;\n}\n",
-    "expectedOutput": "Area: 15.00, Peri: 16.00", "matchType": "exact",
-    "hints": ["💡 struct Rect { float w,h; } r = {5.0,3.0};", "💡 area = r.w * r.h; peri = 2*(r.w+r.h);", "🔓 答案: struct Rect{float w,h;}r={5,3}; area=r.w*r.h; peri=2*(r.w+r.h);"]
+    "expectedOutput": "Area: 15.00, Peri: 16.00",
+    "matchType": "exact",
+    "hints": [
+      "💡 struct Rect { float w,h; } r = {5.0,3.0};",
+      "💡 area = r.w * r.h; peri = 2*(r.w+r.h);",
+      "🔓 答案: struct Rect{float w,h;}r={5,3}; area=r.w*r.h; peri=2*(r.w+r.h);"
+    ]
   },
   {
-    "id": 24, "chapter": "第9章 · 结构体", "title": "结构体数组与枚举", "xp": 60,
+    "id": 28,
+    "chapter": "第10章 · 结构体与联合",
+    "title": "结构体数组与枚举",
+    "xp": 60,
     "theory": "## 📚 结构体数组 — 管理多条记录\n\n```c\nstruct Student class[3] = {\n    {\"Alice\", 20, 92.5},\n    {\"Bob\", 21, 85.0},\n    {\"Charlie\", 19, 78.5}\n};\n```\n\n---\n\n### 🏷️ enum — 给整数起名字\n\n```c\nenum Day { MON=1, TUE, WED, THU, FRI, SAT, SUN };\nenum Day today = WED;  // today = 3\n```\n\n| 特性 | 说明 |\n|------|------|\n| 默认从0开始 | `enum Color {RED, GREEN, BLUE}` → 0,1,2 |\n| 可指定值 | `enum {A=10, B=20, C=30}` |\n| switch 好搭档 | `switch(day) { case MON: ... }` |",
     "task": "创建3个学生的结构体数组，按分数降序排序输出。数据：Alice=92.5, Bob=85.0, Charlie=78.5",
     "starterCode": "#include <stdio.h>\nstruct Student { char name[20]; float score; };\nint main() {\n    struct Student s[3] = {{\"Alice\",92.5},{\"Bob\",85.0},{\"Charlie\",78.5}};\n    // 已按分数降序排列，直接输出\n    for(int i=0; i<3; i++)\n        printf(\"%s: %.1f\\n\", s[i].name, s[i].score);\n    return 0;\n}\n",
-    "expectedOutput": "Alice: 92.5\nBob: 85.0\nCharlie: 78.5", "matchType": "exact",
-    "hints": ["💡 这道题代码已写好，直接运行查看结构体数组的用法", "💡 思考：如果数据未排序，如何用冒泡排序按分数排序？"]
+    "expectedOutput": "Alice: 92.5\nBob: 85.0\nCharlie: 78.5",
+    "matchType": "exact",
+    "hints": [
+      "💡 这道题代码已写好，直接运行查看结构体数组的用法",
+      "💡 思考：如果数据未排序，如何用冒泡排序按分数排序？"
+    ]
   },
   {
-    "id": 25, "chapter": "第10章 · 文件操作", "title": "文件读写基础", "xp": 60,
+    "chapter": "第11章 · 位操作",
+    "title": "位逻辑运算符",
+    "xp": 50,
+    "theory": "## 🔢 位操作——直接操控二进制位\n\nC 语言的一大优势：可以直接操作内存中的每一个 bit。嵌入式、驱动、协议开发离不开它。\n\n---\n\n### 📊 四个位运算符\n\n| 运算符 | 名称 | 规则 | 示例 (a=5,b=3) |\n|------|------|------|-------------|\n| `&` | 按位与 | 两位都为 1 → 1 | `5&3` = `1` |\n| `\\|` | 按位或 | 至少一位为 1 → 1 | `5\\|3` = `7` |\n| `^` | 按位异或 | 两位不同 → 1 | `5^3` = `6` |\n| `~` | 按位取反 | 0变1，1变0 | `~5` = `-6`（补码） |\n\n---\n\n### 📐 二进制追踪（8 位视角）\n\n| 十进制 | 二进制 |\n|------|------|\n| 5 | `00000101` |\n| 3 | `00000011` |\n| 5&3 | `00000001` = 1 |\n| 5\\|3 | `00000111` = 7 |\n| 5^3 | `00000110` = 6 |\n\n---\n\n### 🎯 常见用法\n\n| 操作 | 代码 | 说明 |\n|------|------|------|\n| 置位（设1） | `x \\|= (1<<n)` | 把第 n 位设成 1 |\n| 清位（设0） | `x &= ~(1<<n)` | 把第 n 位设成 0 |\n| 翻转 | `x ^= (1<<n)` | 翻转第 n 位 |\n| 检测 | `if(x & (1<<n))` | 检测第 n 位是否为 1 |\n\n> ⚠️ 不要混淆 `&`（按位与）和 `&&`（逻辑与）！`5&3=1` 但 `5&&3=1`（巧合）。",
+    "task": "读入两个整数 a b，输出 `a&b`、`a|b`、`a^b`、`~a` 的值。输入 `5 3` → `1 7 6 -6`",
+    "starterCode": "#include <stdio.h>\nint main() {\n    int a, b;\n    scanf(\"%d %d\", &a, &b);\n    printf(\"%d\\n%d\\n%d\\n%d\\n\", a&b, a|b, a^b, ~a);\n    return 0;\n}\n",
+    "expectedOutput": "1\n7\n6\n-6",
+    "matchType": "exact",
+    "testInput": "5 3\n",
+    "hints": [
+      "💡 这题代码已完整，直接运行看效果",
+      "💡 试试输入不同数字观察位运算规律",
+      "💡 ~a 的负值来自补码表示"
+    ],
+    "id": 29
+  },
+  {
+    "chapter": "第11章 · 位操作",
+    "title": "移位与位掩码",
+    "xp": 55,
+    "theory": "## ↔️ 移位和掩码——位操作的两大法宝\n\n---\n\n### 📐 移位运算符\n\n| 运算符 | 作用 | 示例 | 等效 |\n|------|------|------|------|\n| `<<` | 左移 | `x << n` | x × 2ⁿ |\n| `>>` | 右移 | `x >> n` | x ÷ 2ⁿ（整数除） |\n\n```c\nint x = 3;      // 00000011\nx << 2;         // 00001100 = 12 (3×4)\nx >> 1;         // 00000001 = 1  (3÷2)\n```\n\n---\n\n### 🎭 位掩码\n\n掩码（Mask）用于提取/修改特定位：\n\n| 操作 | 代码 | 说明 |\n|------|------|------|\n| 提取低4位 | `x & 0x0F` | 保留低4位，高位置0 |\n| 提取高4位 | `(x>>4) & 0x0F` | 右移4位后提取 |\n| 设置第n位 | `x \\|= (1<<n)` | 第n位置1 |\n| 清除第n位 | `x &= ~(1<<n)` | 第n位置0 |\n\n---\n\n### 🔑 实用：用掩码表示权限\n\n```c\n#define READ  0x04  // 00000100\n#define WRITE 0x02  // 00000010\n#define EXEC  0x01  // 00000001\nint perm = READ | WRITE;   // 00000110 = 读写权限\nif (perm & READ) printf(\"可读\");  // 检测读权限\n```",
+    "task": "读入一个 8 位无符号整数（0-255），交换它的高 4 位和低 4 位，输出结果。输入 `18`（0b00010010）→ `33`（0b00100001）",
+    "starterCode": "#include <stdio.h>\nint main() {\n    unsigned char x;\n    scanf(\"%hhu\", &x);\n    // 👇 提取低4位和高4位，交换后重组\n    unsigned char low = x & 0x0F;     // 低4位\n    unsigned char high = (x >> 4) & 0x0F;  // 高4位\n    unsigned char result = (low << 4) | high;\n    printf(\"%d\\n\", result);\n    return 0;\n}\n",
+    "expectedOutput": "33",
+    "matchType": "exact",
+    "testInput": "18\n",
+    "hints": [
+      "💡 代码已完整，直接运行验证",
+      "💡 0x0F = 00001111 用于提取低4位",
+      "💡 试试 0 → 0, 255 → 255, 18 → 33"
+    ],
+    "id": 30
+  },
+  {
+    "chapter": "第11章 · 位操作",
+    "title": "🏆 章末挑战：权限标志系统",
+    "xp": 80,
+    "chapterEnd": true,
+    "theory": "## 🏆 第11章综合挑战\n\n综合运用位运算、宏定义、结构体。\n\n---\n\n### 🎯 实现一个权限系统\n\n| 权限 | 宏 | 位值 |\n|------|-----|------|\n| 读取 | `#define PERM_READ 1` | `00000001` |\n| 写入 | `#define PERM_WRITE 2` | `00000010` |\n| 执行 | `#define PERM_EXEC 4` | `00000100` |\n| 删除 | `#define PERM_DELETE 8` | `00001000` |\n\n---\n\n### 🎯 要求\n\n读入当前权限值（0-15）和一个操作请求：\n- `+n` 添加权限 n（1-4 对应 R/W/X/D）\n- `-n` 移除权限 n\n- `?n` 检查是否有权限 n\n\n输出操作后的权限值或检查结果。",
+    "task": "读入初始权限值 perm，然后读操作类型(+/-/?)和权限编号，执行操作。输入 `5 +2 ?2 ?4` → 权限值 7 → 有写入 → 无删除",
+    "starterCode": "// 👇 用 #define 定义四个权限宏\n// 用位运算实现添加、移除、检查\n// 添加: perm |= (1<<(n-1)); 移除: perm &= ~(1<<(n-1)); 检查: perm & (1<<(n-1))\n\n",
+    "expectedOutput": "7\n1\n0",
+    "matchType": "exact",
+    "testInput": "5\n+ 2\n? 2\n? 4\n",
+    "hints": [
+      "💡 #define PERM_READ 0, 添加: perm |= (1<<n)",
+      "💡 移除: perm &= ~(1<<n); 检查: (perm>>n)&1",
+      "💡 用 switch 或 if 判断操作类型"
+    ],
+    "id": 31
+  },
+  {
+    "id": 32,
+    "chapter": "第12章 · 文件操作",
+    "title": "文件读写基础",
+    "xp": 60,
     "theory": "## 📁 文件操作 — 数据持久化\n\n---\n\n### 📐 文件操作四步\n\n| 步骤 | 函数 | 说明 |\n|------|------|------|\n| ① 打开 | `FILE *f = fopen(\"a.txt\", \"w\");` | 返回文件指针 |\n| ② 读写 | `fprintf` / `fscanf` / `fgets` | 读写数据 |\n| ③ 关闭 | `fclose(f);` | **必须关闭！** |\n\n---\n\n### 🔑 文件打开模式\n\n| 模式 | 含义 | 文件不存在时 |\n|------|------|------------|\n| `\"r\"` | 只读 | 出错 |\n| `\"w\"` | 只写 | 创建新文件 |\n| `\"a\"` | 追加 | 创建新文件 |\n| `\"r+\"` | 读写 | 出错 |\n| `\"w+\"` | 读写（清空） | 创建新文件 |\n\n---\n\n### ✍️ 写入和读取\n\n```c\nFILE *f = fopen(\"test.txt\", \"w\");\nfprintf(f, \"Hello %s\\n\", \"World\");  // 写入\nfclose(f);\n\nf = fopen(\"test.txt\", \"r\");\nchar line[100];\nfgets(line, 100, f);                 // 读取一行\nfclose(f);\n```",
     "task": "将字符串 `C Programming` 写入文件 `output.txt`，然后读回并输出到屏幕。",
     "starterCode": "#include <stdio.h>\nint main() {\n    FILE *f = fopen(\"output.txt\", \"w\");\n    fprintf(f, \"C Programming\\n\");\n    fclose(f);\n    // 👇 读回并输出\n    f = fopen(\"output.txt\", \"r\");\n    char buf[100];\n    \n    printf(\"%s\", buf);\n    fclose(f);\n    return 0;\n}\n",
-    "expectedOutput": "C Programming", "matchType": "contains",
-    "hints": ["💡 fgets(buf, 100, f); 读一行到 buf", "🔓 答案: fgets(buf, 100, f);"]
+    "expectedOutput": "C Programming",
+    "matchType": "contains",
+    "hints": [
+      "💡 fgets(buf, 100, f); 读一行到 buf",
+      "🔓 答案: fgets(buf, 100, f);"
+    ]
   },
   {
-    "id": 26, "chapter": "第11章 · 预处理", "title": "宏定义与条件编译", "xp": 55,
+    "id": 33,
+    "chapter": "第13章 · 预处理",
+    "title": "宏定义与条件编译",
+    "xp": 55,
     "theory": "## 🔧 预处理 — 编译前的文本替换\n\n---\n\n### #define 宏定义\n\n| 类型 | 示例 | 展开结果 |\n|------|------|---------|\n| 常量 | `#define PI 3.14159` | 所有 PI → 3.14159 |\n| 宏函数 | `#define SQUARE(x) ((x)*(x))` | SQUARE(5) → 25 |\n\n⚠️ **宏函数陷阱**：`SQUARE(1+2)` 不加括号会变成 `1+2*1+2` = 5 而不是 9！\n\n---\n\n### 🔀 条件编译\n\n```c\n#define DEBUG\n#ifdef DEBUG\n    printf(\"调试信息\\n\");\n#endif\n```\n\n| 指令 | 含义 |\n|------|------|\n| `#ifdef` | 如果定义了 |\n| `#ifndef` | 如果没定义 |\n| `#if` | 条件表达式 |\n| `#else` | 否则 |\n| `#endif` | 结束条件块 |",
     "task": "定义宏 `CUBE(x)` 计算立方（注意加括号），然后用它计算 `CUBE(3)` 并输出 `27`",
     "starterCode": "#include <stdio.h>\n// 👇 定义 CUBE 宏\n\nint main() {\n    printf(\"%d\\n\", CUBE(3));\n    return 0;\n}\n",
-    "expectedOutput": "27", "matchType": "exact",
-    "hints": ["💡 #define CUBE(x) ((x)*(x)*(x))", "💡 注意每个 x 都要加括号", "🔓 答案: #define CUBE(x) ((x)*(x)*(x))"]
+    "expectedOutput": "27",
+    "matchType": "exact",
+    "hints": [
+      "💡 #define CUBE(x) ((x)*(x)*(x))",
+      "💡 注意每个 x 都要加括号",
+      "🔓 答案: #define CUBE(x) ((x)*(x)*(x))"
+    ]
   },
   {
-    "id": 27, "chapter": "第12章 · 综合实战", "title": "猜数字游戏", "xp": 80,
+    "id": 34,
+    "chapter": "第14章 · 综合实战",
+    "title": "猜数字游戏",
+    "xp": 80,
     "theory": "## 🎮 综合运用：循环 + 条件 + 随机数\n\n---\n\n### 🎲 生成随机数\n\n```c\n#include <stdlib.h>\n#include <time.h>\nsrand(time(0));              // 设置随机种子\nint target = rand() % 100 + 1; // 1~100 的随机数\n```\n\n| 函数 | 作用 |\n|------|------|\n| `srand(seed)` | 设置随机种子 |\n| `rand()` | 返回 0~RAND_MAX 的随机数 |\n| `rand() % n` | 0 ~ n-1 的随机数 |\n\n---\n\n### 🎯 游戏逻辑\n\n| 步骤 | 说明 |\n|------|------|\n| 1 | 生成 1~100 随机数 |\n| 2 | 循环：读取玩家猜测 |\n| 3 | 如果太大 → 提示\"太大了\" |\n| 4 | 如果太小 → 提示\"太小了\" |\n| 5 | 猜中 → 恭喜 + 显示次数 |",
     "task": "完成猜数字游戏：生成1-100随机数，循环读取猜测，提示大小，猜中后输出 `Correct!`",
     "starterCode": "#include <stdio.h>\n#include <stdlib.h>\n#include <time.h>\nint main() {\n    srand(time(0));\n    int target = rand() % 100 + 1;\n    int guess, tries = 0;\n    // 👇 猜数字循环\n    do {\n        printf(\"Guess: \");\n        scanf(\"%d\", &guess);\n        tries++;\n        if(guess > target) printf(\"Too high\\n\");\n        else if(guess < target) printf(\"Too low\\n\");\n    } while(guess != target);\n    printf(\"Correct!\\n\");\n    return 0;\n}\n",
-    "expectedOutput": "Correct!", "matchType": "contains", "testInput": "50\n25\n37\n42\n",
-    "hints": ["💡 这道题代码已完整，运行看看猜数字的游戏逻辑", "💡 试试：加入 tries 计数，猜中后显示用了多少次"]
+    "expectedOutput": "Correct!",
+    "matchType": "contains",
+    "testInput": "50\n25\n37\n42\n",
+    "hints": [
+      "💡 这道题代码已完整，运行看看猜数字的游戏逻辑",
+      "💡 试试：加入 tries 计数，猜中后显示用了多少次"
+    ]
   },
   {
-    "id": 28, "chapter": "第12章 · 综合实战", "title": "简单计算器", "xp": 80,
+    "id": 35,
+    "chapter": "第14章 · 综合实战",
+    "title": "简单计算器",
+    "xp": 80,
     "theory": "## 🔢 综合运用：switch + 函数 + 循环\n\n---\n\n### 🧮 计算器设计\n\n| 功能 | 实现 |\n|------|------|\n| 菜单显示 | printf 输出选项 |\n| 操作选择 | switch/case 分支 |\n| 循环运行 | while 包住整个逻辑 |\n| 退出 | case 'q' → break/return |\n\n---\n\n### 📐 模块化设计\n\n```c\nfloat add(float a, float b) { return a+b; }\nfloat sub(float a, float b) { return a-b; }\n// ... 每个运算一个函数\n\nswitch(op) {\n    case '+': result = add(a,b); break;\n    case '-': result = sub(a,b); break;\n    // ...\n}\n```",
     "task": "完成计算器：读入 `操作数 运算符 操作数`（如 `5 + 3`），支持 +、-、*、/，输出结果。输入 `5 + 3` → `8.00`",
     "starterCode": "#include <stdio.h>\nint main() {\n    float a, b; char op;\n    printf(\"Enter: \");\n    scanf(\"%f %c %f\", &a, &op, &b);\n    // 👇 switch 实现\n    switch(op) {\n        case '+': printf(\"%.2f\\n\", a+b); break;\n        case '-': printf(\"%.2f\\n\", a-b); break;\n        case '*': printf(\"%.2f\\n\", a*b); break;\n        case '/': printf(\"%.2f\\n\", a/b); break;\n    }\n    return 0;\n}\n",
-    "expectedOutput": "8.00", "matchType": "contains", "testInput": "5 + 3\n",
-    "hints": ["💡 代码已完整，直接运行测试各种运算", "💡 试试补充：判断除数为0的情况"]
+    "expectedOutput": "8.00",
+    "matchType": "contains",
+    "testInput": "5 + 3\n",
+    "hints": [
+      "💡 代码已完整，直接运行测试各种运算",
+      "💡 试试补充：判断除数为0的情况"
+    ]
   },
   {
-    "id": 29, "chapter": "第12章 · 综合实战", "title": "学生成绩统计", "xp": 80,
+    "id": 36,
+    "chapter": "第14章 · 综合实战",
+    "title": "学生成绩统计",
+    "xp": 80,
     "theory": "## 📊 综合运用：数组 + 循环 + 条件\n\n读入多名学生成绩，统计最高分、最低分、平均分和及格率。\n\n---\n\n### 🎯 统计指标\n\n| 指标 | 算法 | 说明 |\n|------|------|------|\n| 最高分 | 遍历比较 | `if(a[i] > max) max = a[i]` |\n| 最低分 | 遍历比较 | `if(a[i] < min) min = a[i]` |\n| 平均分 | 累加 ÷ 人数 | `sum / count`，注意浮点 |\n| 及格率 | 统计≥60分 ÷ 总数 × 100 | `pass*100.0/count` |\n\n---\n\n### 📐 设计思路\n\n| 步骤 | 操作 |\n|------|------|\n| ① 输入 | 先读人数 n，再循环读 n 个成绩 |\n| ② 统计 | 一个循环同时做四件事 |\n| ③ 输出 | 格式化打印结果 |",
     "task": "读入学生人数 n 和 n 个成绩（0-100），输出最高分、最低分、平均分（1位小数）和及格率（百分比）。输入：`5` + `78 92 45 88 60` → 平均分72.6，及格率80%",
     "starterCode": "#include <stdio.h>\nint main() {\n    int n;\n    printf(\"Enter count: \");\n    scanf(\"%d\", &n);\n    int scores[100];\n    int sum = 0, max = 0, min = 100, pass = 0;\n    printf(\"Enter scores: \");\n    for(int i = 0; i < n; i++) {\n        scanf(\"%d\", &scores[i]);\n        sum += scores[i];\n        // 👇 更新最大值\n        \n        // 👇 更新最小值\n        \n        // 👇 统计及格人数\n        \n    }\n    printf(\"Max: %d\\n\", max);\n    printf(\"Min: %d\\n\", min);\n    printf(\"Avg: %.1f\\n\", (float)sum / n);\n    printf(\"Pass rate: %.0f%%\\n\", pass * 100.0 / n);\n    return 0;\n}\n",
-    "expectedOutput": "Max: 92\nMin: 45\nAvg: 72.6\nPass rate: 80%", "matchType": "contains", "testInput": "5\n78 92 45 88 60\n",
-    "hints": ["💡 if(scores[i]>max) max=scores[i];", "💡 if(scores[i]<min) min=scores[i];", "💡 if(scores[i]>=60) pass++;", "🔓 答案: if(scores[i]>max)max=scores[i];if(scores[i]<min)min=scores[i];if(scores[i]>=60)pass++;"]
+    "expectedOutput": "Max: 92\nMin: 45\nAvg: 72.6\nPass rate: 80%",
+    "matchType": "contains",
+    "testInput": "5\n78 92 45 88 60\n",
+    "hints": [
+      "💡 if(scores[i]>max) max=scores[i];",
+      "💡 if(scores[i]<min) min=scores[i];",
+      "💡 if(scores[i]>=60) pass++;",
+      "🔓 答案: if(scores[i]>max)max=scores[i];if(scores[i]<min)min=scores[i];if(scores[i]>=60)pass++;"
+    ]
   },
   {
-    "id": 30, "chapter": "第12章 · 综合实战", "title": "素数判断", "xp": 80,
+    "id": 37,
+    "chapter": "第14章 · 综合实战",
+    "title": "素数判断",
+    "xp": 80,
     "theory": "## 🔢 综合运用：函数 + 循环 + 数学优化\n\n素数（质数）是只能被 1 和自身整除的大于 1 的整数。\n\n---\n\n### ⚡ 优化策略\n\n| 方法 | 复杂度 | 说明 |\n|------|--------|------|\n| 暴力法 | O(n) | 试除 2 到 n-1 |\n| 优化一 | O(n/2) | 只试除奇数 |\n| 优化二 | O(√n) | 试除到 √n 即可 |\n\n---\n\n### 📐 为什么只到 √n？\n\n| 原理 | 如果 n = a × b，其中 a ≤ b，则 a ≤ √n |\n|------|------|\n| 推论 | 如果 n 有大于 √n 的因子，必定有小于 √n 的因子 |\n| 因此 | 只需试除到 √n 就能判断 |\n\n---\n\n### 🔑 关键代码\n\n```c\nint isPrime(int n) {\n    if (n < 2) return 0;\n    for (int i = 2; i * i <= n; i++) {\n        if (n % i == 0) return 0;\n    }\n    return 1;\n}\n```",
     "task": "写一个 `isPrime()` 函数判断素数，然后找出 1~100 之间的所有素数并输出。",
     "starterCode": "#include <stdio.h>\nint isPrime(int n) {\n    if(n < 2) return 0;\n    // 👇 优化：只需试除到 i*i <= n\n    \n    return 1;\n}\nint main() {\n    printf(\"Primes 1-100: \");\n    for(int i = 2; i <= 100; i++) {\n        if(isPrime(i)) printf(\"%d \", i);\n    }\n    return 0;\n}\n",
-    "expectedOutput": "Primes 1-100: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97", "matchType": "contains",
-    "hints": ["💡 for(int i=2; i*i<=n; i++) — 只需试除到平方根", "💡 if(n % i == 0) return 0; — 能被整除就不是素数", "🔓 答案: for(int i=2;i*i<=n;i++)if(n%i==0)return 0;"]
+    "expectedOutput": "Primes 1-100: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97",
+    "matchType": "contains",
+    "hints": [
+      "💡 for(int i=2; i*i<=n; i++) — 只需试除到平方根",
+      "💡 if(n % i == 0) return 0; — 能被整除就不是素数",
+      "🔓 答案: for(int i=2;i*i<=n;i++)if(n%i==0)return 0;"
+    ]
   },
   {
-    "id": 31, "chapter": "第12章 · 综合实战", "title": "回文判断", "xp": 85,
+    "id": 38,
+    "chapter": "第14章 · 综合实战",
+    "title": "回文判断",
+    "xp": 85,
     "theory": "## 🔄 综合运用：字符串 + 双指针\n\n回文（Palindrome）是指正读反读都一样的字符串，如 `radar`、`level`。\n\n---\n\n### 🎯 双指针法\n\n| 步骤 | L 指针（左） | R 指针（右） | 操作 |\n|------|------------|------------|------|\n| 初始 | 指向 s[0] | 指向 s[n-1] | 比较两端字符 |\n| 每次 | 向右移动 | 向左移动 | 如果不同 → 不是回文 |\n| 终止 | L ≥ R | 所有字符都对上了 → 是回文 |\n\n---\n\n### 📐 算法逻辑\n\n```c\nint isPal(char s[]) {\n    int l = 0, r = strlen(s) - 1;\n    while (l < r) {\n        if (s[l] != s[r]) return 0;\n        l++; r--;\n    }\n    return 1;\n}\n```\n\n| 测试 | 结果 | 原因 |\n|------|------|------|\n| `radar` | ✅ | r=r, a=a, d=d |\n| `hello` | ❌ | h≠o |\n| `a` | ✅ | 单字符 |",
     "task": "读入一个字符串，判断是否为回文。输入 `radar` → 输出 `Palindrome`，输入 `hello` → 输出 `Not palindrome`",
     "starterCode": "#include <stdio.h>\n#include <string.h>\nint main() {\n    char s[100];\n    scanf(\"%s\", s);\n    int l = 0, r = strlen(s) - 1;\n    // 👇 双指针判断回文\n    \n    \n    printf(\"%s\\n\", ???);\n    return 0;\n}\n",
-    "expectedOutput": "Palindrome", "matchType": "contains", "testInput": "radar\n",
-    "hints": ["💡 while(l < r) 循环比较两端", "💡 if(s[l]!=s[r]) { printf(\"Not palindrome\"); return 0; }", "💡 循环结束后打印 Palindrome", "🔓 答案: while(l<r){if(s[l]!=s[r]){printf(\"Not palindrome\\n\");return 0;}l++;r--;}printf(\"Palindrome\\n\");"]
+    "expectedOutput": "Palindrome",
+    "matchType": "contains",
+    "testInput": "radar\n",
+    "hints": [
+      "💡 while(l < r) 循环比较两端",
+      "💡 if(s[l]!=s[r]) { printf(\"Not palindrome\"); return 0; }",
+      "💡 循环结束后打印 Palindrome",
+      "🔓 答案: while(l<r){if(s[l]!=s[r]){printf(\"Not palindrome\\n\");return 0;}l++;r--;}printf(\"Palindrome\\n\");"
+    ]
   },
   {
-    "id": 32, "chapter": "第12章 · 综合实战", "title": "数组反转（双指针）", "xp": 80,
+    "id": 39,
+    "chapter": "第14章 · 综合实战",
+    "title": "数组反转（双指针）",
+    "xp": 80,
     "theory": "## ↔️ 综合运用：指针 + 数组 + 交换\n\n将数组前后反转，用双指针一次遍历完成。\n\n---\n\n### 🎯 双指针翻转\n\n| 步骤 | L 指针 | R 指针 | 操作 |\n|------|--------|--------|------|\n| 初始 | 指向 a[0] | 指向 a[n-1] | 交换 a[0] 和 a[n-1] |\n| 每次 | L 右移 | R 左移 | 交换 a[L] 和 a[R] |\n| 终止 | L ≥ R | 反转完成 |\n\n---\n\n### 📊 追踪示例（`{1,2,3,4,5}`）\n\n| 轮次 | L | R | 交换后数组 |\n|------|---|---|----------|\n| 初始 | 0 | 4 | `{1,2,3,4,5}` |\n| 第1轮 | 1 | 3 | `{5,2,3,4,1}` |\n| 第2轮 | 2 | 2 | `{5,4,3,2,1}` |\n| 终止 | L≥R | — | 完成！ |\n\n---\n\n### ⚠️ 关键点\n\n- 只需遍历 n/2 次\n- 交换需要临时变量",
     "task": "读入 5 个整数存入数组，用双指针反转后输出。输入 `1 2 3 4 5` → 输出 `5 4 3 2 1`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int a[5];\n    printf(\"Enter 5 numbers: \");\n    for(int i=0; i<5; i++) scanf(\"%d\", &a[i]);\n    // 👇 双指针反转\n    int l = 0, r = 4;\n    \n    \n    printf(\"Reversed: \");\n    for(int i=0; i<5; i++) printf(\"%d \", a[i]);\n    return 0;\n}\n",
-    "expectedOutput": "Reversed: 5 4 3 2 1", "matchType": "contains", "testInput": "1\n2\n3\n4\n5\n",
-    "hints": ["💡 while(l < r) 循环", "💡 int t=a[l]; a[l]=a[r]; a[r]=t; 然后 l++; r--;", "🔓 答案: while(l<r){int t=a[l];a[l]=a[r];a[r]=t;l++;r--;}"]
+    "expectedOutput": "Reversed: 5 4 3 2 1",
+    "matchType": "contains",
+    "testInput": "1\n2\n3\n4\n5\n",
+    "hints": [
+      "💡 while(l < r) 循环",
+      "💡 int t=a[l]; a[l]=a[r]; a[r]=t; 然后 l++; r--;",
+      "🔓 答案: while(l<r){int t=a[l];a[l]=a[r];a[r]=t;l++;r--;}"
+    ]
   },
   {
-    "id": 33, "chapter": "第12章 · 综合实战", "title": "插入排序", "xp": 90,
+    "id": 40,
+    "chapter": "第14章 · 综合实战",
+    "title": "插入排序",
+    "xp": 90,
     "theory": "## 🃏 综合运用：排序算法 + 数组 + 循环\n\n插入排序（Insertion Sort）如同整理扑克牌：把新牌插入已排好的序列中。\n\n---\n\n### 🎯 算法思路\n\n| 步骤 | 比喻 |\n|------|------|\n| ① 默认 a[0] 已排序 | 手里第一张牌 |\n| ② 取下一个元素 | 摸一张新牌 |\n| ③ 从右往左比较 | 找它应该插入的位置 |\n| ④ 大于它的元素右移 | 腾出空位 |\n| ⑤ 插入空位 | 放入新牌 |\n\n---\n\n### 📊 追踪（`{5,2,4,1,3}`）\n\n| i | 当前值 | 操作后 |\n|-----|-------|------|\n| 1 | 2 | `{`**`2,5`**`,4,1,3}` |\n| 2 | 4 | `{`**`2,4,5`**`,1,3}` |\n| 3 | 1 | `{`**`1,2,4,5`**`,3}` |\n| 4 | 3 | `{`**`1,2,3,4,5`**`}` |\n\n| 复杂度 | 最好 | 最坏 | 稳定 |\n|------|------|------|------|\n| | O(n) | O(n²) | ✅ 是 |",
     "task": "实现插入排序，将数组 `{64, 25, 12, 22, 11}` 升序排列后输出。",
     "starterCode": "#include <stdio.h>\nint main() {\n    int a[] = {64, 25, 12, 22, 11};\n    int n = 5;\n    // 👇 插入排序\n    for(int i = 1; i < n; i++) {\n        int key = a[i];\n        int j = i - 1;\n        // 👇 将比 key 大的元素右移\n        \n        a[j+1] = key;\n    }\n    for(int i=0; i<n; i++) printf(\"%d \", a[i]);\n    return 0;\n}\n",
-    "expectedOutput": "11 12 22 25 64", "matchType": "contains",
-    "hints": ["💡 while(j>=0 && a[j]>key) { a[j+1]=a[j]; j--; }", "🔓 答案: 在 while 循环中右移所有比 key 大的元素"]
+    "expectedOutput": "11 12 22 25 64",
+    "matchType": "contains",
+    "hints": [
+      "💡 while(j>=0 && a[j]>key) { a[j+1]=a[j]; j--; }",
+      "🔓 答案: 在 while 循环中右移所有比 key 大的元素"
+    ]
   },
   {
-    "id": 34, "chapter": "第12章 · 综合实战", "title": "温度转换表", "xp": 75,
+    "id": 41,
+    "chapter": "第14章 · 综合实战",
+    "title": "温度转换表",
+    "xp": 75,
     "theory": "## 🌡️ 综合运用：循环 + 格式化输出\n\n打印华氏度→摄氏度的转换表。公式：`C = (F - 32) × 5 / 9`\n\n---\n\n### 📐 格式化输出要求\n\n| 列 | 格式 | 示例 |\n|------|------|------|\n| 华氏度 | 右对齐 6 字符 | `    32` |\n| 摄氏度 | 右对齐 8 字符，1 位小数 | `     0.0` |\n\n---\n\n### 🖨️ printf 对齐\n\n| 格式 | 含义 |\n|------|------|\n| `%6d` | 右对齐，占 6 格 |\n| `%8.1f` | 右对齐，占 8 格，1 位小数 |\n| `%-6d` | 左对齐，占 6 格 |",
     "task": "打印华氏度到摄氏度的转换表：F 从 0 到 100，步长 20。表头 `Fahr  Celsius`，每行一列转换结果。",
     "starterCode": "#include <stdio.h>\nint main() {\n    printf(\"  Fahr  Celsius\\n\");\n    printf(\"------  -------\\n\");\n    // 👇 循环: f = 0, 20, 40, 60, 80, 100\n    for(int f = 0; f <= 100; f += 20) {\n        float c = (f - 32) * 5.0 / 9.0;\n        // 👇 格式化输出\n        \n    }\n    return 0;\n}\n",
-    "expectedOutput": "Fahr  Celsius\n------  -------\n     0    -17.8\n    20     -6.7\n    40      4.4\n    60     15.6\n    80     26.7\n   100     37.8", "matchType": "exact",
-    "hints": ["💡 printf(\"%6d  %8.1f\\n\", f, c);", "🔓 答案: printf(\"%6d  %8.1f\\n\",f,c);"]
+    "expectedOutput": "Fahr  Celsius\n------  -------\n     0    -17.8\n    20     -6.7\n    40      4.4\n    60     15.6\n    80     26.7\n   100     37.8",
+    "matchType": "exact",
+    "hints": [
+      "💡 printf(\"%6d  %8.1f\\n\", f, c);",
+      "🔓 答案: printf(\"%6d  %8.1f\\n\",f,c);"
+    ]
   },
   {
-    "id": 35, "chapter": "第12章 · 综合实战", "title": "字符串压缩（RLE）", "xp": 85,
+    "id": 42,
+    "chapter": "第14章 · 综合实战",
+    "title": "字符串压缩（RLE）",
+    "xp": 85,
     "theory": "## 📦 综合运用：字符串 + 数组 + 字符处理\n\n行程长度编码（Run-Length Encoding）是最简单的压缩算法：连续相同字符用「字符+次数」表示。\n\n---\n\n### 🎯 RLE 规则\n\n| 输入 | 输出 | 说明 |\n|------|------|------|\n| `aaabb` | `a3b2` | 3个a + 2个b |\n| `zzzz` | `z4` | 4个z |\n| `abc` | `a1b1c1` | 无连续也编码 |\n\n---\n\n### 📐 算法思路\n\n| 步骤 | 操作 |\n|------|------|\n| ① 遍历字符串 | 记录当前字符和出现次数 |\n| ② 字符变化时 | 输出上一个字符+次数，重置计数器 |\n| ③ 字符串结束时 | 输出最后一个字符+次数 |\n\n---\n\n### 🔑 伪代码\n\n```\ncur = s[0], count = 1\n从 i=1 遍历到末尾:\n    如果 s[i] == cur: count++\n    否则: 输出 cur+count, cur=s[i], count=1\n输出 cur+count\n```",
     "task": "读入字符串，用 RLE 压缩后输出。例如输入 `aaabb` → 输出 `a3b2`，输入 `aab` → 输出 `a2b1`。假设只有小写字母。",
     "starterCode": "#include <stdio.h>\n#include <string.h>\nint main() {\n    char s[100];\n    scanf(\"%s\", s);\n    int n = strlen(s);\n    // 👇 RLE 压缩\n    int count = 1;\n    for(int i = 1; i <= n; i++) {\n        if(i < n && s[i] == s[i-1]) {\n            count++;\n        } else {\n            printf(\"%c%d\", s[i-1], count);\n            count = 1;\n        }\n    }\n    return 0;\n}\n",
-    "expectedOutput": "a3b2", "matchType": "contains", "testInput": "aaabb\n",
-    "hints": ["💡 代码已完整，直接运行测试", "💡 试试输入 aab → 应输出 a2b1", "💡 想想怎么只压缩连续字符≥2的（跳过 count=1 的情况）"]
+    "expectedOutput": "a3b2",
+    "matchType": "contains",
+    "testInput": "aaabb\n",
+    "hints": [
+      "💡 代码已完整，直接运行测试",
+      "💡 试试输入 aab → 应输出 a2b1",
+      "💡 想想怎么只压缩连续字符≥2的（跳过 count=1 的情况）"
+    ]
   },
   {
-    "id": 36, "chapter": "第12章 · 综合实战", "title": "十进制转二进制", "xp": 80,
+    "id": 43,
+    "chapter": "第14章 · 综合实战",
+    "title": "十进制转二进制",
+    "xp": 80,
     "theory": "## 🔢 综合运用：数组 + 模运算 + 循环\n\n将十进制整数转为二进制字符串。\n\n---\n\n### 📐 算法：除 2 取余法\n\n| 步骤 | 操作 |\n|------|------|\n| ① | n % 2 → 得二进制最低位 |\n| ② | n = n / 2 → 去掉已处理的最低位 |\n| ③ | 重复直到 n = 0 |\n| ④ | 反向输出余数序列 |\n\n---\n\n### 📊 追踪：42₁₀ → 101010₂\n\n| n | n % 2 | n / 2 | 余数 |\n|-----|--------|-------|------|\n| 42 | 0 | 21 | 0 |\n| 21 | 1 | 10 | 1 |\n| 10 | 0 | 5 | 0 |\n| 5 | 1 | 2 | 1 |\n| 2 | 0 | 1 | 0 |\n| 1 | 1 | 0 | 1 |\n\n反向读取：**101010** ✅\n\n---\n\n### 🔑 关键：用数组暂存\n\n因为结果是反向产生的，需要先存入数组，再倒序输出。",
     "task": "读入一个正整数，输出它的二进制表示。输入 `42` → 输出 `101010`",
     "starterCode": "#include <stdio.h>\nint main() {\n    int n, bin[32], i = 0;\n    scanf(\"%d\", &n);\n    // 👇 特殊情况: n=0\n    if(n == 0) { printf(\"0\"); return 0; }\n    // 👇 除2取余，存入数组\n    while(n > 0) {\n        bin[i] = n % 2;\n        n = n / 2;\n        i++;\n    }\n    // 👇 反向输出\n    \n    return 0;\n}\n",
-    "expectedOutput": "101010", "matchType": "exact", "testInput": "42\n",
-    "hints": ["💡 for(int j=i-1; j>=0; j--) 倒序输出", "💡 printf(\"%d\", bin[j]);", "🔓 答案: for(int j=i-1;j>=0;j--)printf(\"%d\",bin[j]);"]
+    "expectedOutput": "101010",
+    "matchType": "exact",
+    "testInput": "42\n",
+    "hints": [
+      "💡 for(int j=i-1; j>=0; j--) 倒序输出",
+      "💡 printf(\"%d\", bin[j]);",
+      "🔓 答案: for(int j=i-1;j>=0;j--)printf(\"%d\",bin[j]);"
+    ]
   },
   {
-    "id": 37, "chapter": "第1章 · 初识C语言", "title": "🏆 章末挑战：自我介绍卡", "xp": 60, "chapterEnd": true,
+    "id": 44,
+    "chapter": "第1章 · 初识C语言",
+    "title": "🏆 章末挑战：自我介绍卡",
+    "xp": 60,
+    "chapterEnd": true,
     "theory": "## 🏆 第1章综合挑战\n\n运用本章学到的所有知识：`#include`、`main` 函数、`printf`、注释、缩进，制作一个格式化的自我介绍卡片。\n\n---\n\n### 🎯 要求\n\n| 项目 | 说明 |\n|------|------|\n| 使用知识点 | `#include`、`int main()`、`printf`、注释、规范缩进 |\n| 输出内容 | 至少 5 行格式化信息（姓名、年龄、爱好等） |\n| 代码规范 | 正确缩进，关键位置添加注释 |\n\n---\n\n### 📐 输出格式参考\n\n```\n===================\n    个人名片\n===================\n姓名: Xiao Ming\n年龄: 18\n语言: C\n爱好: Coding\n===================\n```\n\n> 💡 这关不提供初始代码——你需要从零开始写出完整的程序结构！",
     "task": "从零开始写一个程序，打印一张格式化的自我介绍卡片（至少5行内容），要求代码规范缩进并添加注释。",
     "starterCode": "// 👇 从零开始写你的程序！\n// 记得：先 #include，再 main 函数，\n// 用 printf 输出，注意缩进对齐\n\n",
-    "expectedOutput": "===", "matchType": "contains",
-    "hints": ["💡 程序结构: #include → int main() → { → printf语句 → return 0 → }", "💡 试试用多个 printf 配合 \\\\n 换行来画边框", "💡 别忘了 // 注释 和每层的 4 空格缩进"]
+    "expectedOutput": "===",
+    "matchType": "contains",
+    "hints": [
+      "💡 程序结构: #include → int main() → { → printf语句 → return 0 → }",
+      "💡 试试用多个 printf 配合 \\\\n 换行来画边框",
+      "💡 别忘了 // 注释 和每层的 4 空格缩进"
+    ]
   },
   {
-    "id": 38, "chapter": "第2章 · 数据与变量", "title": "🏆 章末挑战：温度转换计算器", "xp": 75, "chapterEnd": true,
+    "id": 45,
+    "chapter": "第2章 · 数据与变量",
+    "title": "🏆 章末挑战：温度转换计算器",
+    "xp": 75,
+    "chapterEnd": true,
     "theory": "## 🏆 第2章综合挑战\n\n综合运用变量声明、赋值、`scanf` 输入、`printf` 格式化输出。\n\n---\n\n### 🎯 要求\n\n| 项目 | 说明 |\n|------|------|\n| 知识点 | `int/float` 声明、`scanf` 输入、`printf` 格式化、`scanf` 地址符 `&` |\n| 输入 | 华氏温度（整数） |\n| 输出 | 摄氏温度（浮点数，保留 2 位小数） |\n\n---\n\n### 📐 公式\n\n`C = (F - 32) × 5.0 / 9.0`\n\n> ⚠️ 注意用 `5.0` 而非 `5`——整数除法会截断小数部分！这是本章学过的整数除法陷阱。",
     "task": "读入一个华氏温度（整数），转换成摄氏温度并保留2位小数输出。输入 `98` → `Celsius: 36.67`",
     "starterCode": "// 👇 声明变量、读取输入、计算、输出\n// 注意：用 float 存摄氏温度，用 5.0 而非 5！\n\n",
-    "expectedOutput": "Celsius: 36.67", "matchType": "contains", "testInput": "98\n",
-    "hints": ["💡 float f, c; scanf(\"%d\", &f); 然后 c = (f-32) * 5.0 / 9.0;", "💡 printf(\"Celsius: %.2f\", c); 保留两位小数", "💡 这不是 int f！华氏度用 int，但计算结果用 float"]
+    "expectedOutput": "Celsius: 36.67",
+    "matchType": "contains",
+    "testInput": "98\n",
+    "hints": [
+      "💡 float f, c; scanf(\"%d\", &f); 然后 c = (f-32) * 5.0 / 9.0;",
+      "💡 printf(\"Celsius: %.2f\", c); 保留两位小数",
+      "💡 这不是 int f！华氏度用 int，但计算结果用 float"
+    ]
   },
   {
-    "id": 39, "chapter": "第3章 · 运算符与表达式", "title": "🏆 章末挑战：闰年判断器", "xp": 75, "chapterEnd": true,
+    "id": 46,
+    "chapter": "第3章 · 运算符与表达式",
+    "title": "🏆 章末挑战：闰年判断器",
+    "xp": 75,
+    "chapterEnd": true,
     "theory": "## 🏆 第3章综合挑战\n\n综合运用算术、比较、逻辑运算符。\n\n---\n\n### 🎯 闰年规则\n\n| 条件 | 说明 |\n|------|------|\n| 能被 4 整除 | 基本条件 |\n| 但不能被 100 整除 | 除非... |\n| 能被 400 整除也是闰年 | 例外中的例外 |\n\n用逻辑运算符一条表达式写出：`(y%4==0 && y%100!=0) || (y%400==0)`\n\n---\n\n### 🎯 要求\n\n| 输入 | 输出 |\n|------|------|\n| 2000 | `Leap year` |\n| 1900 | `Not leap year` |\n| 2024 | `Leap year` |\n| 2023 | `Not leap year` |\n\n> 💡 这关需要用到 `&&`（与）、`||`（或）、`%`（取余）、`==`（等于）、`!=`（不等于），全在第3章学过！",
     "task": "读入年份，判断是否是闰年，输出 `Leap year` 或 `Not leap year`。年份 `2000` → `Leap year`",
     "starterCode": "// 👇 读入年份，用 if + 逻辑运算符判断\n// 提示：闰年 = (能被4整除 且 不能被100整除) 或 (能被400整除)\n\n",
-    "expectedOutput": "Leap year", "matchType": "contains", "testInput": "2000\n",
-    "hints": ["💡 if((y%4==0 && y%100!=0) || (y%400==0))", "💡 打印 Leap year，else 打印 Not leap year"]
+    "expectedOutput": "Leap year",
+    "matchType": "contains",
+    "testInput": "2000\n",
+    "hints": [
+      "💡 if((y%4==0 && y%100!=0) || (y%400==0))",
+      "💡 打印 Leap year，else 打印 Not leap year"
+    ]
   },
   {
-    "id": 40, "chapter": "第4章 · 控制流", "title": "🏆 章末挑战：数字金字塔", "xp": 90, "chapterEnd": true,
+    "id": 47,
+    "chapter": "第4章 · 控制流",
+    "title": "🏆 章末挑战：数字金字塔",
+    "xp": 90,
+    "chapterEnd": true,
     "theory": "## 🏆 第4章综合挑战\n\n综合运用 for 嵌套循环、if/else、格式化输出。\n\n---\n\n### 🎯 输出要求\n\n输入一个数字 n（1-9），打印如下金字塔（n=5 为例）：\n\n```\n    1\n   121\n  12321\n 1234321\n123454321\n```\n\n| 每行组成 | 说明 |\n|------|------|\n| 左侧空格 | `n-i` 个，用 for 循环控制 |\n| 递增数字 | `1` 到 `i`，用 for 循环 |\n| 递减数字 | `i-1` 到 `1`，用 for 循环 |\n\n---\n\n### 🔧 需要 3 层循环\n\n| 外循环 i | 控制行数（1到n） |\n|------|------|\n| 内循环1 | 打印空格（n-i个） |\n| 内循环2 | 打印递增数字 1→i |\n| 内循环3 | 打印递减数字 i-1→1 |",
     "task": "读入 n（1-9），打印数字金字塔。输入 `5` → 如上图所示的 5 行金字塔。",
     "starterCode": "// 👇 读入n，用 for 嵌套循环打印数字金字塔\n// 外层控制行数，内层三个循环分别打印空格、递增、递减\n\n",
-    "expectedOutput": "    1\n   121\n  12321\n 1234321\n123454321", "matchType": "exact", "testInput": "5\n",
-    "hints": ["💡 for(i=1;i<=n;i++) 控制行", "💡 空格: for(j=1;j<=n-i;j++) printf(\" \");", "💡 递增: for(j=1;j<=i;j++) printf(\"%d\",j);", "💡 递减: for(j=i-1;j>=1;j--) printf(\"%d\",j);"]
+    "expectedOutput": "    1\n   121\n  12321\n 1234321\n123454321",
+    "matchType": "exact",
+    "testInput": "5\n",
+    "hints": [
+      "💡 for(i=1;i<=n;i++) 控制行",
+      "💡 空格: for(j=1;j<=n-i;j++) printf(\" \");",
+      "💡 递增: for(j=1;j<=i;j++) printf(\"%d\",j);",
+      "💡 递减: for(j=i-1;j>=1;j--) printf(\"%d\",j);"
+    ]
   },
   {
-    "id": 41, "chapter": "第5章 · 数组", "title": "🏆 章末挑战：成绩分析系统", "xp": 85, "chapterEnd": true,
+    "id": 48,
+    "chapter": "第6章 · 数组",
+    "title": "🏆 章末挑战：成绩分析系统",
+    "xp": 85,
+    "chapterEnd": true,
     "theory": "## 🏆 第5章综合挑战\n\n综合运用数组声明、遍历、排序、统计分析。\n\n---\n\n### 🎯 程序功能\n\n| 步骤 | 功能 | 知识点 |\n|------|------|------|\n| ① | 读入 n 个分数存入数组 | 数组声明、`scanf` 循环 |\n| ② | 遍历数组求总和、平均分 | 数组遍历 |\n| ③ | 找出最高分和最低分 | 遍历比较 |\n| ④ | 统计及格人数（≥60） | 遍历计数 |\n| ⑤ | 输出分析报告 | `printf` 格式化 |",
     "task": "先读入人数 n，再读入 n 个成绩，输出平均分（1位小数）、最高分、最低分、及格人数。输入 `5` + `78 92 45 88 60` → `Avg: 72.6 Max: 92 Min: 45 Pass: 4`",
     "starterCode": "// 👇 声明数组、读入数据、遍历统计\n// 需要自己定义所有变量和循环\n\n",
-    "expectedOutput": "Avg: 72.6\nMax: 92\nMin: 45\nPass: 4", "matchType": "contains", "testInput": "5\n78 92 45 88 60\n",
-    "hints": ["💡 int arr[n]; 然后 for 循环 scanf 读入", "💡 平均 = (float)sum / n; 注意类型转换", "💡 for(i=0;i<n;i++) 一趟遍历完成所有统计"]
+    "expectedOutput": "Avg: 72.6\nMax: 92\nMin: 45\nPass: 4",
+    "matchType": "contains",
+    "testInput": "5\n78 92 45 88 60\n",
+    "hints": [
+      "💡 int arr[n]; 然后 for 循环 scanf 读入",
+      "💡 平均 = (float)sum / n; 注意类型转换",
+      "💡 for(i=0;i<n;i++) 一趟遍历完成所有统计"
+    ]
   },
   {
-    "id": 42, "chapter": "第6章 · 函数", "title": "🏆 章末挑战：数学工具库", "xp": 90, "chapterEnd": true,
+    "id": 49,
+    "chapter": "第7章 · 函数",
+    "title": "🏆 章末挑战：数学工具库",
+    "xp": 90,
+    "chapterEnd": true,
     "theory": "## 🏆 第6章综合挑战\n\n综合运用函数定义、参数传递、返回值、递归。\n\n---\n\n### 🎯 需要实现的函数\n\n| 函数 | 签名 | 功能 |\n|------|------|------|\n| 阶乘 | `int fact(int n)` | 返回 n!（用递归） |\n| 幂 | `int power(int b, int e)` | 返回 b 的 e 次方（用循环） |\n| 最大公约数 | `int gcd(int a, int b)` | 用欧几里得算法 |\n\n---\n\n### 📖 欧几里得算法（gcd）\n\n```c\nint gcd(int a, int b) {\n    while (b != 0) {\n        int t = b;\n        b = a % b;\n        a = t;\n    }\n    return a;\n}\n```\n\n> 💡 gcd 的算法来自数学，不属于超纲内容——只用了 `while` 和 `%` 运算。每次迭代 `a←b, b←a%b` 直到 b=0。\n\n### 🎯 要求\n\n从零开始实现三个函数并在 main 中测试。输入 `5 2` → 输出 fact(5)=120, power(5,2)=25, gcd(5,2)=1",
     "task": "实现 fact（递归）、power（循环）、gcd（辗转相除）三个函数，读入 a b 并输出计算结果。输入 `5 2` → `fact=120 power=25 gcd=1`",
     "starterCode": "// 👇 先定义三个函数，再写 main 读入数据并调用\n// fact 用递归，power 用循环，gcd 用辗转相除法\n\n",
-    "expectedOutput": "fact=120\npower=25\ngcd=1", "matchType": "contains", "testInput": "5 2\n",
-    "hints": ["💡 fact: if(n<=1)return 1; return n*fact(n-1);", "💡 power: int r=1; for(i=0;i<e;i++) r*=b; return r;", "💡 gcd: while(b!=0){int t=b;b=a%b;a=t;} return a;"]
+    "expectedOutput": "fact=120\npower=25\ngcd=1",
+    "matchType": "contains",
+    "testInput": "5 2\n",
+    "hints": [
+      "💡 fact: if(n<=1)return 1; return n*fact(n-1);",
+      "💡 power: int r=1; for(i=0;i<e;i++) r*=b; return r;",
+      "💡 gcd: while(b!=0){int t=b;b=a%b;a=t;} return a;"
+    ]
   },
   {
-    "id": 43, "chapter": "第7章 · 指针", "title": "🏆 章末挑战：动态数组", "xp": 100, "chapterEnd": true,
+    "id": 50,
+    "chapter": "第8章 · 指针",
+    "title": "🏆 章末挑战：动态数组",
+    "xp": 100,
+    "chapterEnd": true,
     "theory": "## 🏆 第7章综合挑战\n\n综合运用指针、动态内存分配、指针运算、指针传参。\n\n---\n\n### 🎯 程序功能\n\n| 步骤 | 功能 |\n|------|------|\n| ① | 读入 n，用 `malloc` 动态分配数组 |\n| ② | 用指针而非下标遍历输入 |\n| ③ | 写一个 `void reverse(int *a, int n)` 函数，用双指针反转数组 |\n| ④ | 用指针遍历输出 |\n| ⑤ | 用 `free` 释放内存 |\n\n---\n\n### 📖 malloc 使用说明\n\n`malloc` 在 `<stdlib.h>` 中，申请堆内存：\n```c\nint *a = (int*)malloc(n * sizeof(int));\n// 使用完毕必须释放\nfree(a);\n```\n\n| 函数 | 头文件 | 用途 |\n|------|------|------|\n| `malloc(size)` | `<stdlib.h>` | 分配 size 字节内存 |\n| `free(ptr)` | `<stdlib.h>` | 释放 malloc 分配的内存 |\n| `sizeof(int)` | 内置 | 返回 int 类型的字节数 |",
     "task": "读入 n 和 n 个整数，用 malloc 动态分配数组，用指针遍历输入，用双指针函数 reverse 反转，再遍历输出。输入 `5` + `1 2 3 4 5` → 输出 `5 4 3 2 1`",
     "starterCode": "// 👇 需要 #include <stdlib.h>（为 malloc/free）\n// 步骤: malloc → 指针读入 → reverse函数 → 指针输出 → free\n\n",
-    "expectedOutput": "5 4 3 2 1", "matchType": "contains", "testInput": "5\n1 2 3 4 5\n",
-    "hints": ["💡 #include <stdlib.h> 然后 int *a = (int*)malloc(n*sizeof(int));", "💡 指针读入: for(p=a; p<a+n; p++) scanf(\"%d\", p);", "💡 reverse: void rev(int *a,int n){int *l=a,*r=a+n-1;while(l<r){int t=*l;*l=*r;*r=t;l++;r--;}}", "💡 别忘了 free(a);"]
+    "expectedOutput": "5 4 3 2 1",
+    "matchType": "contains",
+    "testInput": "5\n1 2 3 4 5\n",
+    "hints": [
+      "💡 #include <stdlib.h> 然后 int *a = (int*)malloc(n*sizeof(int));",
+      "💡 指针读入: for(p=a; p<a+n; p++) scanf(\"%d\", p);",
+      "💡 reverse: void rev(int *a,int n){int *l=a,*r=a+n-1;while(l<r){int t=*l;*l=*r;*r=t;l++;r--;}}",
+      "💡 别忘了 free(a);"
+    ]
   },
   {
-    "id": 44, "chapter": "第8章 · 字符串", "title": "🏆 章末挑战：密码验证器", "xp": 85, "chapterEnd": true,
+    "id": 51,
+    "chapter": "第9章 · 字符串",
+    "title": "🏆 章末挑战：密码验证器",
+    "xp": 85,
+    "chapterEnd": true,
     "theory": "## 🏆 第8章综合挑战\n\n综合运用字符串输入输出、`strlen`、`strcmp`、字符分类函数。\n\n---\n\n### 🎯 密码规则\n\n| 规则 | 实现方法 |\n|------|------|\n| 长度 ≥ 8 | `strlen(s) >= 8` |\n| 包含大写字母 | 遍历 + `isupper(c)` |\n| 包含数字 | 遍历 + `isdigit(c)` |\n\n---\n\n### 📖 ctype.h 字符函数\n\n需 `#include <ctype.h>`：\n\n| 函数 | 用途 |\n|------|------|\n| `isupper(c)` | 是否大写字母 A-Z |\n| `islower(c)` | 是否小写字母 a-z |\n| `isdigit(c)` | 是否数字 0-9 |\n\n> 💡 这些函数返回非0表示真，0表示假，用在 if 语句中。",
     "task": "读入一个密码字符串，检查：长度≥8、包含大写字母、包含数字。全部满足输出 `Valid`，否则输出 `Invalid`。输入 `Hello1234` → `Valid`",
     "starterCode": "// 👇 需要 #include <string.h> 和 #include <ctype.h>\n// 用 strlen 查长度，用 isupper/isdigit 查字符类型\n\n",
-    "expectedOutput": "Valid", "matchType": "exact", "testInput": "Hello1234\n",
-    "hints": ["💡 #include <string.h> 和 #include <ctype.h>", "💡 if(strlen(s)<8) { printf(\"Invalid\"); return 0; }", "💡 遍历: for(i=0; s[i]; i++) { if(isupper(s[i])) hasUpper=1; ... }"]
+    "expectedOutput": "Valid",
+    "matchType": "exact",
+    "testInput": "Hello1234\n",
+    "hints": [
+      "💡 #include <string.h> 和 #include <ctype.h>",
+      "💡 if(strlen(s)<8) { printf(\"Invalid\"); return 0; }",
+      "💡 遍历: for(i=0; s[i]; i++) { if(isupper(s[i])) hasUpper=1; ... }"
+    ]
   },
   {
-    "id": 45, "chapter": "第9章 · 结构体", "title": "🏆 章末挑战：学生信息系统", "xp": 90, "chapterEnd": true,
+    "chapter": "第10章 · 结构体与联合",
+    "title": "联合体（union）",
+    "xp": 50,
+    "theory": "## 🔀 union — 同一块内存的不同解读\n\n`struct` 的每个成员各占一块内存，`union` 的所有成员<strong>共享同一块内存</strong>。\n\n---\n\n### 📐 struct vs union\n\n| | struct | union |\n|------|--------|-------|\n| 内存 | 所有成员之和 | 最大成员的大小 |\n| 同时有效 | 所有成员 | 最近赋值的那个 |\n| 用途 | 组合数据 | 同一数据的多种表示 |\n\n---\n\n### 🔑 示例\n\n```c\nunion Data {\n    int i;\n    float f;\n    char str[20];\n};\nunion Data d;\nd.i = 42;      // 存入 int\nprintf(\"%d\", d.i);  // ✅ 42\nprintf(\"%f\", d.f);  // ❌ 未定义！当前有效的是 i\n```\n\n| 规则 | 说明 |\n|------|------|\n| 同一时刻只有一个成员有效 | 存入一个会覆盖其他 |\n| 大小等于最大成员 | `sizeof(union Data)` = max(sizeof(i), sizeof(f), sizeof(str)) |\n| 适用场景 | 类型可变的变量、协议解析、节省内存 |\n\n---\n\n### 🎯 实用场景\n\n```c\ntypedef union {\n    int iVal;\n    float fVal;\n} Number;\n// 一个 Number 变量可以存 int 也可以存 float（但不能同时）\n```",
+    "task": "定义 union Number { int i; float f; }，读入 type（0=int,1=float）和 value，用 union 存入并输出。输入 `0 42` → `42`，输入 `1 3.14` → `3.14`",
+    "starterCode": "#include <stdio.h>\nunion Number { int i; float f; };\nint main() {\n    int type;\n    union Number n;\n    scanf(\"%d\", &type);\n    // 👇 根据类型读取并输出\n    \n    return 0;\n}\n",
+    "expectedOutput": "42",
+    "matchType": "contains",
+    "testInput": "0 42\n",
+    "hints": [
+      "💡 if(type==0){ scanf(\"%d\",&n.i); printf(\"%d\",n.i); }",
+      "💡 else{ scanf(\"%f\",&n.f); printf(\"%.2f\",n.f); }",
+      "🔓 答案: if(type==0){scanf(\"%d\",&n.i);printf(\"%d\",n.i);}else{scanf(\"%f\",&n.f);printf(\"%.2f\",n.f);}"
+    ],
+    "id": 52
+  },
+  {
+    "id": 53,
+    "chapter": "第10章 · 结构体与联合",
+    "title": "🏆 章末挑战：学生信息系统",
+    "xp": 90,
+    "chapterEnd": true,
     "theory": "## 🏆 第9章综合挑战\n\n综合运用 `struct` 定义、`typedef`、结构体数组、遍历。\n\n---\n\n### 🎯 数据结构\n\n```c\ntypedef struct {\n    char name[32];\n    int age;\n    float score;\n} Student;\n```\n\n| 字段 | 类型 | 说明 |\n|------|------|------|\n| name | char[32] | 学生姓名 |\n| age | int | 年龄 |\n| score | float | 成绩 |\n\n---\n\n### 🎯 要求\n\n读入 n 个学生信息，存入结构体数组，遍历找出最高分学生并输出其所有信息。",
     "task": "先读入 n（≤10），再循环读入 n 个学生的 name、age、score。找出 score 最高的学生，输出其 name age score。输入 `3` + `Alice 20 88.5 Bob 21 92.0 Carol 19 85.0` → `Bob 21 92.0`",
     "starterCode": "// 👇 定义结构体，声明数组，循环读入，遍历找最高分\n// 结构体定义用 typedef struct\n\n",
-    "expectedOutput": "Bob 21 92.0", "matchType": "contains", "testInput": "3\nAlice 20 88.5\nBob 21 92.0\nCarol 19 85.0\n",
-    "hints": ["💡 typedef struct { char name[32]; int age; float score; } Student;", "💡 Student arr[10]; 然后 for 循环 scanf 读入", "💡 找最高分: for(i=1;i<n;i++) if(arr[i].score>arr[maxIdx].score) maxIdx=i;"]
+    "expectedOutput": "Bob 21 92.0",
+    "matchType": "contains",
+    "testInput": "3\nAlice 20 88.5\nBob 21 92.0\nCarol 19 85.0\n",
+    "hints": [
+      "💡 typedef struct { char name[32]; int age; float score; } Student;",
+      "💡 Student arr[10]; 然后 for 循环 scanf 读入",
+      "💡 找最高分: for(i=1;i<n;i++) if(arr[i].score>arr[maxIdx].score) maxIdx=i;"
+    ]
   },
   {
-    "id": 46, "chapter": "第10章 · 文件操作", "title": "🏆 章末挑战：简易日记本", "xp": 90, "chapterEnd": true,
+    "id": 54,
+    "chapter": "第12章 · 文件操作",
+    "title": "🏆 章末挑战：简易日记本",
+    "xp": 90,
+    "chapterEnd": true,
     "theory": "## 🏆 第10章综合挑战\n\n综合运用 `fopen`/`fclose`、`fprintf`/`fscanf`、文件追加模式。\n\n---\n\n### 🎯 程序功能\n\n| 模式 | 说明 | fopen 参数 |\n|------|------|------|\n| 写入 | 把用户输入的文字存入文件 | `\"w\"`（覆盖写入） |\n| 追加 | 把新内容追加到文件末尾 | `\"a\"`（追加写入） |\n| 读取 | 把文件内容输出到屏幕 | `\"r\"`（只读） |\n\n---\n\n### 📖 文件操作 API 速查\n\n| 函数 | 用途 |\n|------|------|\n| `FILE *fp = fopen(\"diary.txt\", \"w\");` | 打开文件 |\n| `fprintf(fp, \"%s\\n\", text);` | 写入一行 |\n| `fclose(fp);` | 关闭文件 |\n\n> ⚠️ 打开文件后必须 `fclose`！否则内容可能丢失。",
     "task": "读入一行文字，写入 `diary.txt`。然后重新以只读方式打开，读取内容并输出。输入 `Today is a good day.` → 输出 `Today is a good day.`",
     "starterCode": "// 👇 需要 #include <stdio.h>（fopen等在其中）\n// 步骤: fopen(\"w\") → fprintf → fclose → fopen(\"r\") → fgets → printf → fclose\n\n",
-    "expectedOutput": "Today is a good day.", "matchType": "contains", "testInput": "Today is a good day.\n",
-    "hints": ["💡 FILE *fp = fopen(\"diary.txt\", \"w\"); fprintf(fp, \"%s\", str); fclose(fp);", "💡 读取: fp = fopen(\"diary.txt\", \"r\"); fgets(buf, 200, fp); printf(\"%s\", buf); fclose(fp);"]
+    "expectedOutput": "Today is a good day.",
+    "matchType": "contains",
+    "testInput": "Today is a good day.\n",
+    "hints": [
+      "💡 FILE *fp = fopen(\"diary.txt\", \"w\"); fprintf(fp, \"%s\", str); fclose(fp);",
+      "💡 读取: fp = fopen(\"diary.txt\", \"r\"); fgets(buf, 200, fp); printf(\"%s\", buf); fclose(fp);"
+    ]
   },
   {
-    "id": 47, "chapter": "第11章 · 预处理", "title": "🏆 章末挑战：多功能宏工具", "xp": 75, "chapterEnd": true,
+    "id": 55,
+    "chapter": "第13章 · 预处理",
+    "title": "🏆 章末挑战：多功能宏工具",
+    "xp": 75,
+    "chapterEnd": true,
     "theory": "## 🏆 第11章综合挑战\n\n综合运用 `#define` 宏定义、`#ifdef` 条件编译。\n\n---\n\n### 🎯 要求\n\n用宏定义实现：\n\n| 宏 | 功能 |\n|------|------|\n| `MAX(a,b)` | 返回两个数的较大值 |\n| `SQUARE(x)` | 返回 x 的平方 |\n| `PI` | 常量 3.14159 |\n\n---\n\n### ⚠️ 宏定义陷阱\n\n```c\n#define SQUARE(x) ((x)*(x))  // ✅ 正确：加括号\n#define SQUARE(x) x*x        // ❌ 错误：SQUARE(1+2) → 1+2*1+2 = 5!\n```\n\n> 💡 宏只是文本替换，不带括号会因运算符优先级出错！",
     "task": "定义 MAX、SQUARE、PI 三个宏，读入两个整数 a b，用宏计算 max(a,b)、SQUARE(a)、圆的面积（PI*b²），输出三个结果。输入 `3 5` → `5 9 78.54`",
     "starterCode": "// 👇 在 #include 下面用 #define 定义三个宏\n// 注意 SQUARE 要加括号！面积计算要用 float\n\n",
-    "expectedOutput": "Max: 5\nSquare: 9\nArea: 78.54", "matchType": "contains", "testInput": "3 5\n",
-    "hints": ["💡 #define MAX(a,b) ((a)>(b)?(a):(b))", "💡 #define SQUARE(x) ((x)*(x))", "💡 #define PI 3.14159", "💡 面积=PI*SQUARE(b) 输出用 %.2f"]
+    "expectedOutput": "Max: 5\nSquare: 9\nArea: 78.54",
+    "matchType": "contains",
+    "testInput": "3 5\n",
+    "hints": [
+      "💡 #define MAX(a,b) ((a)>(b)?(a):(b))",
+      "💡 #define SQUARE(x) ((x)*(x))",
+      "💡 #define PI 3.14159",
+      "💡 面积=PI*SQUARE(b) 输出用 %.2f"
+    ]
   },
   {
-    "id": 48, "chapter": "第12章 · 综合实战", "title": "🏆 章末挑战：俄罗斯方块计分板", "xp": 120, "chapterEnd": true,
+    "id": 56,
+    "chapter": "第14章 · 综合实战",
+    "title": "🏆 章末挑战：俄罗斯方块计分板",
+    "xp": 120,
+    "chapterEnd": true,
     "theory": "## 🏆 终极挑战：第12章综合实战\n\n这是整个学习旅程的终极关卡——综合运用你学过的<strong>所有C语言核心知识</strong>。\n\n---\n\n### 🎯 实现一个俄罗斯方块风格的计分系统\n\n| 功能 | 知识点 |\n|------|------|\n| 结构体存储玩家数据 | `struct`、`typedef` |\n| 函数计算得分 | 函数定义调用 |\n| 数组存储消除行记录 | 数组声明遍历 |\n| 指针操作分数 | 指针传参 |\n| 字符串存储玩家名 | 字符串处理 |\n| 循环菜单交互 | `while`、`switch` |\n| 宏定义得分规则 | `#define` |\n\n---\n\n### 📐 计分规则\n\n| 消除行数 | 得分 | 宏 |\n|------|------|------|\n| 1 行 | 100 分 | `#define SCORE_1 100` |\n| 2 行 | 300 分 | `#define SCORE_2 300` |\n| 3 行 | 500 分 | `#define SCORE_3 500` |\n| 4 行（俄罗斯方块！） | 800 分 | `#define SCORE_4 800` |\n\n---\n\n### 🎯 要求\n\n1. 用结构体存储玩家名和总分\n2. 循环读取消除行数（0-4），0 表示结束\n3. 根据规则累加分数\n4. 每步显示当前分数\n5. 结束后输出最终成绩\n\n> 💡 这是整个课程的巅峰挑战——没有代码模板，全靠你自己的积累！",
     "task": "实现俄罗斯方块计分板。先输入玩家名，循环输入消除行数（0-4，0=结束），用函数计算得分，实时显示当前分。输入 `Alex` + `1 2 4 0` → 对应的累计得分 `100 400 1200`",
     "starterCode": "// ===== 终极挑战：从零开始！ =====\n// 提示：定义结构体→定义计分函数→定义宏→读入玩家名→循环处理\n// 加油，你能做到的！\n\n",
-    "expectedOutput": "Score: 100\nScore: 400\nScore: 1200\nTotal: 1200", "matchType": "contains", "testInput": "Alex\n1\n2\n4\n0\n",
-    "hints": ["💡 结构体: typedef struct { char name[32]; int score; } Player;", "💡 计分函数: void addScore(Player *p, int lines) { if(lines==1) p->score+=100; ... }", "💡 宏: #define SCORE_1 100 ...", "💡 循环: while(1) { scanf(\"%d\",&lines); if(!lines) break; addScore(&p, lines); printf(\"Score: %d\\n\", p.score); }"]
+    "expectedOutput": "Score: 100\nScore: 400\nScore: 1200\nTotal: 1200",
+    "matchType": "contains",
+    "testInput": "Alex\n1\n2\n4\n0\n",
+    "hints": [
+      "💡 结构体: typedef struct { char name[32]; int score; } Player;",
+      "💡 计分函数: void addScore(Player *p, int lines) { if(lines==1) p->score+=100; ... }",
+      "💡 宏: #define SCORE_1 100 ...",
+      "💡 循环: while(1) { scanf(\"%d\",&lines); if(!lines) break; addScore(&p, lines); printf(\"Score: %d\\n\", p.score); }"
+    ]
   }
 ]
