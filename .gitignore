@@ -9,3 +9,4 @@ tcc-new.zip
 gcc.zip
 tcc.zip
 .DS_Store
+*.obj
