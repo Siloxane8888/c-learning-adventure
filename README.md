@@ -1,7 +1,7 @@
 # 📘 C 语言闯关学习平台
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Levels](https://img.shields.io/badge/levels-48-orange)](https://github.com/Siloxane8888/c-learning-adventure)
+[![Levels](https://img.shields.io/badge/levels-56-orange)](https://github.com/Siloxane8888/c-learning-adventure)
 [![Node](https://img.shields.io/badge/node-18%2B-brightgreen)](https://nodejs.org/)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://github.com/Siloxane8888/c-learning-adventure)
 
@@ -111,16 +111,18 @@ sudo dnf install gcc    # Fedora
 | 第2章 · 数据与变量 | 3 | 🏆 | 40-75 | `int`/`float`/`char`、声明、赋值、`scanf`、格式化IO |
 | 第3章 · 运算符与表达式 | 2 | 🏆 | 40-75 | 算术、复合赋值、自增自减、比较、逻辑、三目 |
 | 第4章 · 控制流 | 4 | 🏆 | 45-90 | `if`/`else`、`switch`/`case`、`for`、`while`、嵌套 |
-| 第5章 · 数组 | 2 | 🏆 | 50-85 | 一维数组、遍历、排序（冒泡、插入）、查找 |
-| 第6章 · 函数 | 3 | 🏆 | 50-90 | 定义调用、递归、作用域、`static`、gcd 算法 |
-| 第7章 · 指针 | 4 | 🏆 | 60-100 | `&`/`*`、指针与数组、指针与函数、动态内存 `malloc` |
-| 第8章 · 字符串 | 2 | 🏆 | 55-85 | `strlen`、`strcmp`、`ctype.h` 字符分类 |
-| 第9章 · 结构体 | 2 | 🏆 | 55-90 | `struct`、`typedef`、结构体数组、`enum` |
-| 第10章 · 文件操作 | 1 | 🏆 | 60-90 | `fopen`、`fprintf`、`fscanf`、`fclose`、追加模式 |
-| 第11章 · 预处理 | 1 | 🏆 | 55-75 | `#define` 宏、`#ifdef` 条件编译、宏括号陷阱 |
-| 第12章 · 综合实战 | 10 | 🏆 | 75-120 | 猜数字、计算器、成绩统计、素数、回文、排序、RLE、进制转换、俄罗斯方块计分板 |
+| 第5章 · 字符输入输出 | 3 | 🏆 | 45-85 | `getchar`/`putchar`、`ctype.h`、缓冲区清理、输入验证 |
+| 第6章 · 数组 | 2 | 🏆 | 50-85 | 一维数组、遍历、排序（冒泡、插入）、查找 |
+| 第7章 · 函数 | 3 | 🏆 | 50-90 | 定义调用、递归、作用域、`static`、gcd 算法 |
+| 第8章 · 指针 | 4 | 🏆 | 60-100 | `&`/`*`、指针与数组、指针与函数、动态内存 `malloc` |
+| 第9章 · 字符串 | 2 | 🏆 | 55-85 | `strlen`、`strcmp`、`ctype.h` 字符分类 |
+| 第10章 · 结构体与联合 | 3 | 🏆 | 55-90 | `struct`、`typedef`、`union`、结构体数组、`enum` |
+| 第11章 · 位操作 | 2 | 🏆 | 50-80 | `&` `\|` `^` `~`、`<<` `>>`、位掩码、权限标志 |
+| 第12章 · 文件操作 | 1 | 🏆 | 60-90 | `fopen`、`fprintf`、`fscanf`、`fclose`、追加模式 |
+| 第13章 · 预处理 | 1 | 🏆 | 55-75 | `#define` 宏、`#ifdef` 条件编译、宏括号陷阱 |
+| 第14章 · 综合实战 | 10 | 🏆 | 75-120 | 猜数字、计算器、成绩统计、素数、回文、排序、RLE、进制转换、俄罗斯方块计分板 |
 
-**总计：48 关 · 12 章末挑战 · 总 XP ~2520**
+**总计：56 关 · 14 章末挑战 · 基于《C Primer Plus》完整知识体系**
 
 ---
 
