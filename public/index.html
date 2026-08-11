@@ -618,6 +618,19 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(77,159,255,0.15);
 }
+.start-btn-about {
+  padding: 14px 24px; border-radius: var(--radius);
+  background: transparent; color: var(--text-tertiary);
+  border: 1px solid var(--border-muted);
+  font-size: 0.88rem; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.start-btn-about:hover {
+  color: var(--text-primary);
+  border-color: var(--text-tertiary);
+  background: var(--bg-surface);
+}
 
 /* ============================================================
    教程引导
@@ -766,6 +779,7 @@ body {
     </div>
   </div>
   <div style="display:flex;gap:12px;align-items:center;">
+    <button class="start-btn-about" onclick="openAbout()">ℹ️ 关于</button>
     <button class="start-btn-vs" onclick="openVSTutorial()">🛠️ VS 环境搭建教程</button>
     <button class="start-btn" onclick="startLearning()">🚀 开始学习</button>
   </div>
@@ -943,6 +957,39 @@ int main() {
       <p style="margin-top:18px;color:var(--text-tertiary);"><em>✅ 学会 VS 后，本平台的所有关卡代码都可以复制到 VS 中编译运行，两份环境互相补充！</em></p>
     </div>
     <button class="modal-close" onclick="closeVSTutorial()">关闭</button>
+  </div>
+</div>
+
+<!-- ===== About 弹窗 ===== -->
+<div class="modal-overlay" id="aboutOverlay" style="z-index:500;">
+  <div class="modal-box" style="max-width:560px;">
+    <h3 style="color:var(--accent) !important;">📘 关于 C 语言闯关学习平台</h3>
+    <p class="modal-sub">v2.0 · MIT License</p>
+    <div style="font-size:0.85rem;line-height:1.9;color:var(--text-secondary);max-height:50vh;overflow-y:auto;padding-right:6px;">
+      <p>C 语言诞生于 1972 年，至今仍是操作系统、嵌入式、数据库等底层系统的首选语言。本项目试图回答一个问题：<strong>如果让零基础的人在浏览器里像玩游戏一样学 C 语言，会是什么体验？</strong></p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 6px;">🎯 设计理念</h4>
+      <table>
+        <tr><td style="width:28px;">🎮</td><td><strong>闯关而非上课</strong> — 第 1 关就开始改代码、看输出，最小化新概念</td></tr>
+        <tr><td>🧩</td><td><strong>章末挑战从零写</strong> — 每章末尾的综合挑战不提供任何初始代码</td></tr>
+        <tr><td>🤖</td><td><strong>模拟器兜底</strong> — 内置 JS C 模拟器，无编译器也能运行</td></tr>
+        <tr><td>🏆</td><td><strong>成就感驱动</strong> — 9 枚成就徽章，闯关数 + XP 双维度</td></tr>
+      </table>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 6px;">🛠️ 技术栈</h4>
+      <p>Node.js + Express · 原生 HTML/CSS/JS · JSON 数据存储 · 零构建工具</p>
+      <p style="margin-top:2px;">选择这些技术的原则：<strong>克隆即用</strong>。三步启动：<code style="background:var(--bg-elevated);padding:2px 6px;border-radius:3px;">git clone</code> → <code style="background:var(--bg-elevated);padding:2px 6px;border-radius:3px;">npm install</code> → <code style="background:var(--bg-elevated);padding:2px 6px;border-radius:3px;">npm start</code></p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 6px;">📖 内容来源</h4>
+      <p>教学体系基于 <strong>《C Primer Plus》</strong>（Stephen Prata 著），关卡设计为原创内容。</p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 6px;">👤 作者</h4>
+      <p><strong>Siloxane</strong> · <a href="https://github.com/Siloxane8888" target="_blank" style="color:var(--accent);">GitHub</a></p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 6px;">🙏 致谢</h4>
+      <p style="font-size:0.78rem;color:var(--text-tertiary);">marked.js · highlight.js · Express · JetBrains Mono · 《C Primer Plus》</p>
+    </div>
+    <button class="modal-close" onclick="closeAbout()">关闭</button>
   </div>
 </div>
 
@@ -1423,6 +1470,7 @@ function initCodeRain() {
 function backToStart() {
   // 关闭可能打开的弹窗
   document.getElementById('vsTutorialOverlay').classList.remove('show');
+  document.getElementById('aboutOverlay').classList.remove('show');
   document.getElementById('hintOverlay').classList.remove('show');
   document.getElementById('startScreen').classList.remove('hidden');
   // 重启代码雨
@@ -1432,6 +1480,7 @@ function backToStart() {
 function startLearning() {
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('vsTutorialOverlay').classList.remove('show');
+  document.getElementById('aboutOverlay').classList.remove('show');
   // 停止代码雨动画释放资源
   if (S._codeRainCtl) { S._codeRainCtl.stop(); S._codeRainCtl = null; }
   // 首次访问 → 显示教程
@@ -1453,6 +1502,14 @@ function closeVSTutorial() {
   // 回到开始界面
   document.getElementById('startScreen').classList.remove('hidden');
   if (!S._codeRainCtl) S._codeRainCtl = initCodeRain();
+}
+
+function openAbout() {
+  document.getElementById('aboutOverlay').classList.add('show');
+}
+
+function closeAbout() {
+  document.getElementById('aboutOverlay').classList.remove('show');
 }
 
 function showTutorial() {
