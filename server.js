@@ -62,23 +62,52 @@ function findCompiler() {
     }
   }
 
-  // 2. 尝试 MSVC
-  const clPath = 'D:\\vs\\VC\\Tools\\MSVC\\14.51.36231\\bin\\Hostx64\\x64\\cl.exe';
-  const vcvarsPath = 'D:\\vs\\VC\\Auxiliary\\Build\\vcvars64.bat';
-  if (fs.existsSync(clPath) && fs.existsSync(vcvarsPath)) {
-    return { type: 'msvc', path: clPath, vcvars: vcvarsPath };
-  }
-
-  // 3. 搜索其他 MSVC 版本
-  try {
-    const vsBase = 'D:\\vs\\VC\\Tools\\MSVC';
-    if (fs.existsSync(vsBase)) {
-      for (const ver of fs.readdirSync(vsBase)) {
-        const cl = path.join(vsBase, ver, 'bin', 'Hostx64', 'x64', 'cl.exe');
-        if (fs.existsSync(cl)) return { type: 'msvc', path: cl, vcvars: vcvarsPath };
+  // 2. 尝试 MSVC — 自动搜索常见安装位置
+  const vsCandidates = [];
+  // VS 2022 / 2019 标准路径
+  for (const base of ['C:\\Program Files\\Microsoft Visual Studio\\2022',
+                       'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019',
+                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community',
+                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional',
+                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise']) {
+    try {
+      if (fs.existsSync(base)) {
+        for (const ed of fs.readdirSync(base).filter(d => d !== 'Shared' && d !== 'SDK')) {
+          const vcDir = path.join(base, ed, 'VC', 'Tools', 'MSVC');
+          if (fs.existsSync(vcDir)) vsCandidates.push(vcDir);
+        }
       }
+    } catch(e) {}
+    // 直接子目录也是可能的
+    const vcDir2 = path.join(base, 'VC', 'Tools', 'MSVC');
+    if (fs.existsSync(vcDir2)) vsCandidates.push(vcDir2);
+  }
+  // 环境变量
+  for (const env of ['VSINSTALLDIR', 'VCINSTALLDIR', 'VCToolsInstallDir']) {
+    if (process.env[env]) {
+      const d = process.env[env];
+      if (fs.existsSync(d)) vsCandidates.push(d);
     }
-  } catch(e) {}
+  }
+  for (const base of vsCandidates) {
+    try {
+      for (const ver of fs.readdirSync(base)) {
+        const cl = path.join(base, ver, 'bin', 'Hostx64', 'x64', 'cl.exe');
+        if (fs.existsSync(cl)) {
+          // 查找对应 vcvars
+          let vcvars = '';
+          const searchBase = path.dirname(path.dirname(path.dirname(path.dirname(base))));
+          for (const vp of [
+            path.join(searchBase, 'Auxiliary', 'Build', 'vcvars64.bat'),
+            path.join(path.dirname(base), 'Auxiliary', 'Build', 'vcvars64.bat')
+          ]) {
+            if (fs.existsSync(vp)) { vcvars = vp; break; }
+          }
+          if (vcvars) return { type: 'msvc', path: cl, vcvars };
+        }
+      }
+    } catch(e) {}
+  }
 
   return null;
 }
@@ -118,7 +147,8 @@ async function compileWithMSVC(code, testInput = '') {
 
   return new Promise((resolve) => {
     try {
-      fs.writeFileSync(srcFile, code, 'utf8');
+      // MSVC 要求 CRLF 换行符 — 使用 Buffer 确保正确的行尾
+      fs.writeFileSync(srcFile, Buffer.from(code.replace(/\r\n/g, '\n').split('\n').join('\r\n')), 'utf8');
       if (testInput) fs.writeFileSync(inputFile, testInput, 'utf8');
 
       // 写批处理文件
@@ -179,7 +209,7 @@ function compileWithGCC(code, testInput = '') {
 
   return new Promise((resolve) => {
     try {
-      fs.writeFileSync(srcFile, code, 'utf8');
+      fs.writeFileSync(srcFile, code.replace(/\r\n/g, '\n').replace(/\n/g, '\r\n'), 'utf8');
       if (testInput) fs.writeFileSync(inputFile, testInput, 'utf8');
 
       const gcc = COMPILER.path;
@@ -242,11 +272,71 @@ function loadProgress() {
   try {
     if (fs.existsSync(PROGRESS_FILE)) return JSON.parse(fs.readFileSync(PROGRESS_FILE, 'utf8'));
   } catch (e) { /* ignore */ }
-  return { completed: {}, xp: 0 };
+  // 首次启动：从模板创建
+  const exampleFile = path.join(__dirname, 'progress.example.json');
+  if (fs.existsSync(exampleFile)) {
+    try {
+      const example = JSON.parse(fs.readFileSync(exampleFile, 'utf8'));
+      saveProgress(example);
+      return example;
+    } catch(e) { /* ignore */ }
+  }
+  return { completed: {}, xp: 0, achievements: {} };
 }
 
 function saveProgress(progress) {
   fs.writeFileSync(PROGRESS_FILE, JSON.stringify(progress, null, 2));
+}
+
+// ============ 成就系统 ============
+const ACHIEVEMENTS = [
+  { id: 'level_1',  name: '初出茅庐', desc: '完成第1关', icon: '🌱', type: 'level', threshold: 1 },
+  { id: 'level_5',  name: '小有所成', desc: '完成5关', icon: '🥉', type: 'level', threshold: 5 },
+  { id: 'level_10', name: '炉火纯青', desc: '完成10关', icon: '🥈', type: 'level', threshold: 10 },
+  { id: 'level_20', name: '登峰造极', desc: '完成20关', icon: '🥇', type: 'level', threshold: 20 },
+  { id: 'level_36', name: '大满贯',   desc: '完成全部36关', icon: '👑', type: 'level', threshold: 36 },
+  { id: 'xp_100',   name: '编程学徒', desc: '累计100 XP', icon: '⭐', type: 'xp', threshold: 100 },
+  { id: 'xp_500',   name: 'C语言专家', desc: '累计500 XP', icon: '🌟', type: 'xp', threshold: 500 },
+  { id: 'xp_1000',  name: '编程大师', desc: '累计1000 XP', icon: '💎', type: 'xp', threshold: 1000 },
+  { id: 'xp_2000',  name: 'C语言传奇', desc: '累计2000 XP', icon: '🔥', type: 'xp', threshold: 2000 },
+];
+
+function checkAchievements(progress) {
+  const completedCount = Object.keys(progress.completed || {}).filter(k => !k.includes('_extra')).length;
+  const xp = progress.xp || 0;
+  const newAchievements = [];
+  for (const a of ACHIEVEMENTS) {
+    const key = a.id;
+    if (progress.achievements?.[key]) continue; // 已解锁
+    const met = a.type === 'level' ? completedCount >= a.threshold : xp >= a.threshold;
+    if (met) {
+      if (!progress.achievements) progress.achievements = {};
+      progress.achievements[key] = new Date().toISOString();
+      newAchievements.push(a);
+    }
+  }
+  return newAchievements;
+}
+
+function completedCount(progress) {
+  return Object.keys(progress.completed || {}).filter(k => !k.includes('_extra')).length;
+}
+
+function getLockedLevels(levels, progress) {
+  const completed = progress.completed || {};
+  return levels.map(l => {
+    // 章末挑战：需要该章节所有常规关卡完成才解锁
+    if (l.chapterEnd) {
+      const chapterLevels = levels.filter(lv => lv.chapter === l.chapter && !lv.chapterEnd);
+      const allDone = chapterLevels.every(lv => completed[String(lv.id)]);
+      return { ...l, locked: !allDone };
+    }
+    // 第一关始终解锁
+    if (l.id === 1) return { ...l, locked: false };
+    // 常规关卡：前一关必须完成才解锁
+    const prevId = l.id - 1;
+    return { ...l, locked: !completed[String(prevId)] };
+  });
 }
 
 // ============ Express ============
@@ -259,23 +349,37 @@ app.get('/api/compiler-status', (_req, res) => {
   COMPILER = findCompiler();
   res.json({
     available: !!COMPILER,
-    path: COMPILER || '未找到',
+    path: COMPILER ? COMPILER.path : '未找到',
+    type: COMPILER ? COMPILER.type : null,
     installHint: COMPILER ? null : '请运行 install-gcc.bat 安装编译器，或手动安装 MinGW-w64 / TCC'
   });
 });
 
-// API: 关卡列表
+// API: 关卡列表（含锁定状态和成就）
 app.get('/api/levels', (_req, res) => {
   try {
     const levels = JSON.parse(fs.readFileSync(LEVELS_FILE, 'utf8'));
     const progress = loadProgress();
+    // 追溯性成就检查（老用户之前完成但未记录成就）
+    const newAch = checkAchievements(progress);
+    if (newAch.length > 0) saveProgress(progress);
+    const lockedLevels = getLockedLevels(levels, progress);
     res.json({
-      levels: levels.map(l => ({
+      levels: lockedLevels.map(l => ({
         id: l.id, title: l.title, chapter: l.chapter, xp: l.xp,
         completed: !!progress.completed[l.id],
-        extraCompleted: !!progress.completed[`${l.id}_extra`]
+        extraCompleted: !!progress.completed[`${l.id}_extra`],
+        locked: l.locked,
+        chapterEnd: !!l.chapterEnd
       })),
-      progress
+      progress,
+      achievements: ACHIEVEMENTS.map(a => ({
+        ...a,
+        unlocked: !!progress.achievements?.[a.id],
+        unlockedAt: progress.achievements?.[a.id] || null
+      })),
+      totalAchievements: ACHIEVEMENTS.length,
+      unlockedAchievements: ACHIEVEMENTS.filter(a => progress.achievements?.[a.id]).length
     });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -361,13 +465,38 @@ app.post('/api/submit', async (req, res) => {
       if (!progress.completed[key]) {
         progress.completed[key] = new Date().toISOString();
         progress.xp = (progress.xp || 0) + level.xp;
+        // 检测新成就
+        const newAchievements = checkAchievements(progress);
         saveProgress(progress);
+        const msg = isExtra
+          ? `🎉 额外挑战完成！+${level.xp} XP`
+          : `✅ 挑战成功！+${level.xp} XP`;
+        res.json({
+          passed: true,
+          message: msg,
+          output: result.output, xp: level.xp, totalXp: progress.xp,
+          newAchievements: newAchievements.length > 0 ? newAchievements : null,
+          allAchievements: ACHIEVEMENTS.map(a => ({
+            ...a, unlocked: !!progress.achievements?.[a.id]
+          })),
+          completedCount: completedCount(progress),
+          totalAchievements: ACHIEVEMENTS.length,
+          unlockedAchievements: ACHIEVEMENTS.filter(a => progress.achievements?.[a.id]).length
+        });
+      } else {
+        saveProgress(progress);
+        res.json({
+          passed: true,
+          message: isExtra ? `🎉 额外挑战完成！+${level.xp} XP` : `✅ 挑战成功！+${level.xp} XP`,
+          output: result.output, xp: level.xp, totalXp: progress.xp,
+          allAchievements: ACHIEVEMENTS.map(a => ({
+            ...a, unlocked: !!progress.achievements?.[a.id]
+          })),
+          completedCount: completedCount(progress),
+          totalAchievements: ACHIEVEMENTS.length,
+          unlockedAchievements: ACHIEVEMENTS.filter(a => progress.achievements?.[a.id]).length
+        });
       }
-      res.json({
-        passed: true,
-        message: isExtra ? `🎉 额外挑战完成！+${level.xp} XP` : `✅ 挑战成功！+${level.xp} XP`,
-        output: result.output, xp: level.xp, totalXp: progress.xp
-      });
     } else {
       res.json({
         passed: false, message: '输出不匹配，请再试一次',

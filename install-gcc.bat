@@ -51,6 +51,6 @@ if %errorlevel% equ 0 (
 :done
 echo.
 echo   安装完成后重新启动 C语言学习平台:
-echo   cd D:\c-learning-adventure ^&^& node server.js
+echo   cd /d %~dp0 ^&^& node server.js
 echo.
 pause

@@ -203,6 +203,11 @@ body {
 .toolbar-btn.submit:disabled { opacity: 0.4; cursor: not-allowed; }
 .toolbar-btn.hint { border-color: rgba(224,155,52,0.3); color: var(--orange); }
 .toolbar-btn.hint:hover { background: var(--orange-soft); }
+.toolbar-btn.back-btn {
+  font-size: 0.9rem; padding: 0 10px; border: 1px solid var(--border-default);
+  background: transparent;
+}
+.toolbar-btn.back-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
 
 /* 内容区域 */
 .content { flex: 1; display: flex; overflow: hidden; }
@@ -482,9 +487,303 @@ body {
   .sidebar { display: none; }
   .teach-panel { padding: 14px; }
 }
+
+/* ============================================================
+   开始界面
+   ============================================================ */
+.start-screen {
+  position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg-body);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; text-align: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  overflow: hidden;
+}
+.start-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* ----- 代码雨背景画布 ----- */
+.start-screen .code-rain-canvas {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; opacity: 0.3; pointer-events: none;
+  display: block;
+}
+
+/* ----- 前景内容层级提升 ----- */
+.start-screen > *:not(.code-rain-canvas) { position: relative; z-index: 1; }
+
+.start-screen .logo {
+  width: 88px; height: 88px; border-radius: 22px;
+  background: linear-gradient(135deg, #1a3a5c, #1e2d4a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 42px; margin-bottom: 22px;
+  box-shadow: 0 0 40px rgba(77,159,255,0.12), 0 0 80px rgba(77,159,255,0.04);
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+}
+.start-screen .logo:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 60px rgba(77,159,255,0.2), 0 0 120px rgba(77,159,255,0.08);
+}
+.start-screen h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+.start-screen .subtitle { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.6; }
+
+/* ----- 特性卡片网格 ----- */
+.start-features {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 36px; max-width: 700px;
+}
+.start-feature {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  border-radius: var(--radius); padding: 20px 18px 16px;
+  width: 150px; text-align: center; cursor: default;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease,
+              background 0.35s ease,
+              width 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  will-change: transform;
+  position: relative; overflow: hidden;
+}
+.start-feature::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(77,159,255,0.06) 0%, transparent 70%);
+  opacity: 0; transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.start-feature:hover {
+  transform: scale(1.10);
+  width: 180px;
+  border-color: rgba(77,159,255,0.35);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(77,159,255,0.15), 0 0 40px rgba(77,159,255,0.06);
+  background: var(--bg-elevated);
+  z-index: 10;
+}
+.start-feature:hover::after { opacity: 1; }
+
+.start-feature .sf-icon {
+  font-size: 1.8rem; margin-bottom: 10px; display: block;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), font-size 0.35s ease;
+  will-change: transform;
+}
+.start-feature:hover .sf-icon {
+  transform: scale(1.35);
+  font-size: 2.3rem;
+}
+.start-feature .sf-title {
+  font-size: 0.85rem; font-weight: 650; color: var(--text-primary); margin-bottom: 4px;
+  transition: color 0.3s ease;
+}
+.start-feature:hover .sf-title { color: var(--accent); }
+.start-feature .sf-desc {
+  font-size: 0.72rem; color: var(--text-tertiary); line-height: 1.5;
+  transition: color 0.3s ease, max-height 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+  max-height: 36px; overflow: hidden;
+}
+.start-feature:hover .sf-desc { color: var(--text-secondary); }
+.start-feature .sf-detail {
+  font-size: 0.68rem; color: var(--accent); line-height: 1.4;
+  max-height: 0; opacity: 0; overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease, margin 0.35s ease;
+  margin-top: 0;
+}
+.start-feature:hover .sf-detail {
+  max-height: 60px; opacity: 1; margin-top: 8px;
+}
+
+/* ----- 开始按钮动效 ----- */
+.start-btn {
+  padding: 14px 48px; border-radius: var(--radius);
+  background: var(--accent); color: #fff; border: none;
+  font-size: 1rem; font-weight: 700; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 4px 16px rgba(77,159,255,0.2);
+}
+.start-btn:hover {
+  background: #5babff;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 28px rgba(77,159,255,0.35), 0 0 60px rgba(77,159,255,0.08);
+}
+.start-btn:active { transform: translateY(0) scale(0.98); transition: all 0.1s ease; }
+.start-btn-vs {
+  padding: 14px 32px; border-radius: var(--radius);
+  background: var(--bg-surface); color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  font-size: 0.92rem; font-weight: 600; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.start-btn-vs:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(77,159,255,0.15);
+}
+
+/* ============================================================
+   教程引导
+   ============================================================ */
+.tutorial-overlay {
+  position: fixed; inset: 0; z-index: 900;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.tutorial-overlay.hidden { display: none; }
+.tutorial-card {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg); padding: 28px 32px;
+  max-width: 440px; width: 92%; box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+.tutorial-card .step-dot-row {
+  display: flex; gap: 8px; justify-content: center; margin-bottom: 18px;
+}
+.tutorial-card .step-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--border-default); transition: var(--transition-fast);
+}
+.tutorial-card .step-dot.active { background: var(--accent); width: 24px; border-radius: 4px; }
+.tutorial-card .step-emoji { font-size: 2.4rem; margin-bottom: 10px; }
+.tutorial-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+.tutorial-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; }
+.tutorial-card .tut-btns { display: flex; gap: 10px; justify-content: center; }
+.tutorial-card .tut-btn {
+  padding: 9px 22px; border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 0.84rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition-fast); border: none;
+}
+.tutorial-card .tut-btn.next { background: var(--accent); color: #fff; }
+.tutorial-card .tut-btn.next:hover { background: #5babff; }
+.tutorial-card .tut-btn.skip {
+  background: transparent; color: var(--text-tertiary); border: 1px solid var(--border-default);
+}
+.tutorial-card .tut-btn.skip:hover { color: var(--text-secondary); border-color: var(--text-tertiary); }
+
+/* ============================================================
+   成就系统
+   ============================================================ */
+.achievement-section {
+  padding: 8px 10px; border-top: 1px solid var(--border-muted);
+  max-height: 160px; overflow-y: auto;
+}
+.achievement-header {
+  font-size: 0.7rem; color: var(--text-tertiary); font-weight: 700;
+  padding: 6px 6px 4px; letter-spacing: 0.03em;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.achievement-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+}
+.achievement-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px; border-radius: var(--radius-sm);
+  font-size: 0.68rem; transition: var(--transition-fast);
+  border: 1px solid transparent;
+}
+.achievement-badge.unlocked {
+  background: var(--bg-elevated); border-color: var(--border-default);
+}
+.achievement-badge.locked {
+  opacity: 0.35; filter: grayscale(1);
+}
+.achievement-badge .ach-icon { font-size: 0.85rem; flex-shrink: 0; }
+.achievement-badge .ach-name { color: var(--text-secondary); font-weight: 500; }
+.achievement-badge.locked .ach-name { color: var(--text-tertiary); }
+
+/* 成就弹出提示 */
+.ach-popup {
+  position: fixed; top: 76px; left: 50%; transform: translateX(-50%); z-index: 300;
+  padding: 16px 28px; border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #1a2740, #1e2d4a);
+  border: 2px solid var(--accent);
+  box-shadow: 0 8px 32px rgba(77,159,255,0.25), 0 0 60px rgba(77,159,255,0.08);
+  animation: achSlideIn 0.5s ease, achSlideOut 0.4s ease 3s forwards;
+  text-align: center; display: flex; align-items: center; gap: 14px;
+}
+.ach-popup .achp-icon { font-size: 2rem; animation: achBounce 0.6s ease; }
+.ach-popup .achp-info { text-align: left; }
+.ach-popup .achp-title { font-size: 0.78rem; color: var(--accent); font-weight: 700; }
+.ach-popup .achp-name { font-size: 1rem; color: var(--text-primary); font-weight: 700; }
+.ach-popup .achp-desc { font-size: 0.76rem; color: var(--text-secondary); }
+@keyframes achSlideIn { from { transform: translateX(-50%) translateY(-30px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+@keyframes achSlideOut { from { opacity: 1; } to { opacity: 0; transform: translateX(-50%) translateY(-15px); } }
+@keyframes achBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+/* ============================================================
+   锁定关卡
+   ============================================================ */
+.level-item.locked {
+  opacity: 0.4; cursor: not-allowed; pointer-events: none;
+}
+.level-item.locked .level-num {
+  background: transparent; border-color: var(--border-muted);
+  color: var(--text-tertiary);
+}
+/* 章末挑战样式 */
+.level-item.chapter-end {
+  border-left: 2px solid var(--orange);
+  margin-left: 6px;
+}
+.level-item.chapter-end .level-num {
+  border-color: rgba(224,155,52,0.25); background: var(--orange-soft);
+}
+.level-item.chapter-end:hover { background: rgba(224,155,52,0.04); }
+.level-item.chapter-end.locked { border-left-color: var(--border-muted); }
 </style>
 </head>
 <body>
+
+<!-- ===== 开始界面 ===== -->
+<div class="start-screen" id="startScreen">
+  <canvas class="code-rain-canvas" id="codeRain"></canvas>
+  <div class="logo">📘</div>
+  <h1>C 语言闯关学习</h1>
+  <p class="subtitle">基于《C Primer Plus》的交互式学习平台<br>12 章 36 节 · 从零基础到综合实战</p>
+  <div class="start-features">
+    <div class="start-feature">
+      <span class="sf-icon">🎮</span>
+      <div class="sf-title">闯关式学习</div>
+      <div class="sf-desc">36 个关卡循序渐进，覆盖 C 语言完整知识体系</div>
+      <div class="sf-detail">12 个章节 × 36 个关卡<br>从 Hello World 到综合实战</div>
+    </div>
+    <div class="start-feature">
+      <span class="sf-icon">✍️</span>
+      <div class="sf-title">在线编码</div>
+      <div class="sf-desc">浏览器内实时编写、编译、运行 C 代码</div>
+      <div class="sf-detail">接真实 MSVC/GCC 编译器<br>5 秒超时安全沙箱</div>
+    </div>
+    <div class="start-feature">
+      <span class="sf-icon">🏆</span>
+      <div class="sf-title">成就系统</div>
+      <div class="sf-desc">9 枚成就徽章，记录你的每一个里程碑</div>
+      <div class="sf-detail">闯关数 + XP 双维度<br>解锁时全屏动画提示</div>
+    </div>
+    <div class="start-feature">
+      <span class="sf-icon">💡</span>
+      <div class="sf-title">提示系统</div>
+      <div class="sf-desc">三层渐进提示，确保你不会被卡住</div>
+      <div class="sf-detail">逐步揭示 → 参考答案<br>独立解决问题更有效</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;">
+    <button class="start-btn-vs" onclick="openVSTutorial()">🛠️ VS 环境搭建教程</button>
+    <button class="start-btn" onclick="startLearning()">🚀 开始学习</button>
+  </div>
+</div>
+
+<!-- ===== 教程引导 ===== -->
+<div class="tutorial-overlay hidden" id="tutorialOverlay">
+  <div class="tutorial-card">
+    <div class="step-dot-row" id="stepDots"></div>
+    <div class="step-emoji" id="stepEmoji"></div>
+    <h3 id="stepTitle"></h3>
+    <p id="stepDesc"></p>
+    <div class="tut-btns">
+      <button class="tut-btn skip" onclick="skipTutorial()">跳过教程</button>
+      <button class="tut-btn next" id="tutNextBtn" onclick="nextTutorialStep()">下一步 →</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===== 左侧边栏 ===== -->
 <aside class="sidebar">
@@ -499,11 +798,19 @@ body {
     <button class="btn btn-primary" onclick="newChat()">＋ 新建学习会话</button>
     <div class="stats-row">
       <span class="stat-item">⭐ <span class="val xp" id="totalXp">0</span> XP</span>
-      <span class="stat-item">✅ <span class="val done" id="completedCount">0</span>/10 关</span>
+      <span class="stat-item">✅ <span class="val done" id="completedCount">0</span>关</span>
     </div>
   </div>
 
   <div class="level-list" id="levelList"></div>
+
+  <div class="achievement-section" id="achievementSection">
+    <div class="achievement-header">
+      <span>🏆 成就</span>
+      <span id="achCount">0/9</span>
+    </div>
+    <div class="achievement-grid" id="achievementGrid"></div>
+  </div>
 
   <div class="sidebar-footer">
     <span class="dot"></span> 就绪 · 本地运行
@@ -513,6 +820,7 @@ body {
 <!-- ===== 主区域 ===== -->
 <div class="main">
   <header class="topbar">
+    <button class="toolbar-btn back-btn" onclick="backToStart()" title="返回首页">🏠</button>
     <div class="level-badge">
       <span class="dot"></span>
       <span id="levelTitle">选择关卡开始学习</span>
@@ -529,7 +837,7 @@ body {
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
         <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
         <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
-        <p style="font-size:0.8rem;margin-top:4px;">共 10 关，覆盖从 Hello World 到指针的完整知识体系</p>
+        <p style="font-size:0.8rem;margin-top:4px;">12 章 48 节（含 12 个章末挑战），从 Hello World 到综合实战的完整知识体系</p>
       </div>
     </div>
 
@@ -566,6 +874,78 @@ body {
   </div>
 </div>
 
+<!-- ===== VS 教程弹窗 ===== -->
+<div class="modal-overlay" id="vsTutorialOverlay" style="z-index:500;">
+  <div class="modal-box" style="max-width:720px;max-height:85vh;">
+    <h3 style="color:var(--accent) !important;">🛠️ Visual Studio C 语言开发环境搭建</h3>
+    <p class="modal-sub">从零开始，保姆级教程 — 每一步都有截图说明</p>
+    <div style="font-size:0.84rem;line-height:1.85;color:var(--text-secondary);max-height:58vh;overflow-y:auto;padding-right:8px;">
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">📥 第一步：下载 Visual Studio</h4>
+      <p>打开浏览器，访问 <a href="https://visualstudio.microsoft.com/zh-hans/downloads/" target="_blank" style="color:var(--accent);">visualstudio.microsoft.com/zh-hans/downloads/</a></p>
+      <p>选择 <strong>Visual Studio Community 2022</strong>（免费版），点击「免费下载」。</p>
+      <p>💡 <em>Community 版完全免费，包含我们需要的所有 C/C++ 开发工具。</em></p>
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">⚙️ 第二步：安装 — 选择工作负载</h4>
+      <p>运行下载的安装程序，在「工作负载」标签页中，<strong>务必勾选</strong>：</p>
+      <p style="background:var(--bg-elevated);padding:10px 16px;border-radius:6px;border:1px solid var(--border-default);">✅ <strong>使用 C++ 的桌面开发</strong>（Desktop development with C++）</p>
+      <p>右侧确认以下组件已勾选：</p>
+      <ul>
+        <li>MSVC v143 - VS 2022 C++ x64/x86 生成工具</li>
+        <li>Windows 11 SDK（或 Windows 10 SDK）</li>
+        <li>C++ 核心桌面功能</li>
+      </ul>
+      <p>点击右下角「安装」，等待 15-30 分钟。</p>
+      <p>💡 <em>安装包约 3-5 GB，建议连接电源和稳定网络。</em></p>
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">🚀 第三步：创建第一个 C 项目</h4>
+      <table>
+        <tr><td style="width:28px;text-align:center;font-weight:700;color:var(--accent);">1</td><td>启动 VS 2022，点击「<strong>创建新项目</strong>」</td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:var(--accent);">2</td><td>搜索框输入 <strong>C++</strong>，选择「<strong>空项目</strong>」（Empty Project）</td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:var(--accent);">3</td><td>项目名称填入 <code style="background:var(--bg-elevated);padding:1px 6px;border-radius:3px;">hello_c</code>，选择保存位置，点击「创建」</td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:var(--accent);">4</td><td>在右侧「解决方案资源管理器」中右键「源文件」→「添加」→「新建项」</td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:var(--accent);">5</td><td>文件名改为 <code style="background:var(--bg-elevated);padding:1px 6px;border-radius:3px;">main.c</code>（<strong>注意扩展名是 .c 不是 .cpp！</strong>），点击「添加」</td></tr>
+      </table>
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">✍️ 第四步：编写并运行代码</h4>
+      <p>在打开的 <code>main.c</code> 中输入以下代码：</p>
+      <pre style="background:#0b0f14;padding:12px 18px;border-radius:6px;font-size:0.82rem;overflow-x:auto;">
+#include &lt;stdio.h&gt;
+int main() {
+    printf("Hello, C World!\\n");
+    return 0;
+}</pre>
+      <p>按 <strong>Ctrl + F5</strong>（或菜单「调试」→「开始执行(不调试)」）编译并运行。</p>
+      <p>看到黑色控制台窗口输出 <code>Hello, C World!</code> 即表示成功！🎉</p>
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">🔧 常见问题与技巧</h4>
+      <table>
+        <tr><th>问题</th><th>解决方法</th></tr>
+        <tr><td>找不到 C++ 项目模板</td><td>重新运行 VS Installer，确认勾选了「使用 C++ 的桌面开发」</td></tr>
+        <tr><td>控制台窗口一闪而过</td><td>用 <strong>Ctrl+F5</strong> 而非 F5，或在 <code>return 0;</code> 前加 <code>getchar();</code></td></tr>
+        <tr><td>编译错误 C4996</td><td>VS 建议用 <code>scanf_s</code> 替代 <code>scanf</code>，在本平台中直接使用标准 <code>scanf</code> 即可</td></tr>
+        <tr><td>中文乱码</td><td>文件 → 高级保存选项 → 编码选「Unicode (UTF-8 带签名) - 代码页 65001」</td></tr>
+        <tr><td>代码提示不工作</td><td>确认文件扩展名为 <code>.c</code>（C 语言），而非 <code>.cpp</code>（C++）</td></tr>
+      </table>
+
+      <h4 style="color:var(--text-primary);margin:18px 0 8px;">💡 VS 快捷键速查</h4>
+      <table>
+        <tr><th>快捷键</th><th>功能</th></tr>
+        <tr><td><code>Ctrl + F5</code></td><td>编译 + 运行（不调试）</td></tr>
+        <tr><td><code>F5</code></td><td>调试模式运行</td></tr>
+        <tr><td><code>Ctrl + K, Ctrl + D</code></td><td>自动格式化代码（对齐缩进）</td></tr>
+        <tr><td><code>Ctrl + K, Ctrl + C</code></td><td>注释选中行</td></tr>
+        <tr><td><code>Ctrl + K, Ctrl + U</code></td><td>取消注释</td></tr>
+        <tr><td><code>Ctrl + Shift + B</code></td><td>仅编译（不运行）</td></tr>
+        <tr><td><code>Ctrl + -</code></td><td>跳回上一个位置</td></tr>
+      </table>
+
+      <p style="margin-top:18px;color:var(--text-tertiary);"><em>✅ 学会 VS 后，本平台的所有关卡代码都可以复制到 VS 中编译运行，两份环境互相补充！</em></p>
+    </div>
+    <button class="modal-close" onclick="closeVSTutorial()">关闭</button>
+  </div>
+</div>
+
 <!-- ===== 帮助弹窗 ===== -->
 <div class="modal-overlay" id="hintOverlay">
   <div class="modal-box">
@@ -584,9 +964,18 @@ const S = {
   levels: [],
   currentLevel: null,
   progress: { completed:{}, xp:0 },
+  achievements: [],
   isExtra: false,
   hintsRevealed: 0,
   streaming: false,
+  tutorialStep: 0,
+  tutorialData: [
+    { emoji: '📚', title: '左侧关卡列表', desc: '在左侧边栏浏览 36 个关卡，按章节分组。完成当前关卡后才能解锁下一关。' },
+    { emoji: '📖', title: '教学面板', desc: '中间区域展示当前关卡的知识点和任务说明。仔细阅读后再动手编码！' },
+    { emoji: '⌨️', title: '代码编辑器', desc: '右侧上半部分是代码编辑器。关卡已提供了初始代码模板，你需要完成空缺的部分。' },
+    { emoji: '▶️', title: '运行代码', desc: '写好代码后点击「▶ 运行」按钮查看输出结果，确认与期望输出一致。' },
+    { emoji: '✅', title: '提交挑战', desc: '确认输出正确后点击「✅ 提交挑战」按钮。通过后获得 XP 并解锁成就！' },
+  ],
 };
 
 // ============================================================
@@ -599,29 +988,29 @@ function parseMD(text) {
   return text.replace(/\n/g, '<br>');
 }
 
-async function init() {
-  // 配置 marked.js（如果已加载）
-  if (typeof marked !== 'undefined') {
-    marked.setOptions({ gfm: true, breaks: false });
-  }
-  await loadLevels();
-  renderLevelList();
-  if (S.levels.length > 0) selectLevel(S.levels[0].id);
-}
-
 async function loadLevels() {
   try {
     const resp = await fetch('/api/levels').then(r => r.json());
+    if (resp.error) throw new Error(resp.error);
     S.levels = resp.levels || [];
     S.progress = resp.progress || { completed:{}, xp:0 };
+    S.achievements = resp.achievements || [];
+    S.totalAchievements = resp.totalAchievements || 9;
+    S.unlockedAchievements = resp.unlockedAchievements || 0;
+    S._loadFailed = false;
     updateStats();
-  } catch(e) { console.error(e); }
+    renderAchievements();
+  } catch(e) {
+    console.error('loadLevels failed:', e);
+    S._loadFailed = S.levels.length === 0;
+  }
 }
 
 function updateStats() {
   document.getElementById('totalXp').textContent = S.progress.xp || 0;
   const done = Object.keys(S.progress.completed||{}).filter(k => !k.includes('_extra')).length;
-  document.getElementById('completedCount').textContent = done;
+  document.getElementById('completedCount').textContent = done + '/' + S.levels.length;
+  document.getElementById('achCount').textContent = (S.unlockedAchievements || 0) + '/' + (S.totalAchievements || 9);
 }
 
 // ============================================================
@@ -629,26 +1018,59 @@ function updateStats() {
 // ============================================================
 function renderLevelList() {
   const list = document.getElementById('levelList');
-  list.innerHTML = S.levels.map(l => {
-    const done = !!S.progress.completed[l.id];
-    const active = S.currentLevel?.id === l.id;
-    const extra = !!S.progress.completed[l.id + '_extra'];
-    return `
-      <div class="level-item ${active?'active':''} ${done?'done':''}" onclick="selectLevel(${l.id})">
-        <span class="level-num">${done ? '✓' : l.id}</span>
-        <div class="linfo">
-          <div class="ltitle">${l.title}</div>
-          <div class="lchapter">${l.chapter} · ${l.xp} XP</div>
-        </div>
-        <div class="licons">${done?'✅':''}${extra?'⭐':''}</div>
-      </div>`;
-  }).join('');
+  if (!S.levels || S.levels.length === 0) {
+    const msg = S._loadFailed
+      ? `<p style="font-size:2rem;margin-bottom:10px;">🔌</p>
+         <p>无法连接到服务器</p>
+         <p style="font-size:0.72rem;">请确保已运行 <code style="background:var(--bg-elevated);padding:2px 6px;border-radius:3px;">npm start</code></p>
+         <button onclick="location.reload()" style="margin-top:12px;padding:6px 18px;border-radius:6px;border:1px solid var(--border-default);background:var(--bg-elevated);color:var(--accent);cursor:pointer;font-family:inherit;font-size:0.8rem;">🔄 重试</button>`
+      : `<p style="font-size:2rem;margin-bottom:8px;">📭</p><p>关卡数据为空</p>`;
+    list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-tertiary);font-size:0.82rem;line-height:1.8;">${msg}</div>`;
+    return;
+  }
+  // 按章节分组
+  const chapters = {};
+  for (const l of S.levels) {
+    const ch = l.chapter || '其他';
+    if (!chapters[ch]) chapters[ch] = [];
+    chapters[ch].push(l);
+  }
+
+  let html = '';
+  for (const [ch, levels] of Object.entries(chapters)) {
+    const doneCount = levels.filter(l => S.progress.completed[l.id]).length;
+    html += `<div style="font-size:0.7rem;color:var(--text-tertiary);padding:10px 6px 2px;font-weight:700;letter-spacing:0.03em;display:flex;justify-content:space-between;">
+      <span>${ch}</span><span>${doneCount}/${levels.length}</span></div>`;
+    for (const l of levels) {
+      const done = !!S.progress.completed[l.id];
+      const active = S.currentLevel?.id === l.id;
+      const locked = l.locked && !done;
+      const isChapterEnd = l.chapterEnd;
+      html += `
+        <div class="level-item ${active?'active':''} ${done?'done':''} ${locked?'locked':''} ${isChapterEnd?'chapter-end':''}" onclick="${locked?'':'selectLevel('+l.id+')'}">
+          <span class="level-num">${done ? '✓' : locked ? '🔒' : '🏆'}</span>
+          <div class="linfo">
+            <div class="ltitle">${l.title.replace(/^🏆 /,'')}</div>
+            <div class="lchapter">${locked ? '🔒 完成本章后解锁' : '🏆 章末挑战 · ' + l.xp + ' XP'}</div>
+          </div>
+          <div class="licons">${done?'✅':''}</div>
+        </div>`;
+    }
+  }
+  list.innerHTML = html;
 }
 
 // ============================================================
 // 选择关卡
 // ============================================================
 async function selectLevel(id) {
+  // 检查锁定
+  const lv = S.levels.find(l => l.id === id);
+  if (lv && lv.locked && !S.progress.completed[id]) {
+    const msg = lv.chapterEnd ? '🔒 请先完成本章所有常规关卡' : '🔒 请先通过上一关';
+    toast(msg, 'fail');
+    return;
+  }
   try {
     const resp = await fetch('/api/levels/' + id).then(r => r.json());
     S.currentLevel = resp;
@@ -766,6 +1188,14 @@ async function submitCode() {
       await loadLevels();
       renderLevelList();
       toast(resp.message, 'ok');
+      // 新成就弹窗
+      if (resp.newAchievements) {
+        setTimeout(() => {
+          for (const a of resp.newAchievements) {
+            showAchievementPopup(a);
+          }
+        }, 600);
+      }
     } else {
       out.textContent = resp.message + (resp.expected ? `\n\n📋 期望：${resp.expected}\n📤 实际：${resp.actual || ''}` : '');
       out.className = 'output-body error';
@@ -792,7 +1222,7 @@ function newChat() {
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
       <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
       <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
-      <p style="font-size:0.8rem;margin-top:4px;">共 10 关，覆盖从 Hello World 到指针的完整知识体系</p>
+      <p style="font-size:0.8rem;margin-top:4px;">12 章 48 节（含 12 个章末挑战），从 Hello World 到综合实战的完整知识体系</p>
     </div>`;
   document.getElementById('codeEditor').value = '';
   document.getElementById('levelTitle').textContent = '选择关卡开始学习';
@@ -854,8 +1284,231 @@ document.getElementById('hintOverlay').addEventListener('click', function(e) {
 });
 
 // ============================================================
+// 成就渲染
+// ============================================================
+function renderAchievements() {
+  const grid = document.getElementById('achievementGrid');
+  if (!S.achievements || S.achievements.length === 0) {
+    grid.innerHTML = '<div style="font-size:0.68rem;color:var(--text-tertiary);padding:4px 6px;grid-column:1/-1;">通关即可解锁成就</div>';
+    return;
+  }
+  grid.innerHTML = S.achievements.map(a => `
+    <div class="achievement-badge ${a.unlocked?'unlocked':'locked'}" title="${a.unlocked ? a.name + ' ✅' : '???'}">
+      <span class="ach-icon">${a.unlocked ? a.icon : '🔒'}</span>
+      <span class="ach-name">${a.unlocked ? a.name : '???'}</span>
+    </div>`).join('');
+  document.getElementById('achCount').textContent = (S.unlockedAchievements || 0) + '/' + (S.totalAchievements || 9);
+}
+
+function showAchievementPopup(ach) {
+  const popup = document.createElement('div');
+  popup.className = 'ach-popup';
+  popup.innerHTML = `
+    <div class="achp-icon">${ach.icon}</div>
+    <div class="achp-info">
+      <div class="achp-title">🏆 成就解锁！</div>
+      <div class="achp-name">${ach.name}</div>
+      <div class="achp-desc">${ach.desc}</div>
+    </div>`;
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 3600);
+}
+
+// ============================================================
+// 代码雨背景动画
+// ============================================================
+let codeRainAnim = null;
+function initCodeRain() {
+  const canvas = document.getElementById('codeRain');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789{}[]();<>/*#include<stdio.h>int main return printf scanf for while if else struct typedef char float double void malloc free NULL true false';
+  const baseFontSize = 15;
+  let columns, drops, trails;
+  let running = true, lastTime = 0, speedAccum = 0;
+  const SPEED = 38; // 像素/秒，帧率无关
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // 限制像素比保证性能
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || window.innerWidth;
+    const h = rect.height || window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(1, 0, 0, 1, 0, 0); // 重置变换
+    ctx.scale(dpr, dpr);
+    columns = Math.floor(w / baseFontSize);
+    // 初始化每列状态
+    drops = new Float32Array(columns);
+    trails = new Float32Array(columns);
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.random() * -h / baseFontSize;
+      trails[i] = 6 + Math.floor(Math.random() * 10);
+    }
+  }
+  resize();
+
+  // 防抖 resize
+  let resizeTimer;
+  const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(resize, 150); };
+  window.addEventListener('resize', onResize);
+  // 监听 start screen 尺寸变化
+  const startScreen = document.getElementById('startScreen');
+  const ro = new ResizeObserver(() => resize());
+  if (startScreen) ro.observe(startScreen);
+
+  function draw(timestamp) {
+    if (!running) return;
+    if (!lastTime) lastTime = timestamp;
+    const dt = Math.min((timestamp - lastTime) / 1000, 0.1); // 上限 100ms 防跳帧
+    lastTime = timestamp;
+    speedAccum += SPEED * dt;
+    const steps = Math.floor(speedAccum);
+    speedAccum -= steps;
+
+    // 半透明覆盖产生拖尾
+    ctx.fillStyle = 'rgba(11, 15, 20, 0.12)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = baseFontSize + 'px "JetBrains Mono","Cascadia Code","Fira Code","Consolas",monospace';
+    ctx.textBaseline = 'top';
+
+    const h = canvas.height / (Math.min(window.devicePixelRatio || 1, 2));
+    const fs = baseFontSize;
+    const charLen = chars.length;
+
+    for (let col = 0; col < columns; col++) {
+      // 头部位置前进
+      drops[col] += steps * 0.9;
+
+      const headY = drops[col] * fs;
+      const trailLen = trails[col];
+
+      // 绘制拖尾（从远到近，渐亮）
+      for (let t = trailLen; t >= 0; t--) {
+        const y = headY - t * fs;
+        if (y < -fs || y > h + fs) continue;
+        const alpha = t === 0 ? 0.88 : 0.55 * Math.pow(1 - t / trailLen, 2.2);
+        if (alpha < 0.02) continue;
+        const ci = (col * 17 + t * 7) % charLen;
+        ctx.fillStyle = 'rgba(77, 159, 255, ' + alpha.toFixed(3) + ')';
+        ctx.fillText(chars[ci], col * fs, y);
+      }
+
+      // 重置到顶部
+      if (headY > h + fs * 2) {
+        drops[col] = -(Math.random() * 6 + 2);
+        trails[col] = 6 + Math.floor(Math.random() * 12);
+      }
+    }
+    codeRainAnim = requestAnimationFrame(draw);
+  }
+
+  codeRainAnim = requestAnimationFrame(draw);
+  return {
+    stop: () => {
+      running = false;
+      if (codeRainAnim) cancelAnimationFrame(codeRainAnim);
+      window.removeEventListener('resize', onResize);
+      if (startScreen) ro.unobserve(startScreen);
+    }
+  };
+}
+
+// ============================================================
+// 开始界面 & 教程
+// ============================================================
+function backToStart() {
+  // 关闭可能打开的弹窗
+  document.getElementById('vsTutorialOverlay').classList.remove('show');
+  document.getElementById('hintOverlay').classList.remove('show');
+  document.getElementById('startScreen').classList.remove('hidden');
+  // 重启代码雨
+  if (!S._codeRainCtl) S._codeRainCtl = initCodeRain();
+}
+
+function startLearning() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('vsTutorialOverlay').classList.remove('show');
+  // 停止代码雨动画释放资源
+  if (S._codeRainCtl) { S._codeRainCtl.stop(); S._codeRainCtl = null; }
+  // 首次访问 → 显示教程
+  const visited = localStorage.getItem('c_learning_visited');
+  if (!visited) {
+    localStorage.setItem('c_learning_visited', '1');
+    showTutorial();
+  }
+}
+
+function openVSTutorial() {
+  document.getElementById('startScreen').classList.add('hidden');
+  if (S._codeRainCtl) { S._codeRainCtl.stop(); S._codeRainCtl = null; }
+  document.getElementById('vsTutorialOverlay').classList.add('show');
+}
+
+function closeVSTutorial() {
+  document.getElementById('vsTutorialOverlay').classList.remove('show');
+  // 回到开始界面
+  document.getElementById('startScreen').classList.remove('hidden');
+  if (!S._codeRainCtl) S._codeRainCtl = initCodeRain();
+}
+
+function showTutorial() {
+  S.tutorialStep = 0;
+  document.getElementById('tutorialOverlay').classList.remove('hidden');
+  renderTutorialStep();
+}
+
+function renderTutorialStep() {
+  const step = S.tutorialData[S.tutorialStep];
+  if (!step) return;
+  document.getElementById('stepEmoji').textContent = step.emoji;
+  document.getElementById('stepTitle').textContent = step.title;
+  document.getElementById('stepDesc').textContent = step.desc;
+
+  // 步点
+  const dots = document.getElementById('stepDots');
+  dots.innerHTML = S.tutorialData.map((_, i) =>
+    `<div class="step-dot ${i === S.tutorialStep ? 'active' : ''}"></div>`
+  ).join('');
+
+  // 最后一步按钮文案
+  const btn = document.getElementById('tutNextBtn');
+  btn.textContent = S.tutorialStep >= S.tutorialData.length - 1 ? '🎉 开始闯关！' : '下一步 →';
+}
+
+function nextTutorialStep() {
+  S.tutorialStep++;
+  if (S.tutorialStep >= S.tutorialData.length) {
+    skipTutorial();
+    return;
+  }
+  renderTutorialStep();
+}
+
+function skipTutorial() {
+  document.getElementById('tutorialOverlay').classList.add('hidden');
+  S.tutorialStep = 0;
+}
+
+// ============================================================
 // 启动
 // ============================================================
+async function init() {
+  // 配置 marked.js（如果已加载）
+  if (typeof marked !== 'undefined') {
+    marked.setOptions({ gfm: true, breaks: false });
+  }
+  await loadLevels();
+  renderLevelList();
+  if (S.levels.length > 0) selectLevel(S.levels[0].id);
+
+  // 开始界面始终显示，启动代码雨
+  S._codeRainCtl = initCodeRain();
+}
+
 init();
 </script>
 </body>
