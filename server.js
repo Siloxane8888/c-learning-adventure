@@ -186,7 +186,7 @@ function runExe(id, exeFile, testInput, inputFile, cleanupFiles) {
     }
 
     execFile(exeFile, [], {
-      timeout: 5000, maxBuffer: 1024 * 100,
+      timeout: 10000, maxBuffer: 1024 * 100,
       stdio: inputFd ? [inputFd, 'pipe', 'pipe'] : 'pipe',
     }, (runErr, stdout, stderr) => {
       if (inputFd) try { fs.closeSync(inputFd); } catch(e) {}
@@ -231,7 +231,7 @@ function compileWithGCC(code, testInput = '') {
           }
 
           const child = execFile(exeFile, [], {
-            timeout: 5000,
+            timeout: 10000,
             maxBuffer: 1024 * 100,
             stdio: inputFd ? [inputFd, 'pipe', 'pipe'] : 'pipe',
           }, (runErr, stdout, stderr) => {
