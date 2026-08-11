@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>C 语言闯关学习 · C Primer Plus</title>
+<style>
+/* ============================================================
+   C 语言闯关学习平台 — 设计系统
+   ============================================================ */
+
+/* ----- 基础变量 ----- */
+:root {
+  --bg-body: #0b0f14;
+  --bg-surface: #131820;
+  --bg-elevated: #1a212b;
+  --bg-hover: #1f2833;
+  --border-default: #252d38;
+  --border-muted: #1c232d;
+  --text-primary: #e2e8f0;
+  --text-secondary: #8896a6;
+  --text-tertiary: #5c6a7a;
+  --accent: #4d9fff;
+  --accent-soft: rgba(77,159,255,0.12);
+  --accent-glow: rgba(77,159,255,0.06);
+  --green: #3fb950;
+  --green-soft: rgba(63,185,80,0.12);
+  --orange: #e09b34;
+  --orange-soft: rgba(224,155,52,0.12);
+  --red: #f85149;
+  --red-soft: rgba(248,81,73,0.12);
+  --purple: #a371f7;
+  --purple-soft: rgba(163,113,247,0.10);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+               'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'SF Mono',
+               'Consolas', 'Source Code Pro', monospace;
+  --font-display: 'Inter', var(--font-sans);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow: 0 2px 8px rgba(0,0,0,0.4), 0 0 1px rgba(255,255,255,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+
+  --transition-fast: 0.12s ease;
+  --transition: 0.2s ease;
+}
+
+/* ----- 全局重置 ----- */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size: 15px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-body);
+  color: var(--text-primary);
+  height: 100vh; overflow: hidden; display: flex;
+  letter-spacing: -0.01em;
+}
+
+/* ----- 滚动条 ----- */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ----- 左侧边栏 ----- */
+.sidebar {
+  width: 278px; min-width: 278px; background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
+  display: flex; flex-direction: column; height: 100vh;
+}
+
+.sidebar-header {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid var(--border-muted);
+}
+.sidebar-header .brand {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.sidebar-header .brand-icon {
+  width: 38px; height: 38px; border-radius: var(--radius);
+  background: linear-gradient(135deg, #1a3a5c, #1e2d4a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.sidebar-header h1 {
+  font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.sidebar-header .version {
+  font-size: 0.68rem; color: var(--text-tertiary); font-weight: 500;
+  margin-top: 1px;
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 9px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default); background: var(--bg-elevated);
+  color: var(--text-primary); font-size: 0.82rem; font-weight: 550;
+  cursor: pointer; transition: var(--transition-fast); width: 100%;
+  letter-spacing: -0.01em; font-family: inherit;
+}
+.btn:hover { background: var(--bg-hover); border-color: var(--text-tertiary); }
+.btn-primary {
+  background: var(--accent); color: #fff; border: none;
+  font-weight: 600; letter-spacing: -0.01em;
+}
+.btn-primary:hover { background: #5babff; }
+
+/* 进度统计 */
+.stats-row {
+  display: flex; gap: 18px; margin-top: 14px; font-size: 0.78rem;
+}
+.stat-item { display: flex; align-items: center; gap: 5px; color: var(--text-secondary); }
+.stat-item .val { font-weight: 650; color: var(--text-primary); }
+.stat-item .val.xp { color: var(--orange); }
+.stat-item .val.done { color: var(--green); }
+
+/* 关卡列表 */
+.level-list { flex: 1; overflow-y: auto; padding: 8px 10px; }
+.level-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: var(--transition-fast);
+  border: 1px solid transparent; margin: 2px 0;
+}
+.level-item:hover { background: var(--bg-hover); }
+.level-item.active {
+  background: var(--accent-soft); border-color: rgba(77,159,255,0.2);
+}
+.level-item.done .linfo .ltitle { color: var(--text-tertiary); }
+
+.level-num {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border-default);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  color: var(--text-secondary);
+}
+.level-item.active .level-num {
+  border-color: var(--accent); background: rgba(77,159,255,0.1); color: var(--accent);
+}
+.level-item.done .level-num {
+  border-color: var(--green); background: var(--green-soft); color: var(--green);
+}
+
+.linfo { flex: 1; min-width: 0; }
+.ltitle { font-size: 0.82rem; font-weight: 550; line-height: 1.3; }
+.lchapter { font-size: 0.7rem; color: var(--text-tertiary); margin-top: 1px; }
+.licons { display: flex; gap: 4px; font-size: 0.75rem; }
+
+/* 底部 */
+.sidebar-footer {
+  padding: 10px 14px; border-top: 1px solid var(--border-muted);
+  font-size: 0.7rem; color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 7px;
+}
+.sidebar-footer .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+}
+
+/* ----- 主区域 ----- */
+.main { flex: 1; display: flex; flex-direction: column; height: 100vh; min-width: 0; }
+
+/* 顶栏 */
+.topbar {
+  display: flex; align-items: center; gap: 14px; padding: 0 20px;
+  height: 52px; border-bottom: 1px solid var(--border-default);
+  background: var(--bg-surface);
+}
+.level-badge {
+  font-size: 0.8rem; font-weight: 650; color: var(--text-primary);
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 12px; background: var(--bg-elevated);
+  border-radius: var(--radius-sm); border: 1px solid var(--border-default);
+}
+.level-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+.topbar .spacer { flex: 1; }
+
+.toolbar-btn {
+  height: 33px; padding: 0 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default); background: var(--bg-elevated);
+  color: var(--text-secondary); font-size: 0.8rem; cursor: pointer;
+  transition: var(--transition-fast); font-family: inherit;
+  display: flex; align-items: center; gap: 5px; font-weight: 500;
+}
+.toolbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.toolbar-btn.run { border-color: rgba(77,159,255,0.3); color: var(--accent); }
+.toolbar-btn.run:hover { background: var(--accent-soft); }
+.toolbar-btn.submit {
+  background: var(--green); color: #000; border: none; font-weight: 650;
+  padding: 0 18px;
+}
+.toolbar-btn.submit:hover { background: #4cc95a; }
+.toolbar-btn.submit:disabled { opacity: 0.4; cursor: not-allowed; }
+.toolbar-btn.hint { border-color: rgba(224,155,52,0.3); color: var(--orange); }
+.toolbar-btn.hint:hover { background: var(--orange-soft); }
+
+/* 内容区域 */
+.content { flex: 1; display: flex; overflow: hidden; }
+
+/* 教学面板 */
+.teach-panel {
+  flex: 1; overflow-y: auto; padding: 24px 28px;
+  border-right: 1px solid var(--border-default);
+  line-height: 1.78; font-size: 0.9rem; color: var(--text-secondary);
+}
+.teach-panel h2 {
+  font-size: 1.3rem; font-weight: 700; color: var(--text-primary);
+  margin: 22px 0 10px; letter-spacing: -0.02em;
+}
+.teach-panel h2:first-child { margin-top: 0; }
+.teach-panel h3 {
+  font-size: 1.05rem; font-weight: 650; color: var(--text-primary);
+  margin: 18px 0 8px;
+}
+.teach-panel h4 { font-size: 0.92rem; font-weight: 600; margin: 12px 0 6px; color: var(--text-primary); }
+.teach-panel p { margin: 8px 0; }
+.teach-panel ul, .teach-panel ol { padding-left: 22px; margin: 8px 0; }
+.teach-panel li { margin: 4px 0; }
+.teach-panel code {
+  background: var(--bg-elevated); color: var(--accent);
+  padding: 2px 7px; border-radius: 4px;
+  font-family: var(--font-mono); font-size: 0.88em;
+  border: 1px solid var(--border-muted);
+}
+.teach-panel pre {
+  background: #0b0f14; border: 1px solid var(--border-default);
+  border-radius: var(--radius); padding: 14px 18px; overflow-x: auto;
+  margin: 10px 0; position: relative; font-size: 0.85rem;
+  line-height: 1.65;
+}
+.teach-panel pre code {
+  background: none; border: none; padding: 0; color: var(--text-primary);
+  font-size: inherit;
+}
+.teach-panel table {
+  border-collapse: collapse; width: 100%; margin: 10px 0;
+  font-size: 0.84rem; border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--border-default);
+}
+.teach-panel th {
+  background: var(--bg-elevated); padding: 8px 14px; text-align: left;
+  font-weight: 600; color: var(--text-primary); border-bottom: 1px solid var(--border-default);
+}
+.teach-panel td {
+  padding: 7px 14px; border-bottom: 1px solid var(--border-muted);
+}
+.teach-panel tr:last-child td { border-bottom: none; }
+.teach-panel blockquote {
+  border-left: 3px solid var(--accent); padding: 10px 16px;
+  margin: 12px 0; background: var(--accent-glow);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-secondary);
+}
+
+/* 任务卡片 */
+.task-card {
+  margin-top: 22px; padding: 18px 22px;
+  background: var(--bg-elevated); border: 1px solid var(--border-default);
+  border-radius: var(--radius);
+}
+.task-card h3 { margin-top: 0 !important; }
+.task-card .expected-output {
+  margin-top: 8px; padding: 10px 14px; background: #0b0f14;
+  border-radius: var(--radius-sm); font-family: var(--font-mono);
+  font-size: 0.82rem; white-space: pre-wrap; color: var(--green);
+  border: 1px solid var(--border-muted);
+}
+
+/* 额外挑战卡片 */
+.extra-card {
+  display: none; margin-top: 16px; padding: 16px 20px;
+  background: rgba(224,155,52,0.04); border: 1px solid rgba(224,155,52,0.2);
+  border-radius: var(--radius);
+}
+.extra-card.show { display: block; }
+.extra-card h3 { color: var(--orange) !important; }
+.extra-card .xp-tag {
+  display: inline-block; font-size: 0.72rem; background: var(--orange-soft);
+  color: var(--orange); padding: 2px 10px; border-radius: 12px;
+  font-weight: 600; margin-top: 6px;
+}
+
+/* 右侧面板 */
+.right-side { flex: 1.15; display: flex; flex-direction: column; overflow: hidden; min-width: 420px; }
+
+/* 编辑器 */
+.editor-panel { flex: 1; display: flex; flex-direction: column; min-height: 240px; }
+.editor-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px; background: var(--bg-surface);
+  font-size: 0.78rem; color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border-muted);
+  font-weight: 500;
+}
+.editor-header .file-indicator {
+  display: flex; align-items: center; gap: 8px;
+}
+.editor-header .file-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+.extra-toggle {
+  font-size: 0.76rem; color: var(--orange); cursor: pointer;
+  display: flex; align-items: center; gap: 5px; font-weight: 500;
+  padding: 3px 10px; border-radius: var(--radius-sm); transition: var(--transition-fast);
+  border: 1px solid transparent; background: none; font-family: inherit;
+}
+.extra-toggle:hover { background: var(--orange-soft); }
+.extra-toggle.active { color: var(--accent); border-color: rgba(77,159,255,0.3); }
+
+#codeEditor {
+  flex: 1; width: 100%; background: #0b0f14; color: #c9d1d9;
+  border: none; padding: 16px 18px; font-family: var(--font-mono);
+  font-size: 0.84rem; resize: none; outline: none; line-height: 1.7;
+  tab-size: 4;
+}
+#codeEditor::placeholder { color: var(--text-tertiary); }
+
+/* 输出面板 */
+.output-panel { height: 190px; min-height: 140px; display: flex; flex-direction: column; border-top: 1px solid var(--border-default); }
+.output-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 16px; background: var(--bg-surface);
+  font-size: 0.78rem; color: var(--text-tertiary); font-weight: 500;
+  border-bottom: 1px solid var(--border-muted);
+}
+#resultBadge { font-weight: 600; font-size: 0.76rem; }
+.output-body {
+  flex: 1; background: #0b0f14; color: var(--green);
+  padding: 12px 18px; font-family: var(--font-mono);
+  font-size: 0.82rem; overflow-y: auto; white-space: pre-wrap;
+  line-height: 1.6;
+}
+.output-body.error { color: var(--red); }
+.output-body.info { color: var(--text-secondary); }
+
+/* 通关横幅 */
+.next-bar {
+  display: none; align-items: center; justify-content: center; gap: 10px;
+  padding: 10px; background: var(--green-soft); border-top: 1px solid rgba(63,185,80,0.2);
+}
+.next-bar.show { display: flex; }
+.next-bar button {
+  background: var(--green); color: #000; border: none;
+  padding: 8px 22px; border-radius: var(--radius-sm); font-weight: 650;
+  cursor: pointer; font-family: inherit; font-size: 0.84rem;
+  transition: var(--transition-fast);
+}
+.next-bar button:hover { background: #4cc95a; }
+
+/* 欢迎页 */
+.welcome {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center; padding: 40px;
+}
+.welcome .w-icon {
+  width: 72px; height: 72px; border-radius: 18px;
+  background: linear-gradient(135deg, #1a3a5c, #1e2d4a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin-bottom: 18px;
+}
+.welcome h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+.welcome p { font-size: 0.9rem; color: var(--text-secondary); max-width: 420px; line-height: 1.7; }
+
+/* 帮助弹窗 */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  display: none; align-items: center; justify-content: center; z-index: 100;
+  backdrop-filter: blur(3px);
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: var(--bg-surface); border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg); padding: 24px 28px;
+  max-width: 520px; width: 92%; max-height: 75vh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+.modal-box h3 {
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; color: var(--orange);
+}
+.modal-box .modal-sub {
+  font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 14px;
+}
+.hint-card {
+  padding: 12px 16px; margin: 8px 0; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border-default);
+  font-size: 0.85rem; line-height: 1.6;
+}
+.hint-card.revealed { border-color: rgba(224,155,52,0.3); background: var(--orange-soft); }
+.reveal-btn {
+  display: block; width: 100%; padding: 8px; margin: 6px 0;
+  background: var(--bg-elevated); border: 1px dashed var(--border-default);
+  color: var(--text-secondary); border-radius: var(--radius-sm);
+  cursor: pointer; font-family: inherit; font-size: 0.82rem;
+  transition: var(--transition-fast);
+}
+.reveal-btn:hover { border-color: var(--orange); color: var(--orange); }
+.modal-close {
+  display: block; margin: 16px auto 0; padding: 9px 28px;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: inherit; font-size: 0.85rem; font-weight: 600;
+}
+
+/* Toast */
+.toast {
+  position: fixed; top: 18px; right: 18px; padding: 11px 20px;
+  border-radius: var(--radius-sm); font-size: 0.85rem; z-index: 200;
+  animation: slideIn 0.35s ease; background: var(--bg-elevated);
+  border: 1px solid var(--border-default); box-shadow: var(--shadow-lg);
+  font-weight: 500; letter-spacing: -0.01em;
+}
+.toast.ok { border-color: var(--green); color: var(--green); }
+.toast.fail { border-color: var(--red); color: var(--red); }
+@keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* 加载指示器 */
+.typing-dots { display: flex; gap: 4px; padding: 6px 0; }
+.typing-dots span {
+  width: 5px; height: 5px; background: var(--text-tertiary);
+  border-radius: 50%; animation: bounce 1.4s infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+
+/* 响应式 */
+@media (max-width: 960px) {
+  .content { flex-direction: column; }
+  .teach-panel { max-height: 38vh; border-right: none; border-bottom: 1px solid var(--border-default); }
+  .right-side { min-width: 0; }
+}
+@media (max-width: 680px) {
+  .sidebar { display: none; }
+  .teach-panel { padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 左侧边栏 ===== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="brand">
+      <div class="brand-icon">📘</div>
+      <div>
+        <h1>C 语言闯关</h1>
+        <div class="version">基于《C Primer Plus》</div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="newChat()">＋ 新建学习会话</button>
+    <div class="stats-row">
+      <span class="stat-item">⭐ <span class="val xp" id="totalXp">0</span> XP</span>
+      <span class="stat-item">✅ <span class="val done" id="completedCount">0</span>/10 关</span>
+    </div>
+  </div>
+
+  <div class="level-list" id="levelList"></div>
+
+  <div class="sidebar-footer">
+    <span class="dot"></span> 就绪 · 本地运行
+  </div>
+</aside>
+
+<!-- ===== 主区域 ===== -->
+<div class="main">
+  <header class="topbar">
+    <div class="level-badge">
+      <span class="dot"></span>
+      <span id="levelTitle">选择关卡开始学习</span>
+    </div>
+    <span class="spacer"></span>
+    <button class="toolbar-btn hint" onclick="showHints()">💡 提示</button>
+    <button class="toolbar-btn run" onclick="runCode()">▶ 运行</button>
+    <button class="toolbar-btn submit" id="submitBtn" onclick="submitCode()">✅ 提交挑战</button>
+  </header>
+
+  <div class="content">
+    <!-- 教学面板 -->
+    <div class="teach-panel" id="teachPanel">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
+        <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
+        <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
+        <p style="font-size:0.8rem;margin-top:4px;">共 10 关，覆盖从 Hello World 到指针的完整知识体系</p>
+      </div>
+    </div>
+
+    <!-- 右侧：编辑器 + 输出 -->
+    <div class="right-side">
+      <div class="editor-panel">
+        <div class="editor-header">
+          <div class="file-indicator">
+            <span class="dot"></span>
+            <span id="fileName">main.c</span>
+          </div>
+          <button class="extra-toggle" id="extraToggle" onclick="toggleExtra()" style="display:none;">
+            ⭐ 额外挑战
+          </button>
+        </div>
+        <textarea id="codeEditor" spellcheck="false"
+          placeholder="// 在这里编写你的 C 代码...&#10;// 修改代码后点击 ▶ 运行 查看结果&#10;// 完成挑战后点击 ✅ 提交挑战"></textarea>
+      </div>
+
+      <div class="output-panel">
+        <div class="output-header">
+          <span>📤 终端输出</span>
+          <span id="resultBadge"></span>
+        </div>
+        <div class="output-body info" id="outputContent">
+          准备就绪 — 修改左侧代码，点击「▶ 运行」查看输出
+        </div>
+        <div class="next-bar" id="nextLevelBar">
+          <span style="font-size:0.9rem;">🎉 挑战通过！</span>
+          <button onclick="nextLevel()">下一关 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 帮助弹窗 ===== -->
+<div class="modal-overlay" id="hintOverlay">
+  <div class="modal-box">
+    <h3>💡 提示系统</h3>
+    <p class="modal-sub">逐步揭示提示，试试自己解决问题！最后一步会给出参考答案。</p>
+    <div id="hintItems"></div>
+    <button class="modal-close" onclick="closeHints()">关闭</button>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 应用状态
+// ============================================================
+const S = {
+  levels: [],
+  currentLevel: null,
+  progress: { completed:{}, xp:0 },
+  isExtra: false,
+  hintsRevealed: 0,
+  streaming: false,
+};
+
+// ============================================================
+// 初始化
+// ============================================================
+async function init() {
+  await loadLevels();
+  renderLevelList();
+  if (S.levels.length > 0) selectLevel(S.levels[0].id);
+}
+
+async function loadLevels() {
+  try {
+    const resp = await fetch('/api/levels').then(r => r.json());
+    S.levels = resp.levels || [];
+    S.progress = resp.progress || { completed:{}, xp:0 };
+    updateStats();
+  } catch(e) { console.error(e); }
+}
+
+function updateStats() {
+  document.getElementById('totalXp').textContent = S.progress.xp || 0;
+  const done = Object.keys(S.progress.completed||{}).filter(k => !k.includes('_extra')).length;
+  document.getElementById('completedCount').textContent = done;
+}
+
+// ============================================================
+// 关卡列表
+// ============================================================
+function renderLevelList() {
+  const list = document.getElementById('levelList');
+  list.innerHTML = S.levels.map(l => {
+    const done = !!S.progress.completed[l.id];
+    const active = S.currentLevel?.id === l.id;
+    const extra = !!S.progress.completed[l.id + '_extra'];
+    return `
+      <div class="level-item ${active?'active':''} ${done?'done':''}" onclick="selectLevel(${l.id})">
+        <span class="level-num">${done ? '✓' : l.id}</span>
+        <div class="linfo">
+          <div class="ltitle">${l.title}</div>
+          <div class="lchapter">${l.chapter} · ${l.xp} XP</div>
+        </div>
+        <div class="licons">${done?'✅':''}${extra?'⭐':''}</div>
+      </div>`;
+  }).join('');
+}
+
+// ============================================================
+// 选择关卡
+// ============================================================
+async function selectLevel(id) {
+  try {
+    const resp = await fetch('/api/levels/' + id).then(r => r.json());
+    S.currentLevel = resp;
+    S.isExtra = false;
+    S.hintsRevealed = 0;
+
+    // 教学面板
+    document.getElementById('teachPanel').innerHTML = `
+      <h2>${resp.title}</h2>
+      <div style="color:var(--text-tertiary);font-size:0.78rem;margin-bottom:14px;">
+        ${resp.chapter} · ${resp.xp} XP ${resp.completed ? '· ✅ 已通关' : ''}
+      </div>
+      ${resp.theory}
+      <div class="task-card">
+        ${resp.task}
+        ${resp.expectedOutput ? `<div class="expected-output">📋 期望输出：\n${resp.expectedOutput}</div>` : ''}
+      </div>
+      ${resp.extraChallenge ? `
+        <div class="extra-card" id="extraSection">
+          <h3>⭐ 额外挑战：${resp.extraChallenge.title}</h3>
+          <p style="color:var(--text-secondary);white-space:pre-wrap;">${resp.extraChallenge.description}</p>
+          <div class="xp-tag">🏆 +${resp.xp} XP</div>
+        </div>` : ''}
+    `;
+
+    // 编辑器
+    document.getElementById('codeEditor').value = resp.starterCode || '';
+    document.getElementById('levelTitle').textContent = `第 ${resp.id} 关 · ${resp.title}`;
+    document.getElementById('outputContent').textContent = '代码已加载 — 修改后点击「▶ 运行」';
+    document.getElementById('outputContent').className = 'output-body info';
+    document.getElementById('resultBadge').textContent = '';
+
+    // UI 更新
+    const extraBtn = document.getElementById('extraToggle');
+    extraBtn.style.display = resp.extraChallenge ? 'flex' : 'none';
+    extraBtn.classList.remove('active');
+    extraBtn.textContent = '⭐ 额外挑战';
+    document.getElementById('nextLevelBar').classList.remove('show');
+
+    updateStats();
+    renderLevelList();
+  } catch(e) { console.error(e); }
+}
+
+function toggleExtra() {
+  S.isExtra = !S.isExtra;
+  const btn = document.getElementById('extraToggle');
+  const section = document.getElementById('extraSection');
+
+  if (S.isExtra) {
+    btn.textContent = '🔙 返回主线';
+    btn.classList.add('active');
+    if (section) section.classList.add('show');
+  } else {
+    btn.textContent = '⭐ 额外挑战';
+    btn.classList.remove('active');
+    if (section) section.classList.remove('show');
+  }
+}
+
+// ============================================================
+// 运行 & 提交
+// ============================================================
+async function runCode() {
+  const code = document.getElementById('codeEditor').value;
+  if (!code.trim()) return;
+
+  const out = document.getElementById('outputContent');
+  out.textContent = '⏳ 编译运行中…';
+  out.className = 'output-body info';
+
+  try {
+    const resp = await fetch('/api/run', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ code, testInput: S.currentLevel?.testInput || '' })
+    }).then(r => r.json());
+
+    if (resp.success) {
+      out.textContent = resp.output || '(无输出)';
+      out.className = 'output-body';
+    } else {
+      out.textContent = `[${resp.phase || '错误'}] ${resp.error}`;
+      out.className = 'output-body error';
+    }
+  } catch(e) {
+    out.textContent = '网络错误: ' + e.message;
+    out.className = 'output-body error';
+  }
+}
+
+async function submitCode() {
+  if (!S.currentLevel) return;
+
+  const code = document.getElementById('codeEditor').value;
+  const btn = document.getElementById('submitBtn');
+  const out = document.getElementById('outputContent');
+
+  btn.disabled = true;
+  btn.textContent = '⏳ 检测中…';
+
+  try {
+    const resp = await fetch('/api/submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ levelId: S.currentLevel.id, code, isExtra: S.isExtra })
+    }).then(r => r.json());
+
+    if (resp.passed) {
+      out.textContent = (resp.output ? resp.output + '\n\n' : '') + resp.message;
+      out.className = 'output-body';
+      document.getElementById('resultBadge').textContent = '✅ 通过';
+      document.getElementById('resultBadge').style.color = 'var(--green)';
+      document.getElementById('nextLevelBar').classList.add('show');
+      await loadLevels();
+      renderLevelList();
+      toast(resp.message, 'ok');
+    } else {
+      out.textContent = resp.message + (resp.expected ? `\n\n📋 期望：${resp.expected}\n📤 实际：${resp.actual || ''}` : '');
+      out.className = 'output-body error';
+      document.getElementById('resultBadge').textContent = '❌ 未通过';
+      toast(resp.message, 'fail');
+    }
+  } catch(e) {
+    out.textContent = '提交失败: ' + e.message;
+    out.className = 'output-body error';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✅ 提交挑战';
+}
+
+function nextLevel() {
+  const idx = S.levels.findIndex(l => l.id === S.currentLevel?.id);
+  if (idx >= 0 && idx < S.levels.length - 1) selectLevel(S.levels[idx + 1].id);
+}
+
+function newChat() {
+  S.currentLevel = null;
+  document.getElementById('teachPanel').innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
+      <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
+      <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
+      <p style="font-size:0.8rem;margin-top:4px;">共 10 关，覆盖从 Hello World 到指针的完整知识体系</p>
+    </div>`;
+  document.getElementById('codeEditor').value = '';
+  document.getElementById('levelTitle').textContent = '选择关卡开始学习';
+  document.getElementById('outputContent').textContent = '准备就绪';
+  document.getElementById('outputContent').className = 'output-body info';
+  renderLevelList();
+}
+
+// ============================================================
+// 提示系统
+// ============================================================
+function showHints() {
+  if (!S.currentLevel?.hints) return;
+  const container = document.getElementById('hintItems');
+  container.innerHTML = S.currentLevel.hints.map((hint, i) => {
+    const revealed = i < S.hintsRevealed;
+    return `<div class="hint-card ${revealed?'revealed':''}">
+      ${revealed ? hint : `<span style="color:var(--text-tertiary);">提示 ${i+1} — 点击下方按钮揭示</span>`}
+    </div>`;
+  }).join('');
+
+  if (S.hintsRevealed < S.currentLevel.hints.length) {
+    container.innerHTML += `
+      <button class="reveal-btn" onclick="revealNextHint()">
+        🔓 揭示提示 #${S.hintsRevealed + 1}
+      </button>`;
+  }
+
+  document.getElementById('hintOverlay').classList.add('show');
+}
+
+function revealNextHint() { S.hintsRevealed++; showHints(); }
+function closeHints() { document.getElementById('hintOverlay').classList.remove('show'); }
+
+// ============================================================
+// 工具函数
+// ============================================================
+function toast(msg, type) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// Tab 键支持
+document.getElementById('codeEditor').addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = this.selectionStart;
+    this.value = this.value.slice(0, s) + '    ' + this.value.slice(this.selectionEnd);
+    this.selectionStart = this.selectionEnd = s + 4;
+  }
+});
+
+// 点击弹窗外部关闭
+document.getElementById('hintOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeHints();
+});
+
+// ============================================================
+// 启动
+// ============================================================
+init();
+</script>
+</body>
+</html>
