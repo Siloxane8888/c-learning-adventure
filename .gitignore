@@ -1,0 +1,11 @@
+node_modules/
+temp/
+*.exe
+*.zip
+*.tmp
+*.log
+progress.json
+tcc-new.zip
+gcc.zip
+tcc.zip
+.DS_Store
