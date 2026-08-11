@@ -631,6 +631,20 @@ body {
   border-color: var(--text-tertiary);
   background: var(--bg-surface);
 }
+.start-btn-ref, .start-btn-appendix {
+  padding: 11px 18px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text-secondary);
+  border: 1px solid var(--border-muted);
+  font-size: 0.82rem; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.start-btn-ref:hover, .start-btn-appendix:hover {
+  color: var(--accent);
+  border-color: rgba(77,159,255,0.3);
+  background: var(--accent-glow);
+  transform: translateY(-1px);
+}
 
 /* ============================================================
    教程引导
@@ -778,9 +792,13 @@ body {
       <div class="sf-detail">逐步揭示 → 参考答案<br>独立解决问题更有效</div>
     </div>
   </div>
-  <div style="display:flex;gap:12px;align-items:center;">
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;">
     <button class="start-btn-about" onclick="openAbout()">ℹ️ 关于</button>
     <button class="start-btn-vs" onclick="openVSTutorial()">🛠️ VS 环境搭建教程</button>
+    <button class="start-btn-ref" onclick="window.open('https://www.amazon.com/Primer-Plus-6th-Developers-Library/dp/0321928423','_blank')">📖 C Primer Plus 原书</button>
+    <button class="start-btn-appendix" onclick="openAppendix()">📋 附录速查</button>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;margin-top:16px;">
     <button class="start-btn" onclick="startLearning()">🚀 开始学习</button>
   </div>
 </div>
@@ -851,7 +869,7 @@ body {
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
         <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
         <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
-        <p style="font-size:0.8rem;margin-top:4px;">14 章 56 节（含 14 个章末挑战），基于《C Primer Plus》完整知识体系</p>
+        <p style="font-size:0.8rem;margin-top:4px;">14 章 59 节（含 14 个章末挑战），完整对齐《C Primer Plus》知识体系</p>
       </div>
     </div>
 
@@ -990,6 +1008,83 @@ int main() {
       <p style="font-size:0.78rem;color:var(--text-tertiary);">marked.js · highlight.js · Express · JetBrains Mono · 《C Primer Plus》</p>
     </div>
     <button class="modal-close" onclick="closeAbout()">关闭</button>
+  </div>
+</div>
+
+<!-- ===== 附录弹窗 ===== -->
+<div class="modal-overlay" id="appendixOverlay" style="z-index:1100;">
+  <div class="modal-box" style="max-width:680px;max-height:85vh;">
+    <h3 style="color:var(--orange) !important;">📋 C 语言附录速查</h3>
+    <p class="modal-sub">运算符优先级 · ASCII 表 · 关键字 · 格式说明符</p>
+    <div style="font-size:0.82rem;line-height:1.8;color:var(--text-secondary);max-height:55vh;overflow-y:auto;padding-right:6px;">
+
+      <h4 style="color:var(--text-primary);margin:16px 0 8px;">📐 运算符优先级（高→低）</h4>
+      <table>
+        <tr><th>优先级</th><th>运算符</th><th>结合性</th></tr>
+        <tr><td>1</td><td><code>() [] . -></code></td><td>左→右</td></tr>
+        <tr><td>2</td><td><code>! ~ ++ -- + - * & (type) sizeof</code></td><td>右→左</td></tr>
+        <tr><td>3</td><td><code>* / %</code></td><td>左→右</td></tr>
+        <tr><td>4</td><td><code>+ -</code></td><td>左→右</td></tr>
+        <tr><td>5</td><td><code><< >></code></td><td>左→右</td></tr>
+        <tr><td>6</td><td><code>< <= > >=</code></td><td>左→右</td></tr>
+        <tr><td>7</td><td><code>== !=</code></td><td>左→右</td></tr>
+        <tr><td>8</td><td><code>&</code></td><td>左→右</td></tr>
+        <tr><td>9</td><td><code>^</code></td><td>左→右</td></tr>
+        <tr><td>10</td><td><code>|</code></td><td>左→右</td></tr>
+        <tr><td>11</td><td><code>&&</code></td><td>左→右</td></tr>
+        <tr><td>12</td><td><code>||</code></td><td>左→右</td></tr>
+        <tr><td>13</td><td><code>?:</code></td><td>右→左</td></tr>
+        <tr><td>14</td><td><code>= += -= *= /= %= &= ^= |= <<= >>=</code></td><td>右→左</td></tr>
+        <tr><td>15</td><td><code>,</code></td><td>左→右</td></tr>
+      </table>
+      <p style="font-size:0.72rem;color:var(--text-tertiary);margin-top:4px;">口诀：单目 > 算术 > 移位 > 关系 > 位逻辑 > 逻辑 > 条件 > 赋值 > 逗号</p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 8px;">🔤 ASCII 码表（常用）</h4>
+      <table>
+        <tr><th>字符</th><th>十进制</th><th>十六进制</th><th>字符</th><th>十进制</th><th>十六进制</th></tr>
+        <tr><td><code>'0'</code></td><td>48</td><td>0x30</td><td><code>'A'</code></td><td>65</td><td>0x41</td></tr>
+        <tr><td><code>'9'</code></td><td>57</td><td>0x39</td><td><code>'Z'</code></td><td>90</td><td>0x5A</td></tr>
+        <tr><td><code>'a'</code></td><td>97</td><td>0x61</td><td><code>'z'</code></td><td>122</td><td>0x7A</td></tr>
+        <tr><td><code>' '</code></td><td>32</td><td>0x20</td><td><code>'\n'</code></td><td>10</td><td>0x0A</td></tr>
+        <tr><td><code>'\t'</code></td><td>9</td><td>0x09</td><td><code>'\r'</code></td><td>13</td><td>0x0D</td></tr>
+        <tr><td><code>'!'</code></td><td>33</td><td>0x21</td><td><code>'~'</code></td><td>126</td><td>0x7E</td></tr>
+      </table>
+      <p style="font-size:0.72rem;color:var(--text-tertiary);margin-top:4px;">💡 大小写转换：<code>'a' - 'A' = 32</code> · 数字转字符：<code>'0' + 5 = '5'</code></p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 8px;">🔑 C 语言关键字（32 个）</h4>
+      <p style="font-family:var(--font-mono);font-size:0.78rem;">
+        <code>auto break case char const continue default do</code><br>
+        <code>double else enum extern float for goto if</code><br>
+        <code>int long register return short signed sizeof</code><br>
+        <code>static struct switch typedef union unsigned void</code><br>
+        <code>volatile while</code>
+      </p>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 8px;">🖨️ printf/scanf 格式说明符</h4>
+      <table>
+        <tr><th>说明符</th><th>类型</th><th>示例</th></tr>
+        <tr><td><code>%d / %i</code></td><td>有符号十进制整数</td><td><code>printf("%d", 42);</code></td></tr>
+        <tr><td><code>%u</code></td><td>无符号十进制整数</td><td><code>printf("%u", 42U);</code></td></tr>
+        <tr><td><code>%f</code></td><td>浮点数（float/double）</td><td><code>printf("%.2f", 3.14);</code></td></tr>
+        <tr><td><code>%c</code></td><td>单个字符</td><td><code>printf("%c", 'A');</code></td></tr>
+        <tr><td><code>%s</code></td><td>字符串</td><td><code>printf("%s", "Hi");</code></td></tr>
+        <tr><td><code>%p</code></td><td>指针地址</td><td><code>printf("%p", &x);</code></td></tr>
+        <tr><td><code>%x / %X</code></td><td>十六进制整数</td><td><code>printf("%x", 255);</code> → ff</td></tr>
+        <tr><td><code>%o</code></td><td>八进制整数</td><td><code>printf("%o", 8);</code> → 10</td></tr>
+        <tr><td><code>%e / %E</code></td><td>科学计数法</td><td><code>printf("%e", 1234.0);</code></td></tr>
+        <tr><td><code>%%</code></td><td>百分号本身</td><td><code>printf("100%%");</code></td></tr>
+      </table>
+
+      <h4 style="color:var(--text-primary);margin:16px 0 8px;">🔢 转义序列</h4>
+      <table>
+        <tr><th>序列</th><th>含义</th><th>序列</th><th>含义</th></tr>
+        <tr><td><code>\n</code></td><td>换行</td><td><code>\t</code></td><td>制表符</td></tr>
+        <tr><td><code>\\</code></td><td>反斜杠</td><td><code>\"</code></td><td>双引号</td></tr>
+        <tr><td><code>\'</code></td><td>单引号</td><td><code>\0</code></td><td>空字符</td></tr>
+        <tr><td><code>\r</code></td><td>回车</td><td><code>\a</code></td><td>响铃</td></tr>
+      </table>
+    </div>
+    <button class="modal-close" onclick="closeAppendix()">关闭</button>
   </div>
 </div>
 
@@ -1269,7 +1364,7 @@ function newChat() {
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;color:var(--text-tertiary);">
       <div style="font-size:48px;margin-bottom:12px;opacity:0.6;">📘</div>
       <p style="font-size:0.95rem;">👈 从左侧关卡列表开始你的 C 语言学习之旅</p>
-      <p style="font-size:0.8rem;margin-top:4px;">14 章 56 节（含 14 个章末挑战），基于《C Primer Plus》完整知识体系</p>
+      <p style="font-size:0.8rem;margin-top:4px;">14 章 59 节（含 14 个章末挑战），完整对齐《C Primer Plus》知识体系</p>
     </div>`;
   document.getElementById('codeEditor').value = '';
   document.getElementById('levelTitle').textContent = '选择关卡开始学习';
@@ -1471,6 +1566,7 @@ function backToStart() {
   // 关闭可能打开的弹窗
   document.getElementById('vsTutorialOverlay').classList.remove('show');
   document.getElementById('aboutOverlay').classList.remove('show');
+  document.getElementById('appendixOverlay').classList.remove('show');
   document.getElementById('hintOverlay').classList.remove('show');
   document.getElementById('startScreen').classList.remove('hidden');
   // 重启代码雨
@@ -1510,6 +1606,14 @@ function openAbout() {
 
 function closeAbout() {
   document.getElementById('aboutOverlay').classList.remove('show');
+}
+
+function openAppendix() {
+  document.getElementById('appendixOverlay').classList.add('show');
+}
+
+function closeAppendix() {
+  document.getElementById('appendixOverlay').classList.remove('show');
 }
 
 function showTutorial() {
