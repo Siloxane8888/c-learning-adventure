@@ -639,12 +639,56 @@ body {
   font-family: inherit; letter-spacing: -0.01em;
   transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
 }
-.start-btn-ref:hover, .start-btn-appendix:hover {
+.start-btn-ref:hover, .start-btn-appendix:hover, .start-btn-roadmap:hover {
   color: var(--accent);
   border-color: rgba(77,159,255,0.3);
   background: var(--accent-glow);
   transform: translateY(-1px);
 }
+.start-btn-roadmap {
+  padding: 11px 18px; border-radius: var(--radius-sm);
+  background: transparent; color: var(--orange);
+  border: 1px solid rgba(224,155,52,0.2);
+  font-size: 0.82rem; font-weight: 500; cursor: pointer;
+  font-family: inherit; letter-spacing: -0.01em;
+  transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ============================================================
+   学习路线图
+   ============================================================ */
+.roadmap { padding: 8px 0; }
+.rm-phase { text-align: center; margin: 12px 0 8px; }
+.rm-phase-tag {
+  display: inline-block; padding: 3px 16px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;
+  background: var(--accent-soft); color: var(--accent);
+}
+.rm-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+.rm-row:hover { background: var(--bg-elevated); }
+.rm-bubble {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--bg-elevated); border: 2px solid var(--border-default);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 700; color: var(--text-secondary);
+  flex-shrink: 0;
+}
+.rm-bubble-lit {
+  border-color: var(--green); background: var(--green-soft); color: var(--green);
+}
+.rm-bubble-final {
+  border-color: var(--accent); background: var(--accent-soft); color: var(--accent);
+  box-shadow: 0 0 12px rgba(77,159,255,0.15);
+}
+.rm-info { flex: 1; min-width: 0; }
+.rm-info strong { display: block; font-size: 0.82rem; color: var(--text-primary); margin-bottom: 1px; }
+.rm-info span { font-size: 0.72rem; color: var(--text-tertiary); }
+.rm-xp { font-size: 0.76rem; color: var(--orange); font-weight: 600; white-space: nowrap; }
+.rm-arrow { text-align: center; color: var(--border-default); font-size: 0.8rem; padding: 2px 0; }
 
 /* ============================================================
    教程引导
@@ -794,6 +838,7 @@ body {
   </div>
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;">
     <button class="start-btn-about" onclick="openAbout()">ℹ️ 关于</button>
+    <button class="start-btn-roadmap" onclick="openRoadmap()">🗺️ 学习路线</button>
     <button class="start-btn-vs" onclick="openVSTutorial()">🛠️ VS 环境搭建教程</button>
     <button class="start-btn-ref" onclick="window.open('https://www.amazon.com/Primer-Plus-6th-Developers-Library/dp/0321928423','_blank')">📖 C Primer Plus 原书</button>
     <button class="start-btn-appendix" onclick="openAppendix()">📋 附录速查</button>
@@ -1008,6 +1053,67 @@ int main() {
       <p style="font-size:0.78rem;color:var(--text-tertiary);">marked.js · highlight.js · Express · JetBrains Mono · 《C Primer Plus》</p>
     </div>
     <button class="modal-close" onclick="closeAbout()">关闭</button>
+  </div>
+</div>
+
+<!-- ===== 学习路线弹窗 ===== -->
+<div class="modal-overlay" id="roadmapOverlay" style="z-index:1100;">
+  <div class="modal-box" style="max-width:760px;max-height:85vh;">
+    <h3 style="color:var(--orange) !important;">🗺️ 学习路线规划</h3>
+    <p class="modal-sub">14 章 · 59 关 · 对齐《C Primer Plus》第 6 版</p>
+    <div style="font-size:0.82rem;line-height:1.7;color:var(--text-secondary);max-height:58vh;overflow-y:auto;padding-right:8px;">
+
+      <div class="roadmap">
+
+        <div class="rm-phase"><span class="rm-phase-tag">入门</span></div>
+
+        <div class="rm-row"><div class="rm-bubble rm-bubble-lit">1</div><div class="rm-info"><strong>第1章 · 初识C语言</strong><span>2 关 — 第一个程序 & 基本结构</span></div><div class="rm-xp">65 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">2</div><div class="rm-info"><strong>第2章 · 数据与变量</strong><span>3 关 — 类型、变量、scanf/printf</span></div><div class="rm-xp">125 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">3</div><div class="rm-info"><strong>第3章 · 运算符与表达式</strong><span>2 关 — 算术、比较、逻辑、三目</span></div><div class="rm-xp">85 XP</div></div>
+
+        <div class="rm-phase"><span class="rm-phase-tag">基础</span></div>
+
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">4</div><div class="rm-info"><strong>第4章 · 控制流</strong><span>4 关 — if/switch/for/while 全覆盖</span></div><div class="rm-xp">200 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">5</div><div class="rm-info"><strong>第5章 · 字符输入输出</strong><span>3 关 — getchar/putchar/ctype.h/缓冲区</span></div><div class="rm-xp">140 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">6</div><div class="rm-info"><strong>第6章 · 数组</strong><span>2 关 — 遍历、排序、查找</span></div><div class="rm-xp">110 XP</div></div>
+
+        <div class="rm-phase"><span class="rm-phase-tag">进阶</span></div>
+
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">7</div><div class="rm-info"><strong>第7章 · 函数</strong><span>4 关 — 定义、递归、math.h、作用域</span></div><div class="rm-xp">195 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">8</div><div class="rm-info"><strong>第8章 · 指针</strong><span>4 关 — &/*、指针运算、malloc/free</span></div><div class="rm-xp">250 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">9</div><div class="rm-info"><strong>第9章 · 字符串</strong><span>2 关 — strlen/strcmp/ctype.h</span></div><div class="rm-xp">115 XP</div></div>
+
+        <div class="rm-phase"><span class="rm-phase-tag">高级</span></div>
+
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">10</div><div class="rm-info"><strong>第10章 · 结构体与联合</strong><span>3 关 — struct/typedef/union/enum</span></div><div class="rm-xp">155 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">11</div><div class="rm-info"><strong>第11章 · 位操作</strong><span>2 关 — 位逻辑、移位、掩码</span></div><div class="rm-xp">105 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">12</div><div class="rm-info"><strong>第12章 · 文件操作</strong><span>1 关 — fopen/fprintf/fscanf</span></div><div class="rm-xp">60 XP</div></div>
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble">13</div><div class="rm-info"><strong>第13章 · 预处理与标准库</strong><span>3 关 — 宏、qsort、预定义宏</span></div><div class="rm-xp">140 XP</div></div>
+
+        <div class="rm-phase"><span class="rm-phase-tag">🏆 实战</span></div>
+
+        <div class="rm-arrow">↓</div>
+        <div class="rm-row"><div class="rm-bubble rm-bubble-final">14</div><div class="rm-info"><strong>第14章 · 综合实战</strong><span>10 关 — 综合运用全部知识</span></div><div class="rm-xp" style="color:var(--accent);font-weight:700;">815 XP</div></div>
+
+      </div>
+
+      <div style="margin-top:16px;padding:10px 14px;background:var(--bg-elevated);border-radius:6px;font-size:0.76rem;color:var(--text-tertiary);text-align:center;">
+        🏆 每章末尾有章末挑战（从零编码）&nbsp;|&nbsp; 总计 <strong style="color:var(--text-primary);">2520+ XP</strong> &nbsp;|&nbsp; 解锁全部 9 枚成就徽章
+      </div>
+    </div>
+    <button class="modal-close" onclick="closeRoadmap()">关闭</button>
   </div>
 </div>
 
@@ -1567,6 +1673,7 @@ function backToStart() {
   document.getElementById('vsTutorialOverlay').classList.remove('show');
   document.getElementById('aboutOverlay').classList.remove('show');
   document.getElementById('appendixOverlay').classList.remove('show');
+  document.getElementById('roadmapOverlay').classList.remove('show');
   document.getElementById('hintOverlay').classList.remove('show');
   document.getElementById('startScreen').classList.remove('hidden');
   // 重启代码雨
@@ -1614,6 +1721,14 @@ function openAppendix() {
 
 function closeAppendix() {
   document.getElementById('appendixOverlay').classList.remove('show');
+}
+
+function openRoadmap() {
+  document.getElementById('roadmapOverlay').classList.add('show');
+}
+
+function closeRoadmap() {
+  document.getElementById('roadmapOverlay').classList.remove('show');
 }
 
 function showTutorial() {
