@@ -62,14 +62,29 @@ function findCompiler() {
     }
   }
 
-  // 2. 尝试 MSVC — 自动搜索常见安装位置
+  // 2. 尝试 MSVC — 多策略自动搜索
   const vsCandidates = [];
-  // VS 2022 / 2019 标准路径
+
+  // === 策略A: vswhere.exe（微软官方 VS 定位工具）===
+  const vswherePaths = [
+    'C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe',
+    'C:\\Program Files\\Microsoft Visual Studio\\Installer\\vswhere.exe'
+  ];
+  for (const vsw of vswherePaths) {
+    if (fs.existsSync(vsw)) {
+      try {
+        const out = execSync(`"${vsw}" -latest -property installationPath`, { timeout: 5000, encoding: 'utf8' }).trim();
+        if (out && fs.existsSync(out)) {
+          const vcDir = path.join(out, 'VC', 'Tools', 'MSVC');
+          if (fs.existsSync(vcDir)) vsCandidates.push(vcDir);
+        }
+      } catch(e) {}
+    }
+  }
+
+  // === 策略B: 标准安装路径 ===
   for (const base of ['C:\\Program Files\\Microsoft Visual Studio\\2022',
-                       'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019',
-                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Community',
-                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional',
-                       'C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise']) {
+                       'C:\\Program Files (x86)\\Microsoft Visual Studio\\2019']) {
     try {
       if (fs.existsSync(base)) {
         for (const ed of fs.readdirSync(base).filter(d => d !== 'Shared' && d !== 'SDK')) {
@@ -78,30 +93,55 @@ function findCompiler() {
         }
       }
     } catch(e) {}
-    // 直接子目录也是可能的
     const vcDir2 = path.join(base, 'VC', 'Tools', 'MSVC');
     if (fs.existsSync(vcDir2)) vsCandidates.push(vcDir2);
   }
-  // 环境变量
+
+  // === 策略C: 全盘扫描根目录（D:\vs, E:\vs 等非标路径）===
+  for (const drive of ['D', 'E', 'F', 'G']) {
+    for (const name of ['vs', 'VS', 'Visual Studio', 'Microsoft Visual Studio']) {
+      try {
+        const root = drive + ':\\' + name;
+        if (!fs.existsSync(root)) continue;
+        // 直接是 VC 安装目录
+        const vcDir = path.join(root, 'VC', 'Tools', 'MSVC');
+        if (fs.existsSync(vcDir)) { vsCandidates.push(vcDir); continue; }
+        // 包含子目录
+        for (const sub of fs.readdirSync(root)) {
+          const sd = path.join(root, sub, 'VC', 'Tools', 'MSVC');
+          if (fs.existsSync(sd)) vsCandidates.push(sd);
+        }
+      } catch(e) {}
+    }
+  }
+
+  // === 策略D: 环境变量 ===
   for (const env of ['VSINSTALLDIR', 'VCINSTALLDIR', 'VCToolsInstallDir']) {
     if (process.env[env]) {
       const d = process.env[env];
       if (fs.existsSync(d)) vsCandidates.push(d);
     }
   }
+
+  // === 在所有候选路径中搜索 cl.exe ===
   for (const base of vsCandidates) {
     try {
       for (const ver of fs.readdirSync(base)) {
         const cl = path.join(base, ver, 'bin', 'Hostx64', 'x64', 'cl.exe');
         if (fs.existsSync(cl)) {
-          // 查找对应 vcvars
+          // 查找对应 vcvars64.bat
           let vcvars = '';
-          const searchBase = path.dirname(path.dirname(path.dirname(path.dirname(base))));
-          for (const vp of [
-            path.join(searchBase, 'Auxiliary', 'Build', 'vcvars64.bat'),
-            path.join(path.dirname(base), 'Auxiliary', 'Build', 'vcvars64.bat')
-          ]) {
+          // base 路径如 D:\vs\VC\Tools\MSVC，vcvars 在 D:\vs\VC\Auxiliary\Build\
+          // 向上 3 层到 VS 根（D:\vs），然后逐层向下搜索
+          let search = base;
+          for (let i = 0; i < 6; i++) {
+            search = path.dirname(search);
+            const vp = path.join(search, 'Auxiliary', 'Build', 'vcvars64.bat');
             if (fs.existsSync(vp)) { vcvars = vp; break; }
+            // 也检查 VS 根目录下的 VC\Auxiliary 路径
+            const vp2 = path.join(search, 'VC', 'Auxiliary', 'Build', 'vcvars64.bat');
+            if (fs.existsSync(vp2)) { vcvars = vp2; break; }
+            if (search === path.dirname(search)) break; // 到达根目录
           }
           if (vcvars) return { type: 'msvc', path: cl, vcvars };
         }
